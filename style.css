@@ -1,0 +1,142 @@
+.toptimer {
+  background: #353535;
+  color: #fff;
+}
+.toptimer-timer {
+  position: relative;
+  z-index: 9999;
+  height: 39px;
+}
+.toptimer-timer-controls {
+  display: flex;
+  justify-content: center;
+}
+.toptimer-timer-countdown {
+  display: flex;
+  justify-content: center;
+}
+
+.toptimer-timer-dropdown {
+  padding: 8px 20px;
+}
+
+.toptimer-timer-go {
+  background: orange;
+  padding: 8px 20px;
+  font-weight: bold;
+  margin-left: 10px;
+  color: #000;
+  cursor: pointer;
+}
+
+.toptimer-timer-countdown {
+  font-size: 26px;
+}
+.toptimer-timer-stop {
+  margin-left: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.toptimer-right-wrapper {
+  position: absolute;
+  right: 10px;
+  top: 0;
+}
+
+.left-wrapper {
+  position: absolute;
+  left: 10px;
+  top: 0;
+}
+
+.settings-btn{
+  margin-top: 5px;
+}
+.toptimer-calendar-btn {
+  display: flex;
+  height: 39px;
+  width: 30px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.toptimer-calendar-btn img {
+  height: 20px;
+  width: 20px;
+}
+
+.settings-btn img {
+  height: 20px;
+  width: 20px;
+}
+.toptimer-calendar-popup {
+  position: relative;
+  display: none;
+}
+.toptimer-calendar-popup iframe {
+  position: absolute;
+  right: 0;
+}
+
+.toptimer-calendar-popup-close-btn {
+  content: "x";
+  top: 0;
+  right: 0;
+  position: absolute;
+  z-index: 9999;
+  width: 10px;
+  line-height: 1;
+  padding: 2px 12px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+.toptimer-points {
+  display: block;
+  right: 30px;
+  border: 1px solid;
+  position: absolute;
+  padding: 2px 4px;
+  font-size: 12px;
+}
+
+#myProgress {
+  width: 100%;
+  height: 10px;
+  border-bottom: 1px solid grey;
+}
+
+#myBar {
+  width: 1%;
+  height: 10px;
+  background-color: #04AA6D;
+}
+
+#toptimer__overflow{
+  background-color: #000;
+  position: absolute;
+  top:0px;
+  bottom:0px;
+  left:0px;
+  right:0px;
+  opacity: 0.8;
+}
+
+#toptimer__settingPaneContainer{
+  position: absolute;
+  top:0px;
+  bottom:0px;
+  left:0px;
+  right:0px;
+}
+
+#toptimer__settingPane{
+  display: block;
+  height: 60%;
+  width: 80%;
+  background-color: black;
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30%;
+}

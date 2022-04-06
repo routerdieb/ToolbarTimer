@@ -1,0 +1,23 @@
+{
+  "name": "TopTimer",
+  "version": "0.0.4",
+  "manifest_version": 2,
+  "description": "TopTimer is a
+   timer for sites. Especially for evernote, notion, kanban boards.
+  ",
+
+  "content_scripts": [
+    {
+      "matches": ["https://evernote.com/*", "https://www.evernote.com/*","https://notion.so/*","https://www.notion.so/*","https://www.focusmate.com/*"],
+      "css": ["style.css"],
+      "js": ["jquery-3.6.0.slim.min.js", "script.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    "engine-start.mp3",
+    "ring.mp3",
+    "calendar-icon.png",
+    "gear-icon.png"
+  ],
+  "permissions": ["storage"]
+}
