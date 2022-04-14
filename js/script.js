@@ -9,11 +9,11 @@ let ToptimerExtension = {};
     55: "55 Min",
     105: "1:45 Hours (1 hour 45 min)",
   };
-  let points = (await getPoints()) || 0;
+  let points = (await getOption("points")) || 0;
   ToptimerExtension.isMuted = false;
   // elements
   const toptimerTimer = $('<div class="toptimer toptimer-timer">');
-  const settingsBtn = $('<button class="settings-btn toptimer" type="button">');
+  const settingsBtn = $('<button id="settings-btn" class="btn toptimer" type="button">');
   $(settingsBtn).click(openSettingPane);
 
   const rightWrapper = $('<div class="toptimer toptimer-right-wrapper">');
@@ -24,24 +24,28 @@ let ToptimerExtension = {};
   const mute_btn = $('<button id="mute_btn" class="toptimer" type="button">');
   $(mute_btn).html('🔊');
   $(mute_btn).click(toggle_mute);
-  const points_span = $('<span class="toptimer-points">');
-  const btnCalendarControl = $('<button class="toptimer toptimer-calendar-btn" type="button">');
+  //const points_span = $('<span class="toptimer-points">');
+  const btnCalendarBtn = $('<button class="toptimer" id="toptimer-calendar-btn" type="button">');
+  let hideCal = (await getOption("hideCal")) || false;
+  if (hideCal){
+    $("#toptimer-calendar-btn").hide();
+  }
   const btnCalendarCloseControl = $('<button class="toptimer toptimer-calendar-popup-close-btn" type="button">');
 
   const progressBar = $('<div id="myProgress"><div id="myBar"></div></div>');
 
   btnCalendarCloseControl.text("×");
   $(btnCalendarCloseControl).click(handleCalendarCloseClick);
-  $(points_span).html(points);
-  btnCalendarControl.append(points_span);
-  btnCalendarControl.append(
-    $(`<img src="${chrome.runtime.getURL("calendar-icon.png")}" />`)
+  //$(points_span).html(points);
+  //btnCalendarControl.append(points_span);
+  btnCalendarBtn.append(
+    $(`<img src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
   );
 
 
   leftWrapper.append(settingsBtn)
   settingsBtn.append(
-    $(`<img src="${chrome.runtime.getURL("gear-icon.png")}" />`)
+    $(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
   );
   leftWrapper.append(mute_btn)
   
@@ -55,8 +59,8 @@ let ToptimerExtension = {};
   $(toptimerTimer).append(controls);
   $(toptimerTimer).append(rightWrapper);
   
-  $(rightWrapper).append(btnCalendarControl);
-  $(btnCalendarControl).click(handleCalendarClick);
+  $(rightWrapper).append(btnCalendarBtn);
+  $(btnCalendarBtn).click(handleCalendarClick);
   $(rightWrapper).append(calendarPopup);
   $(calendarPopup).html(
     '<iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=2&amp;bgcolor=%23B39DDB&amp;ctz=Europe%2FBerlin&amp;src=dy5lc29AbGl2ZS5kZQ&amp;src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%234285F4&amp;color=%237986CB&amp;mode=WEEK&amp;showTitle=0&amp;showNav=1&amp;showDate=1&amp;showPrint=1&amp;showTabs=1&amp;showCalendars=0&amp;showTz=0" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>'
@@ -132,7 +136,7 @@ let ToptimerExtension = {};
             break;
         }
         $(points_span).html(points);
-        setPoints(points);
+        setOption('points',points);
         document.title = "Go again ?";
         return
       }
@@ -186,24 +190,6 @@ let ToptimerExtension = {};
     elem = document.getElementById("myBar");
     elem.style.width = percent + "%";
   }
-
-  
-
-  async function getPoints() {
-    return new Promise((res, rej) => {
-      chrome.storage.local.get(["points"], function (result) {
-        res(result.points);
-      });
-    });
-  }
-
-  async function setPoints(points) {
-    return new Promise((res, rej) => {
-      chrome.storage.local.set({ points: points }, function () {
-        res(points);
-      });
-    });
-  }
 })();
 
 function toggle_mute(){
@@ -227,44 +213,19 @@ function playAudio(file) {
     ToptimerExtension.audio.play();
   }
 }
-
-function openSettingPane(){
-  const html_overflow = "<div id=\"toptimer__overflow\"></div>";
-  $(document.body).append(html_overflow);
-
-  const html_container = "<div id=\"toptimer__settingPaneContainer\">";
-  const html_setting_pane = "<div id=\"toptimer__settingPane\" class=\"toptimer\"> This is the settings page. Show me the text !! <\br> Where is the text.<\div>";
-  const html = html_container + html_setting_pane + "</div>";
-  $(document.body).append(html);
-  $("#toptimer__settingPane").append("Shows your Colour:</br>");
-
-
-  $("#toptimer__settingPane").append("Google Calendar:</br>");
-
-
-  $("#toptimer__settingPane").append("Font:</br>");
-
-
-  //lock scrolling
-  $('body').css({'overflow':'hidden'});
-  $(document).bind('scroll',function () { 
-       window.scrollTo(0,0); 
+// get and set settings
+async function getOption(name) {
+  return new Promise((res, rej) => {
+    chrome.storage.local.get([name], function (result) {
+      res(result.points);
+    });
   });
+}
 
-  //
-  $(document).keydown(function(event) {
-    
-    if (event.key === "Escape") {
-      console.log("esc was pressed");
-      $('#toptimer__overflow').remove();
-      $('#toptimer__settingPaneContainer').remove();
-      //unlock scrolling
-      $(document).unbind('scroll'); 
-      $('body').css({'overflow':'visible'});
-    }
+async function setOption(name,value) {
+  return new Promise((res, rej) => {
+    chrome.storage.local.set({ name: value }, function () {
+      res(points);
+    });
   });
-
-  
-    
-  
 }

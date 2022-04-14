@@ -2,10 +2,13 @@
   background: #353535;
   color: #fff;
 }
+
 .toptimer-timer {
   position: relative;
   z-index: 9999;
   height: 39px;
+  position: sticky;
+	top: 0;
 }
 .toptimer-timer-controls {
   display: flex;
@@ -49,10 +52,17 @@
   top: 0;
 }
 
-.settings-btn{
+/* settings btn */
+#settings-btn{
   margin-top: 5px;
 }
-.toptimer-calendar-btn {
+
+#settings-btn img {
+  height: 20px;
+  width: 20px;
+}
+
+#toptimer-calendar-btn {
   display: flex;
   height: 39px;
   width: 30px;
@@ -60,15 +70,12 @@
   justify-content: center;
   cursor: pointer;
 }
-.toptimer-calendar-btn img {
+#toptimer-calendar-btn img {
   height: 20px;
   width: 20px;
 }
 
-.settings-btn img {
-  height: 20px;
-  width: 20px;
-}
+
 .toptimer-calendar-popup {
   position: relative;
   display: none;
@@ -140,3 +147,4 @@
   margin-right: auto;
   margin-top: 30%;
 }
+
