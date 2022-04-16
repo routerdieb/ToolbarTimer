@@ -8,7 +8,7 @@
 
   "content_scripts": [
     {
-      "matches": ["https://evernote.com/*", "https://www.evernote.com/*","https://notion.so/*","https://www.notion.so/*","https://www.focusmate.com/*"],
+      "matches": ["https://evernote.com/*", "https://www.evernote.com/*","https://notion.so/*","https://www.notion.so/*"],
       "css": ["/css/style.css"],
       "js": ["js/jquery-3.6.0.slim.min.js","js/options.js", "js/script.js"]
     }
