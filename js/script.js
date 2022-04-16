@@ -9,7 +9,7 @@ let ToptimerExtension = {};
     55: "55 Min",
     105: "1:45 Hours (1 hour 45 min)",
   };
-  let points = (await getOption("points")) || 0;
+  //let points = getOption("points");
   ToptimerExtension.isMuted = false;
   // elements
   const toptimerTimer = $('<div class="toptimer toptimer-timer">');
@@ -26,10 +26,7 @@ let ToptimerExtension = {};
   $(mute_btn).click(toggle_mute);
   //const points_span = $('<span class="toptimer-points">');
   const btnCalendarBtn = $('<button class="toptimer" id="toptimer-calendar-btn" type="button">');
-  let hideCal = (await getOption("hideCal")) || false;
-  if (hideCal){
-    $("#toptimer-calendar-btn").hide();
-  }
+  
   const btnCalendarCloseControl = $('<button class="toptimer toptimer-calendar-popup-close-btn" type="button">');
 
   const progressBar = $('<div id="myProgress"><div id="myBar"></div></div>');
@@ -87,12 +84,16 @@ let ToptimerExtension = {};
   jQuery(document).ready(function ($) {
     $(document.body).prepend(progressBar);
     $(document.body).prepend(toptimerTimer);
+    let hideCal = getHideCalendar();
+    if (hideCal){
+      $("#toptimer-calendar-btn").hide();
+    }
   });
   var interval;
 
   async function handleGoClick() {
 
-    playAudio("engine-start.mp3");
+    playAudio("../media/engine-start.mp3");
     
     $(controls).hide();
     
@@ -122,7 +123,7 @@ let ToptimerExtension = {};
       if (distance < 0) {
         clearInterval(interval);
         countDown.html("Finished");
-        playAudio("ring.mp3");
+        playAudio("../media/ring.mp3");
         
         switch (minutes) {
           case 25:
@@ -135,8 +136,8 @@ let ToptimerExtension = {};
             points += 4;
             break;
         }
-        $(points_span).html(points);
-        setOption('points',points);
+        //$(points_span).html(points);
+        //setOption('points',points);
         document.title = "Go again ?";
         return
       }
@@ -214,18 +215,20 @@ function playAudio(file) {
   }
 }
 // get and set settings
-async function getOption(name) {
-  return new Promise((res, rej) => {
-    chrome.storage.local.get([name], function (result) {
-      res(result.points);
-    });
+function getHideCalendar(name) {
+  tmp = false;
+  chrome.storage.local.get(["HIDE_CALENDAR_KEY"], function(result) {
+    tmp = result.HIDE_CALENDAR_KEY;
+  });
+  
+  console.log('Value currently is ' + tmp);
+  return tmp;
+}
+
+function setHideCalendar(value) {  
+  chrome.storage.local.set({"HIDE_CALENDAR_KEY": value}, function() {
+    console.log('Value is set to ' + value);
   });
 }
 
-async function setOption(name,value) {
-  return new Promise((res, rej) => {
-    chrome.storage.local.set({ name: value }, function () {
-      res(points);
-    });
-  });
-}
+

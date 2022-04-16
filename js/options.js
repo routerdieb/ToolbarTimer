@@ -21,11 +21,11 @@ function openSettingPane(){
       if ($('#cb-hide-calendar')[0].checked) {
         $("#toptimer-calendar-btn").hide();
         console.log("hide cal");
-        setOption("hideCal",true);
+        setHideCalendar(true);
       } else {
         $("#toptimer-calendar-btn").show();
         console.log("show cal");
-        setOption("hideCal",false);
+        setHideCalendar(false);
       }
     });
   
