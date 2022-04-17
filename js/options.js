@@ -1,4 +1,4 @@
-function openSettingPane(){
+async function openSettingPane(){
     $('#settings-btn').prop('disabled', true);
     const html_overflow = "<div id=\"toptimer__overflow\"></div>";
     $(document.body).append(html_overflow);
@@ -28,6 +28,8 @@ function openSettingPane(){
         setHideCalendar(false);
       }
     });
+    $('#cb-hide-calendar')[0].checked = await getHideCalendar();
+    
   
     //lock scrolling
     $('body').css({'overflow':'hidden'});

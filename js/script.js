@@ -81,10 +81,16 @@ let ToptimerExtension = {};
   $(countDown).hide();
 
 
-  jQuery(document).ready(function ($) {
-    $(document.body).prepend(progressBar);
-    $(document.body).prepend(toptimerTimer);
-    let hideCal = getHideCalendar();
+  jQuery(document).ready(async function ($) {
+    if ($('header').get(0) != "undefined"){
+      $('header').prepend(progressBar);
+      $('header').prepend(toptimerTimer);
+    }else{
+      $(document.body).prepend(progressBar);
+      $(document.body).prepend(toptimerTimer);
+    }
+    let hideCal = await getHideCalendar();
+    console.log("hideCal"+hideCal)
     if (hideCal){
       $("#toptimer-calendar-btn").hide();
     }
@@ -215,14 +221,18 @@ function playAudio(file) {
   }
 }
 // get and set settings
-function getHideCalendar(name) {
-  tmp = false;
-  chrome.storage.local.get(["HIDE_CALENDAR_KEY"], function(result) {
-    tmp = result.HIDE_CALENDAR_KEY;
+function getHideCalendar() {
+  sKey = "HIDE_CALENDAR_KEY";
+  return new Promise(function(resolve, reject) {
+    chrome.storage.local.get(sKey, function(items) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        reject(chrome.runtime.lastError.message);
+      } else {
+        resolve(items[sKey]);
+      }
+    });
   });
-  
-  console.log('Value currently is ' + tmp);
-  return tmp;
 }
 
 function setHideCalendar(value) {  
