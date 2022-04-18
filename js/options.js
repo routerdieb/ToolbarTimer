@@ -7,11 +7,14 @@ async function openSettingPane(){
     const html_setting_pane = "<div id=\"toptimer__settingPane\" class=\"toptimer\"> This is the settings page. Show me the text !! <\br> Where is the text.<\div>";
     const html = html_container + html_setting_pane + "</div>";
     $(document.body).append(html);
+    const optionsCloseButton = "<button id=\"optionsClose-btn\" class=\"btn toptimer\" type=\"button\">X</button>";
+    $("#toptimer__settingPane").append(optionsCloseButton);
+    $("#optionsClose-btn").click(closeSettingsPane);
     $("#toptimer__settingPane").append("Shows your Colour:</br>");
   
   
     $("#toptimer__settingPane").append("Google Calendar:</br>");
-  
+    $('#toptimer__settingPaneContainer').click(closeSettingsPane);//masks the overflow thing for some reason
   
     $("#toptimer__settingPane").append("Font:</br>");
   

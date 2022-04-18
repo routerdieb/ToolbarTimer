@@ -7,9 +7,20 @@
   position: relative;
   z-index: 9999;
   height: 39px;
-  position: sticky;
+  /*position: sticky;*/
 	top: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size:12px;
+  margin-bottom: 0px;
+  margin-top:0px;
+  padding: 0px;
 }
+
+.toptimer-timer img{
+  height: 20px;
+  width: 20px;
+}
+
 .toptimer-timer-controls {
   display: flex;
   justify-content: center;
@@ -53,8 +64,13 @@
 }
 
 /* settings btn */
-#settings-btn{
-  margin-top: 5px;
+
+#settings-btn {
+  height: 39px;
+  width: 30px;
+  justify-content: center;
+  cursor: pointer;
+  float:left;
 }
 
 #settings-btn img {
@@ -63,7 +79,6 @@
 }
 
 #toptimer-calendar-btn {
-  display: flex;
   height: 39px;
   width: 30px;
   align-items: center;
@@ -71,6 +86,17 @@
   cursor: pointer;
 }
 #toptimer-calendar-btn img {
+  height: 20px;
+  width: 20px;
+}
+#mute_btn {
+  height: 39px;
+  width: 30px;
+  justify-content: center;
+  cursor: pointer;
+  float:left;
+}
+#mute_btn img{
   height: 20px;
   width: 20px;
 }
@@ -98,6 +124,23 @@
   justify-content: center;
   cursor: pointer;
 }
+
+#optionsClose-btn {
+  float:right;
+  right: 0;
+  top: 0;
+  content: "x";
+  position: absolute;
+  z-index: 9999;
+  width: 10px;
+  line-height: 1;
+  padding: 2px 12px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+
 .toptimer-points {
   display: block;
   right: 30px;
@@ -138,6 +181,7 @@
 }
 
 #toptimer__settingPane{
+  position: relative;
   display: block;
   height: 60%;
   width: 80%;
@@ -147,4 +191,6 @@
   margin-right: auto;
   margin-top: 30%;
 }
+
+
 

@@ -40,11 +40,12 @@ let ToptimerExtension = {};
   );
 
 
-  leftWrapper.append(settingsBtn)
+  leftWrapper.append(settingsBtn);
   settingsBtn.append(
     $(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
   );
-  leftWrapper.append(mute_btn)
+  leftWrapper.append(mute_btn);
+  leftWrapper.append("</div>");
   
   const calendarPopup = $('<div class="toptimer-calendar-popup">');
   const countDown = $('<div class="toptimer-timer-countdown">');
