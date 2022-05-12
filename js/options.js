@@ -1,10 +1,10 @@
 async function openSettingPane(){
     $('#settings-btn').prop('disabled', true);
-    const html_overflow = "<div id=\"toptimer__overflow\"></div>";
+    html_overflow = '<div id="toptimer__overflow"></div>';
     $(document.body).append(html_overflow);
   
     const html_container = "<div id=\"toptimer__settingPaneContainer\">";
-    const html_setting_pane = "<div id=\"toptimer__settingPane\" class=\"toptimer\"> This is the settings page. Show me the text !! <\br> Where is the text.<\div>";
+    const html_setting_pane = "<div id=\"toptimer__settingPane\" class=\"toptimer\"> Settings <hr> ...</div>";
     const html = html_container + html_setting_pane + "</div>";
     $(document.body).append(html);
     const optionsCloseButton = "<button id=\"optionsClose-btn\" class=\"btn toptimer\" type=\"button\">X</button>";
@@ -14,6 +14,10 @@ async function openSettingPane(){
   
   
     $("#toptimer__settingPane").append("Google Calendar:</br>");
+    $("#toptimer__settingPane").click((event)=> {
+      event.stopPropagation();
+      console.log('stopPropagation');
+    });
     $('#toptimer__settingPaneContainer').click(closeSettingsPane);//masks the overflow thing for some reason
   
     $("#toptimer__settingPane").append("Font:</br>");
@@ -33,6 +37,7 @@ async function openSettingPane(){
     });
     $('#cb-hide-calendar')[0].checked = await getHideCalendar();
     
+    create_SetCalendarText();
   
     //lock scrolling
     $('body').css({'overflow':'hidden'});
@@ -56,6 +61,7 @@ async function openSettingPane(){
 
 
 function closeSettingsPane(){
+  console.log("closeSettings Called")
     $('#toptimer__overflow').remove();
     $('#toptimer__settingPaneContainer').remove();
     //unlock scrolling
@@ -65,5 +71,13 @@ function closeSettingsPane(){
 }
 
 function create_hide_cal_checkbox(){
-  $("#toptimer__settingPane").append("<label for=\"accept\" id=\"cb-hide-calendarLabel\"><input type=\"checkbox\" id=\"cb-hide-calendar\" name=\"accept\" value=\"yes\">  Hide the Calendar </label>");
+  $("#toptimer__settingPane").append('<label for="accept" id="cb-hide-calendarLabel"><input type="checkbox" id="cb-hide-calendar" name="accept" value="yes">  Hide the Calendar </label>');
+}
+
+
+function create_SetCalendarText(){
+  const calContainer = $('<div id="calContainer"><label for="calLink">Insert Google Calendar Link:</label><input type="text" id="calLink" name="calLink"><br></div>');
+  const set_button = $('<button type="button">Set!</button>');
+  calContainer.append(set_button);
+  $("#toptimer__settingPane").append(calContainer);
 }

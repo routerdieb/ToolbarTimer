@@ -102,14 +102,15 @@
 }
 
 
-.toptimer-calendar-popup {
-  position: relative;
-  display: none;
-}
-.toptimer-calendar-popup iframe {
+#calendarPopupDiv{
   position: absolute;
-  right: 0;
+  top: 15%;
+  width: auto;
+  height: 40%;
+  z-index: 2;
 }
+
+
 
 .toptimer-calendar-popup-close-btn {
   content: "x";
@@ -138,16 +139,6 @@
   display: flex;
   justify-content: center;
   cursor: pointer;
-}
-
-
-.toptimer-points {
-  display: block;
-  right: 30px;
-  border: 1px solid;
-  position: absolute;
-  padding: 2px 4px;
-  font-size: 12px;
 }
 
 #myProgress {
@@ -189,7 +180,8 @@
   color: white;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 30%;
+  margin-top: 10%;
+  padding: 10px;
 }
 
 
