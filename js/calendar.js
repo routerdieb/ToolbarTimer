@@ -12,14 +12,18 @@ async function open_Calendar(){
   btnCalendarCloseControl.text("×");
   btnCalendarCloseControl.click(close_Calendar);
   
-
+  calendarIFrame = await getCalendar()
+  calendarIFrame = calendarIFrame !== null ? calendarIFrame : "<div>Set the Calendar in the Settings</div>"
   calDiv.append(calendarPopup);
+  
+  console.log(" heyho "+calendarIFrame)
   calendarPopup.html(
-    '<iframe id="calIframe" src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=2&amp;bgcolor=%23B39DDB&amp;ctz=Europe%2FBerlin&amp;src=dy5lc29AbGl2ZS5kZQ&amp;src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%234285F4&amp;color=%237986CB&amp;mode=WEEK&amp;showTitle=0&amp;showNav=1&amp;showDate=1&amp;showPrint=1&amp;showTabs=1&amp;showCalendars=0&amp;showTz=0" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>'
+    calendarIFrame
   );
   calendarPopup.append(btnCalendarCloseControl);
   btnCalendarCloseControl.click(close_Calendar);
 
+    
 
 
     $(document.body).prepend(calDiv);

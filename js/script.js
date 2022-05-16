@@ -18,9 +18,7 @@ let ToptimerExtension = {};
   const rightWrapper = $('<div class="toptimer toptimer-right-wrapper">');
   const leftWrapper = $('<div class="left-wrapper">');
 
-  toptimerTimer.append(leftWrapper);
-  toptimerTimer.append(controls);
-  toptimerTimer.append(rightWrapper);
+  toptimerTimer.append(leftWrapper).append(controls).append(rightWrapper);
 
   //Left Wrapper
   const btnCalendarBtn = $('<button class="toptimer" id="toptimer-calendar-btn" type="button">');
@@ -51,21 +49,16 @@ let ToptimerExtension = {};
     }
   }
   controls.append(btnGoControl);
-  btnGoControl.text("GO!");
-  btnGoControl.click(handleGoClick);
+  btnGoControl.text("GO!").click(handleGoClick);
   
   toptimerTimer.append(countDown);
   countDown.hide();
 
-
-
   //Right Stuff
   
-  mute_btn.html('🔊');
-  mute_btn.click(toggle_mute);
+  mute_btn.html('🔊').click(toggle_mute);
 
-  const settingsBtn = $('<button id="settings-btn" class="btn toptimer" type="button">');
-  settingsBtn.click(openSettingPane);
+  const settingsBtn = $('<button id="settings-btn" class="btn toptimer" type="button">').click(openSettingPane);
   settingsBtn.append(
     $(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
   );
@@ -207,6 +200,7 @@ function setHideCalendar(value) {
   chrome.storage.local.set({"HIDE_CALENDAR_KEY": value}, function() {
     console.log('Value is set to ' + value);
   });
+  
 }
 
 function formatedTimeSpan(fullTime, seconds) {

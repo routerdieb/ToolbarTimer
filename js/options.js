@@ -12,6 +12,8 @@ async function openSettingPane(){
     $("#optionsClose-btn").click(closeSettingsPane);
     $("#toptimer__settingPane").append("Shows your Colour:</br>");
   
+    $("#toptimer__settingPane").append(create_color_boxes());
+    AddClickListener();
   
     $("#toptimer__settingPane").append("Google Calendar:</br>");
     $("#toptimer__settingPane").click((event)=> {
@@ -54,6 +56,11 @@ async function openSettingPane(){
       }
     });
   
+    $('#setCal').click(() => {
+      val = $('#calLink').val()
+      console.log(val)
+      setCalendar(val)
+    });
     
       
     
@@ -76,8 +83,53 @@ function create_hide_cal_checkbox(){
 
 
 function create_SetCalendarText(){
-  const calContainer = $('<div id="calContainer"><label for="calLink">Insert Google Calendar Link:</label><input type="text" id="calLink" name="calLink"><br></div>');
-  const set_button = $('<button type="button">Set!</button>');
+  const calContainer = $('<div id="calContainer"><label for="calLink">Insert Google Calendar Link:</label><br><input type="text" id="calLink" name="calLink"></div>');
+  const set_button = $('<button id="setCal" type="button">Set!</button>');
   calContainer.append(set_button);
   $("#toptimer__settingPane").append(calContainer);
+}
+
+// get and set settings
+function getCalendar() {
+  sKey = "CALENDAR_KEY";
+  return new Promise(function(resolve, reject) {
+    chrome.storage.local.get(sKey, function(items) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        reject(chrome.runtime.lastError.message);
+      } else {
+        resolve(items[sKey]);
+      }
+    });
+  });
+}
+
+function setCalendar(value) {  
+  chrome.storage.local.set({"CALENDAR_KEY": value}, function() {
+    console.log('Value is set to ' + value);
+  });
+}
+
+////////
+
+let colors = ['red','green','blue','orange']
+function create_color_boxes(){
+  string = ""
+  for (const color of colors){
+    string += '<div id='+color+'box class="'+color+' colorbox"></div>'
+  }
+  return string
+  
+}
+
+function AddClickListener(){
+  string = ""
+  for (const color of colors){
+    $('#'+color+'box').click( ()=> {
+      console.log("clicked the colorbox" + color)
+      $("#myBar").css("background-color",color)
+    })
+  }
+  return string
+  
 }
