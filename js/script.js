@@ -75,6 +75,9 @@ let ToptimerExtension = {};
       $(document.body).prepend(progressBar);
       $(document.body).prepend(toptimerTimer);
     }
+
+    let color = await getColor();
+    $("#myBar").css("background-color",color)
     
     close_Calendar();
     let hideCal = await getHideCalendar();

@@ -128,8 +128,30 @@ function AddClickListener(){
     $('#'+color+'box').click( ()=> {
       console.log("clicked the colorbox" + color)
       $("#myBar").css("background-color",color)
+      setColor(color)
     })
   }
   return string
   
+}
+
+// get and set settings
+function getColor() {
+  sKey = "Color";
+  return new Promise(function(resolve, reject) {
+    chrome.storage.local.get(sKey, function(items) {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+        reject(chrome.runtime.lastError.message);
+      } else {
+        resolve(items[sKey]);
+      }
+    });
+  });
+}
+
+function setColor(value) {  
+  chrome.storage.local.set({"Color": value}, function() {
+    console.log('Value is set to ' + value);
+  });
 }

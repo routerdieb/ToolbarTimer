@@ -27,7 +27,8 @@
 }
 .toptimer-timer-countdown {
   display: flex;
-  justify-content: center;
+  justify-content: center;/* align horizontal */
+  align-items: center; /* align vertical */
 }
 
 .toptimer-timer-dropdown {
@@ -184,5 +185,35 @@
   padding: 10px;
 }
 
+#calLink{
+  width: 80%;
+}
 
+#toptimer__settingPane{
+  border-style: solid;
+  border-width: 2px;
+  border-color: grey;
+}
+#calendarPopupDiv{
+  border-style: solid;
+  border-width: 2px;
+  border-color: grey;
+}
 
+.red{
+  background-color:red;
+}
+.green{
+  background-color:green;
+}
+.blue{
+  background-color:blue;
+}
+.orange{
+  background-color:orange;
+}
+
+.colorbox{
+  height: 20px;
+  width: 20px;
+}
