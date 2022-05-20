@@ -7,6 +7,11 @@ async function open_Calendar(){
     const calendarPopup = $('<div class="toptimer-calendar-popup">');
     const calDiv = $('<div id="calendarPopupDiv" class="toptimer"> Calendar</div>');
 
+    $(".toptimer-calendar-popup").click((event)=> {
+      event.stopPropagation();
+      console.log('stopPropagation');
+    });
+    $('#toptimer__overflow').click(close_Calendar);//masks the overflow thing for some reason
     
   const btnCalendarCloseControl = $('<button class="toptimer toptimer-calendar-popup-close-btn" type="button">');
   btnCalendarCloseControl.text("×");
@@ -38,7 +43,7 @@ async function open_Calendar(){
       
       if (event.key === "Escape") {
         console.log("esc was pressed");
-        closeSettingsPane();
+        close_Calendar();
       }
     });
   
