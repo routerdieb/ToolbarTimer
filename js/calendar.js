@@ -13,7 +13,7 @@ async function open_Calendar(){
   btnCalendarCloseControl.click(close_Calendar);
   
   calendarIFrame = await getCalendar()
-  calendarIFrame = calendarIFrame !== null ? calendarIFrame : "<div>Set the Calendar in the Settings</div>"
+  calendarIFrame = calendarIFrame ? calendarIFrame : '<div class="error"> Set the Calendar in the settings.</div>';
   calDiv.append(calendarPopup);
   
   console.log(" heyho "+calendarIFrame)
