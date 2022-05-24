@@ -5,10 +5,16 @@
   "description": "TopTimer is a
    timer for sites. Especially for evernote, notion, kanban boards.
   ",
-
+  "browser_action": {
+    "default_title": "Top Timer"  // optional, shown in tooltip
+  },
+  "options_ui": {
+    "page": "html/options.html",
+    "open_in_tab": true
+  },
   "content_scripts": [
     {
-      "matches": ["https://evernote.com/*", "https://www.evernote.com/*","https://notion.so/*","https://www.notion.so/*"],
+      "matches": ["https://*/*","http://*/*"],
       "css": ["/css/style.css"],
       "js": ["js/jquery-3.6.0.slim.min.js","js/options.js", "js/calendar.js","js/script.js"]
     }

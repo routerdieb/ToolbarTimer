@@ -1,6 +1,6 @@
 .toptimer {
-  background: #353535;
-  color: #fff;
+  background: #353535 !important;
+  color: #fff !important;
 }
 
 .toptimer-timer {
@@ -14,11 +14,12 @@
   margin-bottom: 0px;
   margin-top:0px;
   padding: 0px;
+  width: 100%;
 }
 
 .toptimer-timer img{
-  height: 20px;
-  width: 20px;
+  height: 20px !important;
+  width: 20px !important;
 }
 
 .toptimer-timer-controls {
@@ -178,7 +179,7 @@
   height: 60%;
   width: 80%;
   background-color: black;
-  color: white;
+  color: white !important;
   margin-left: auto;
   margin-right: auto;
   margin-top: 10%;
@@ -216,4 +217,21 @@
 .colorbox{
   height: 20px;
   width: 20px;
+  float: left;
+}
+
+.line{
+  margin-bottom:5px;
+}
+
+.__TTsubTitle{
+  color: white !important;
+}
+
+#setCal{
+  background-color: orange;
+}
+
+#__TTcb-hide-calendarLabel{
+  background-color: white !important;
 }

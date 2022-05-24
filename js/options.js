@@ -3,26 +3,26 @@ async function openSettingPane(){
     html_overflow = '<div id="toptimer__overflow"></div>';
     $(document.body).append(html_overflow);
   
-    const html_container = "<div id=\"toptimer__settingPaneContainer\">";
-    const html_setting_pane = "<div id=\"toptimer__settingPane\" class=\"toptimer\"> Settings <hr> ...</div>";
+    const html_container = '<div id="toptimer__settingPaneContainer">';
+    const html_setting_pane = '<div id="toptimer__settingPane" class="toptimer __TTsubTitle">Settings <hr></div>';
     const html = html_container + html_setting_pane + "</div>";
     $(document.body).append(html);
     const optionsCloseButton = "<button id=\"optionsClose-btn\" class=\"btn toptimer\" type=\"button\">X</button>";
     $("#toptimer__settingPane").append(optionsCloseButton);
     $("#optionsClose-btn").click(closeSettingsPane);
-    $("#toptimer__settingPane").append("Shows your Colour:</br>");
+    $("#toptimer__settingPane").append('<div class="line"> Select your Colour:</br>');
   
-    $("#toptimer__settingPane").append(create_color_boxes());
+    $("#toptimer__settingPane").append(create_color_div());
     AddClickListener();
   
-    $("#toptimer__settingPane").append("Google Calendar:</br>");
+    $("#toptimer__settingPane").append('<div class="line __TTsubTitle">Google Calendar:</div>');
     $("#toptimer__settingPane").click((event)=> {
       event.stopPropagation();
       console.log('stopPropagation');
     });
     $('#toptimer__settingPaneContainer').click(closeSettingsPane);//masks the overflow thing for some reason
   
-    $("#toptimer__settingPane").append("Font:</br>");
+    //$("#toptimer__settingPane").append("Font:</br>");
   
     create_hide_cal_checkbox();
     $('#cb-hide-calendarLabel').click(function(){
@@ -78,12 +78,12 @@ function closeSettingsPane(){
 }
 
 function create_hide_cal_checkbox(){
-  $("#toptimer__settingPane").append('<label for="accept" id="cb-hide-calendarLabel"><input type="checkbox" id="cb-hide-calendar" name="accept" value="yes">  Hide the Calendar </label>');
+  $("#toptimer__settingPane").append('<label for="accept" id="__TTcb-hide-calendarLabel"><input type="checkbox" id="cb-hide-calendar" name="accept" value="yes">  Hide the Calendar Button</label>');
 }
 
 
 function create_SetCalendarText(){
-  const calContainer = $('<div id="calContainer"><label for="calLink">Insert Google Calendar Link:</label><br><input type="text" id="calLink" name="calLink"></div>');
+  const calContainer = $('<div id="calContainer"><label for="calLink">Insert Google Calendar embedd Link:</label><br><input type="text" id="calLink" name="calLink"></div>');
   const set_button = $('<button id="setCal" type="button">Set!</button>');
   calContainer.append(set_button);
   $("#toptimer__settingPane").append(calContainer);
@@ -113,12 +113,12 @@ function setCalendar(value) {
 ////////
 
 let colors = ['red','green','blue','orange']
-function create_color_boxes(){
-  string = ""
+function create_color_div(){
+  string = '<div id="colorContainer">'
   for (const color of colors){
     string += '<div id='+color+'box class="'+color+' colorbox"></div>'
   }
-  return string
+  return string + '</div><br>'
   
 }
 

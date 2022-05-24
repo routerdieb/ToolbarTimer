@@ -68,13 +68,27 @@ let ToptimerExtension = {};
 
   //Init
   jQuery(document).ready(async function ($) {
-    if ($('header').get(0) != "undefined"){
-      $('header').prepend(progressBar);
-      $('header').prepend(toptimerTimer);
-    }else{
+    console.log('site is ready')
+    //if ($('header').get(0) != "undefined"){
+    //  $('header').prepend(progressBar);
+    //  $('header').prepend(toptimerTimer);
+    //  console.log('prepending to header');
+    //}else{
+      
+      $(document.body).prepend('<div id="copyOfBody123">');
+      var style = css($("body"));
+      $("#copyOfBody123").css(style);
+      
+      $(document.body).css('width','100%');
+      let childs = Array.from($('body').children());
+      childs.forEach( (item,index) => $(item).appendTo($('#copyOfBody123')));
       $(document.body).prepend(progressBar);
       $(document.body).prepend(toptimerTimer);
-    }
+      $('body').css("background-color","");
+      
+    
+      console.log('prepending to body');
+    //}
 
     let color = await getColor();
     $("#myBar").css("background-color",color)
@@ -224,5 +238,35 @@ function formatedTimeSpan(fullTime, seconds) {
 
 
 
+//Github magic: https://stackoverflow.com/questions/754607/can-jquery-get-all-css-styles-associated-with-an-element
+function css(a) {
+  var sheets = document.styleSheets, o = {};
+  for (var i in sheets) {
+      var rules = sheets[i].rules || sheets[i].cssRules;
+      for (var r in rules) {
+          if (a.is(rules[r].selectorText)) {
+              o = $.extend(o, css2json(rules[r].style), css2json(a.attr('style')));
+          }
+      }
+  }
+  return o;
+}
 
-
+function css2json(css) {
+  var s = {};
+  if (!css) return s;
+  if (css instanceof CSSStyleDeclaration) {
+      for (var i in css) {
+          if ((css[i]).toLowerCase) {
+              s[(css[i]).toLowerCase()] = (css[css[i]]);
+          }
+      }
+  } else if (typeof css == "string") {
+      css = css.split("; ");
+      for (var i in css) {
+          var l = css[i].split(": ");
+          s[l[0].toLowerCase()] = (l[1]);
+      }
+  }
+  return s;
+}
