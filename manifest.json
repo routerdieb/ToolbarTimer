@@ -16,7 +16,7 @@
     {
       "matches": ["https://*/*","http://*/*"],
       "css": ["/css/style.css"],
-      "js": ["js/jquery-3.6.0.slim.min.js","js/options.js", "js/calendar.js","js/script.js"]
+      "js": ["js/loadStore.js","js/jquery-3.6.0.slim.min.js","js/options.js", "js/calendar.js","js/script.js"]
     }
   ],
   "web_accessible_resources": [{

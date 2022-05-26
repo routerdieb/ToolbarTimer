@@ -1,272 +1,253 @@
 let ToptimerExtension = {};
 
-(async function () {
-  // this is the code which will be injected into a given page...
+(async function() {
+    // this is the code which will be injected into a given page...
 
-  const dropdownOptions = {
-    5: "5 Min",
-    25: "25 Min",
-    55: "55 Min",
-    105: "1:45 Hours (1 hour 45 min)",
-  };
-  //let points = getOption("points");
-  ToptimerExtension.isMuted = false;
-  // The Bar
-  const toptimerTimer = $('<div class="toptimer toptimer-timer">');
-  const progressBar = $('<div id="myProgress"><div id="myBar"></div></div>');
-  const controls = $('<div class="toptimer-timer-controls">');
-  const rightWrapper = $('<div class="toptimer toptimer-right-wrapper">');
-  const leftWrapper = $('<div class="left-wrapper">');
+    const dropdownOptions = {
+        5: "5 Min",
+        25: "25 Min",
+        55: "55 Min",
+        105: "1:45 Hours (1 hour 45 min)",
+    };
+    //let points = getOption("points");
+    ToptimerExtension.isMuted = false;
+    // The Bar
+    const toptimerTimer = $('<div class="toptimer toptimer-timer">');
+    const progressBar = $('<div id="myProgress"><div id="myBar">');
+    const controls = $('<div class="toptimer-timer-controls">');
+    const rightWrapper = $('<div class="toptimer toptimer-right-wrapper">');
+    const leftWrapper = $('<div class="left-wrapper">');
 
-  toptimerTimer.append(leftWrapper).append(controls).append(rightWrapper);
+    toptimerTimer.append(leftWrapper).append(controls).append(rightWrapper);
 
-  //Left Wrapper
-  const btnCalendarBtn = $('<button class="toptimer" id="toptimer-calendar-btn" type="button">');
-  btnCalendarBtn.append(
-    $(`<img src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
-  );
-  btnCalendarBtn.click(open_Calendar);
-  
-  leftWrapper.append(btnCalendarBtn);
+    //Left Wrapper
+    const btnCalendarBtn = $('<button class="toptimer" id="toptimer-calendar-btn" type="button">');
+    btnCalendarBtn.append(
+        $(`<img src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
+    );
+    btnCalendarBtn.click(open_Calendar);
 
-  //Center Stuff
-  const dropdownControl = $('<select class="toptimer toptimer-timer-dropdown">');
-  const btnGoControl = $('<button class="toptimer-timer-go" type="button">');
-  const mute_btn = $('<button id="mute_btn" class="toptimer" type="button">');
-  controls.append(dropdownControl);
+    leftWrapper.append(btnCalendarBtn);
 
-  const countDown = $('<div class="toptimer-timer-countdown">');
-  const btnStop = $('<button class="toptimer toptimer-timer-stop">');
-  btnStop.html("✕");
-  btnStop.click(handleStopClick);
+    //Center Stuff
+    const dropdownControl = $('<select class="toptimer toptimer-timer-dropdown">');
+    const btnGoControl = $('<button class="toptimer-timer-go" type="button">');
+    const mute_btn = $('<button id="mute_btn" class="toptimer" type="button">');
+    controls.append(dropdownControl);
 
-  for (const value in dropdownOptions) {
-    if (Object.hasOwnProperty.call(dropdownOptions, value)) {
-      const label = dropdownOptions[value];
-      const option = $(`<option value=${value}>`);
-      option.text(label);
-      $(dropdownControl).append(option);
+    const countDown = $('<div class="toptimer-timer-countdown">');
+    const btnStop = $('<button class="toptimer toptimer-timer-stop">');
+    btnStop.html("✕");
+    btnStop.click(handleStopClick);
+
+    for (const value in dropdownOptions) {
+        if (Object.hasOwnProperty.call(dropdownOptions, value)) {
+            const label = dropdownOptions[value];
+            const option = $('<option value=${value}>');
+            option.text(label);
+            $(dropdownControl).append(option);
+        }
     }
-  }
-  controls.append(btnGoControl);
-  btnGoControl.text("GO!").click(handleGoClick);
-  
-  toptimerTimer.append(countDown);
-  countDown.hide();
+    controls.append(btnGoControl);
+    btnGoControl.text("GO!").click(handleGoClick);
 
-  //Right Stuff
-  
-  mute_btn.html('🔊').click(toggle_mute);
+    toptimerTimer.append(countDown);
+    countDown.hide();
 
-  const settingsBtn = $('<button id="settings-btn" class="btn toptimer" type="button">').click(openSettingPane);
-  settingsBtn.append(
-    $(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
-  );
+    //Right Stuff
 
-  rightWrapper.append(mute_btn);
-  rightWrapper.append(settingsBtn); 
+    mute_btn.html('🔊').click(toggle_mute);
 
-  //Init
-  jQuery(document).ready(async function ($) {
-    console.log('site is ready')
-    //if ($('header').get(0) != "undefined"){
-    //  $('header').prepend(progressBar);
-    //  $('header').prepend(toptimerTimer);
-    //  console.log('prepending to header');
-    //}else{
-      
-      $(document.body).prepend('<div id="copyOfBody123">');
-      var style = css($("body"));
-      $("#copyOfBody123").css(style);
-      
-      $(document.body).css('width','100%');
-      let childs = Array.from($('body').children());
-      childs.forEach( (item,index) => $(item).appendTo($('#copyOfBody123')));
-      $(document.body).prepend(progressBar);
-      $(document.body).prepend(toptimerTimer);
-      $('body').css("background-color","");
-      
-    
-      console.log('prepending to body');
-    //}
+    const settingsBtn = $('<button id="settings-btn" class="btn toptimer" type="button">').click(openSettingPane);
+    settingsBtn.append(
+        $(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
+    );
 
-    let color = await getColor();
-    $("#myBar").css("background-color",color)
-    
-    close_Calendar();
-    let hideCal = await getHideCalendar();
-    console.log("hideCal"+hideCal)
-    if (hideCal){
-      $("#toptimer-calendar-btn").hide();
-    }
-  });
+    rightWrapper.append(mute_btn);
+    rightWrapper.append(settingsBtn);
 
-  async function handleGoClick() {
+    //Init
+    jQuery(document).ready(async function($) {
+        console.log('site is ready')
+            //if ($('header').get(0) != "undefined"){
+            //  $('header').prepend(progressBar);
+            //  $('header').prepend(toptimerTimer);
+            //  console.log('prepending to header');
+            //}else{
 
-    playAudio("../media/engine-start.mp3");
-    
-    controls.hide();
-    
-    // Set the date we're counting down to
-    const now = new Date().getTime();
-    const minutes = parseInt(dropdownControl.val());
-    const countDownDate = new Date().getTime() + minutes * 60 * 1000;
-    const fullTime = minutes * 60;
-    console.log(fullTime)
-    const distance = countDownDate - now;
-    countDown.html(formatedTimeSpan(fullTime,distance / 1000));
-    
-    countDown.show();
-    // Update the count down every 1 second
-    ToptimerExtension.interval = setInterval(() => {
-        // Get today's date and time
+        $(document.body).prepend('<div id="copyOfBody123">');
+        var style = css($("body"));
+        $("#copyOfBody123").css(style);
+
+        $(document.body).css('width', '100%');
+        let childs = Array.from($('body').children());
+        childs.forEach((item, index) => $(item).appendTo($('#copyOfBody123')));
+        $(document.body).prepend(progressBar);
+        $(document.body).prepend(toptimerTimer);
+        $('body').css("background-color", "");
+
+
+        console.log('prepending to body');
+        //}
+
+        let color = await getColor();
+        $("#myBar").css("background-color", color)
+
+        close_Calendar();
+        let hideCal = await getHideCalendar();
+        console.log("hideCal" + hideCal)
+        if (hideCal) {
+            $("#toptimer-calendar-btn").hide();
+        }
+    });
+
+    async function handleGoClick() {
+
+        playAudio("../media/engine-start.mp3");
+
+        controls.hide();
+
+        // Set the date we're counting down to
         const now = new Date().getTime();
-
-        // Find the distance between now and the count down date
+        const minutes = parseInt(dropdownControl.val());
+        const countDownDate = new Date().getTime() + minutes * 60 * 1000;
+        const fullTime = minutes * 60;
+        console.log(fullTime)
         const distance = countDownDate - now;
         countDown.html(formatedTimeSpan(fullTime, distance / 1000));
-        // If the count down is finished, write some text
-        $(controls).hide();
-        countDown.append(btnStop);
-        $(countDown).show();
 
-        if (distance < 0) {
-          clearInterval(interval);
-          countDown.html("Finished");
-          playAudio("../media/ring.mp3");
+        countDown.show();
+        // Update the count down every 1 second
+        ToptimerExtension.interval = setInterval(() => {
+            // Get today's date and time
+            const now = new Date().getTime();
 
-          switch (minutes) {
-            case 25:
-              points += 1;
-              break;
-            case 55:
-              points += 2;
-              break;
-            case 105:
-              points += 4;
-              break;
-          }
-          //$(points_span).html(points);
-          //setOption('points',points);
-          document.title = "Go again ?";
-          return;
-        }
-        countDown.append(btnStop);
-        $(btnStop).click(handleStopClick);
-      }, 1000);
-  }
+            // Find the distance between now and the count down date
+            const distance = countDownDate - now;
+            countDown.html(formatedTimeSpan(fullTime, distance / 1000));
+            // If the count down is finished, write some text
+            $(controls).hide();
+            countDown.append(btnStop);
+            $(countDown).show();
 
-  function handleStopClick() {
-    console.log("handleStopClick");
-    clearInterval(ToptimerExtension.interval);
-    countDown.hide();
-    controls.show();
-    if (ToptimerExtension.audio) {
-      ToptimerExtension.audio.pause();
-      ToptimerExtension.audio.currentTime = 0;
+            if (distance < 0) {
+                clearInterval(interval);
+                countDown.html("Finished");
+                playAudio("../media/ring.mp3");
+
+                switch (minutes) {
+                    case 25:
+                        points += 1;
+                        break;
+                    case 55:
+                        points += 2;
+                        break;
+                    case 105:
+                        points += 4;
+                        break;
+                }
+                //$(points_span).html(points);
+                //setOption('points',points);
+                document.title = "Go again ?";
+                return;
+            }
+            countDown.append(btnStop);
+            $(btnStop).click(handleStopClick);
+        }, 1000);
     }
-    document.title = "Timer stopped";
-  }
+
+    function handleStopClick() {
+        console.log("handleStopClick");
+        clearInterval(ToptimerExtension.interval);
+        countDown.hide();
+        controls.show();
+        if (ToptimerExtension.audio) {
+            ToptimerExtension.audio.pause();
+            ToptimerExtension.audio.currentTime = 0;
+        }
+        document.title = "Timer stopped";
+    }
 })(); // End of Async init function
 
 //////////////////////////////////////
 ////////// Functions /////////////////
 //////////////////////////////////////
-function updateProgressBar(percent){
-  elem = document.getElementById("myBar");
-  elem.style.width = percent + "%";
+function updateProgressBar(percent) {
+    elem = document.getElementById("myBar");
+    elem.style.width = percent + "%";
 }
 
-function toggle_mute(){
-  ToptimerExtension.isMuted = !ToptimerExtension.isMuted;
-  if(ToptimerExtension.isMuted){
-    $("#mute_btn")[0].innerHTML = "🔇";
-    console.log("toptimer muted");
-  }else{
-    $("#mute_btn")[0].innerHTML = "🔊";
-    console.log("toptimer unmuted");
-  }
+function toggle_mute() {
+    ToptimerExtension.isMuted = !ToptimerExtension.isMuted;
+    if (ToptimerExtension.isMuted) {
+        $("#mute_btn")[0].innerHTML = "🔇";
+        console.log("toptimer muted");
+    } else {
+        $("#mute_btn")[0].innerHTML = "🔊";
+        console.log("toptimer unmuted");
+    }
 }
 
 function playAudio(file) {
-  if (!ToptimerExtension.isMuted){
-    if (ToptimerExtension.audio) {
-      ToptimerExtension.audio.pause();
-      ToptimerExtension.audio.currentTime = 0;
+    if (!ToptimerExtension.isMuted) {
+        if (ToptimerExtension.audio) {
+            ToptimerExtension.audio.pause();
+            ToptimerExtension.audio.currentTime = 0;
+        }
+        ToptimerExtension.audio = new Audio(chrome.runtime.getURL(file));
+        ToptimerExtension.audio.play();
     }
-    ToptimerExtension.audio = new Audio(chrome.runtime.getURL(file));
-    ToptimerExtension.audio.play();
-  }
-}
-// get and set settings
-function getHideCalendar() {
-  sKey = "HIDE_CALENDAR_KEY";
-  return new Promise(function(resolve, reject) {
-    chrome.storage.local.get(sKey, function(items) {
-      if (chrome.runtime.lastError) {
-        console.error(chrome.runtime.lastError.message);
-        reject(chrome.runtime.lastError.message);
-      } else {
-        resolve(items[sKey]);
-      }
-    });
-  });
 }
 
-function setHideCalendar(value) {  
-  chrome.storage.local.set({"HIDE_CALENDAR_KEY": value}, function() {
-    console.log('Value is set to ' + value);
-  });
-  
-}
 
 function formatedTimeSpan(fullTime, seconds) {
-  var m = Math.ceil(Math.floor(seconds / 60)),
-    s = Math.round(seconds - m * 60);
-  if(s == 60){
-    m += 1
-    s = 0
-  }
-  if (m < 10) m = "0" + m;
-  if (s < 10) s = "0" + s;
-  document.title = m + ":" + s;
+    var m = Math.ceil(Math.floor(seconds / 60)),
+        s = Math.round(seconds - m * 60);
+    if (s == 60) {
+        m += 1
+        s = 0
+    }
+    if (m < 10) m = "0" + m;
+    if (s < 10) s = "0" + s;
+    document.title = m + ":" + s;
 
-  console.log(seconds);
-  updateProgressBar(100.0 - (seconds / fullTime)*100.0);
-  return `<span class="toptimer-timer-countdown-minute">${m}</span>:<span class="toptimer-timer-countdown-second">${s}</span><span style="margin-left: 5px">min</span>`;
+    console.log(seconds);
+    updateProgressBar(100.0 - (seconds / fullTime) * 100.0);
+    return `<span class="toptimer-timer-countdown-minute">${m}</span>:<span class="toptimer-timer-countdown-second">${s}</span><span style="margin-left: 5px">min</span>`;
 }
 
 
 
 //Github magic: https://stackoverflow.com/questions/754607/can-jquery-get-all-css-styles-associated-with-an-element
 function css(a) {
-  var sheets = document.styleSheets, o = {};
-  for (var i in sheets) {
-      var rules = sheets[i].rules || sheets[i].cssRules;
-      for (var r in rules) {
-          if (a.is(rules[r].selectorText)) {
-              o = $.extend(o, css2json(rules[r].style), css2json(a.attr('style')));
-          }
-      }
-  }
-  return o;
+    var sheets = document.styleSheets,
+        o = {};
+    for (var i in sheets) {
+        var rules = sheets[i].rules || sheets[i].cssRules;
+        for (var r in rules) {
+            if (a.is(rules[r].selectorText)) {
+                o = $.extend(o, css2json(rules[r].style), css2json(a.attr('style')));
+            }
+        }
+    }
+    return o;
 }
 
 function css2json(css) {
-  var s = {};
-  if (!css) return s;
-  if (css instanceof CSSStyleDeclaration) {
-      for (var i in css) {
-          if ((css[i]).toLowerCase) {
-              s[(css[i]).toLowerCase()] = (css[css[i]]);
-          }
-      }
-  } else if (typeof css == "string") {
-      css = css.split("; ");
-      for (var i in css) {
-          var l = css[i].split(": ");
-          s[l[0].toLowerCase()] = (l[1]);
-      }
-  }
-  return s;
+    var s = {};
+    if (!css) return s;
+    if (css instanceof CSSStyleDeclaration) {
+        for (var i in css) {
+            if ((css[i]).toLowerCase) {
+                s[(css[i]).toLowerCase()] = (css[css[i]]);
+            }
+        }
+    } else if (typeof css == "string") {
+        css = css.split("; ");
+        for (var i in css) {
+            var l = css[i].split(": ");
+            s[l[0].toLowerCase()] = (l[1]);
+        }
+    }
+    return s;
 }
