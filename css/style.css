@@ -1,237 +1,266 @@
 .toptimer {
-  background: #353535 !important;
-  color: #fff !important;
+    background: #353535 !important;
+    color: #fff !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
 }
 
-.toptimer-timer {
-  position: relative;
-  z-index: 9999;
-  height: 39px;
-  /*position: sticky;*/
-	top: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size:12px;
-  margin-bottom: 0px;
-  margin-top:0px;
-  padding: 0px;
-  width: 100%;
-}
-
-.toptimer-timer img{
-  height: 20px !important;
-  width: 20px !important;
+#toptimer-bar {
+    position: relative;
+    z-index: 9999;
+    height: 40px;
+    /*position: sticky;*/
+    top: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 0px;
+    width: 100%;
 }
 
 .toptimer-timer-controls {
-  display: flex;
-  justify-content: center;
-}
-.toptimer-timer-countdown {
-  display: flex;
-  justify-content: center;/* align horizontal */
-  align-items: center; /* align vertical */
-}
-
-.toptimer-timer-dropdown {
-  padding: 8px 20px;
-}
-
-.toptimer-timer-go {
-  background: orange;
-  padding: 8px 20px;
-  font-weight: bold;
-  margin-left: 10px;
-  color: #000;
-  cursor: pointer;
+    display: flex;
+    justify-content: center;
 }
 
 .toptimer-timer-countdown {
-  font-size: 26px;
+    display: flex;
+    justify-content: center;
+    /* align horizontal */
+    align-items: center;
+    /* align vertical */
 }
+
+#toptimer-timer-dropdown {
+    margin-top: 0px;
+    padding: 8px 20px;
+    width: 10%;
+    height: 40px;
+}
+
+.toptimer-timer-countdown {
+    font-size: 26px;
+}
+
 .toptimer-timer-stop {
-  margin-left: 10px;
-  font-size: 16px;
-  cursor: pointer;
+    margin-left: 10px;
+    font-size: 16px;
+    cursor: pointer;
 }
+
 .toptimer-right-wrapper {
-  position: absolute;
-  right: 10px;
-  top: 0;
+    position: absolute;
+    right: 10px;
+    top: 0;
 }
 
 .left-wrapper {
-  position: absolute;
-  left: 10px;
-  top: 0;
+    position: absolute;
+    left: 10px;
+    top: 0;
 }
+
 
 /* settings btn */
 
 #settings-btn {
-  height: 39px;
-  width: 30px;
-  justify-content: center;
-  cursor: pointer;
-  float:left;
+    height: 39px;
+    width: 30px;
+    justify-content: center;
+    cursor: pointer;
+    float: left;
 }
 
-#settings-btn img {
-  height: 20px;
-  width: 20px;
+.width2020 {
+    height: 20px !important;
+    width: 20px !important;
 }
 
 #toptimer-calendar-btn {
-  height: 39px;
-  width: 30px;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+    height: 39px;
+    width: 30px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
 }
-#toptimer-calendar-btn img {
-  height: 20px;
-  width: 20px;
-}
+
 #mute_btn {
-  height: 39px;
-  width: 30px;
-  justify-content: center;
-  cursor: pointer;
-  float:left;
-}
-#mute_btn img{
-  height: 20px;
-  width: 20px;
+    height: 39px;
+    width: 30px;
+    justify-content: center;
+    cursor: pointer;
+    float: left;
 }
 
-
-#calendarPopupDiv{
-  position: absolute;
-  top: 15%;
-  width: auto;
-  height: 40%;
-  z-index: 2;
+#mute_btn img {
+    height: 20px;
+    width: 20px;
 }
 
-
+#calendarPopupDiv {
+    position: absolute;
+    top: 15%;
+    width: auto;
+    height: 40%;
+    z-index: 10002;
+}
 
 .toptimer-calendar-popup-close-btn {
-  content: "x";
-  top: 0;
-  right: 0;
-  position: absolute;
-  z-index: 9999;
-  width: 10px;
-  line-height: 1;
-  padding: 2px 12px;
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
+    content: "x";
+    top: 0;
+    right: 0;
+    position: absolute;
+    z-index: 10002;
+    width: 10px;
+    line-height: 1;
+    padding: 2px 12px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
 }
 
 #optionsClose-btn {
-  float:right;
-  right: 0;
-  top: 0;
-  content: "x";
-  position: absolute;
-  z-index: 9999;
-  width: 10px;
-  line-height: 1;
-  padding: 2px 12px;
-  display: flex;
-  justify-content: center;
-  cursor: pointer;
+    float: right;
+    right: 0;
+    top: 0;
+    content: "x";
+    position: absolute;
+    z-index: 10003;
+    width: 10px;
+    line-height: 1;
+    padding: 2px 12px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
 }
 
 #myProgress {
-  width: 100%;
-  height: 10px;
-  border-bottom: 1px solid grey;
+    width: 100%;
+    height: 10px;
+    border-bottom: 1px solid grey;
 }
 
 #myBar {
-  width: 1%;
-  height: 10px;
-  background-color: #04AA6D;
+    width: 1%;
+    height: 10px;
+    background-color: #04AA6D;
 }
 
-#toptimer__overflow{
-  background-color: #000;
-  position: absolute;
-  top:0px;
-  bottom:0px;
-  left:0px;
-  right:0px;
-  opacity: 0.8;
+#toptimer__overflow {
+    background-color: #000;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    opacity: 0.8;
+    z-index: 10000;
 }
 
-#toptimer__settingPaneContainer{
-  position: absolute;
-  top:0px;
-  bottom:0px;
-  left:0px;
-  right:0px;
+#toptimer__settingPaneContainer {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 10001;
 }
 
-#toptimer__settingPane{
-  position: relative;
-  display: block;
-  height: 60%;
-  width: 80%;
-  background-color: black;
-  color: white !important;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 10%;
-  padding: 10px;
+#toptimer__settingPane {
+    position: relative;
+    display: block;
+    height: 60%;
+    width: 80%;
+    background-color: black;
+    color: white !important;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    padding: 10px;
 }
 
-#calLink{
-  width: 80%;
+#calLink {
+    width: 80%;
+    height: 20px;
 }
 
-#toptimer__settingPane{
-  border-style: solid;
-  border-width: 2px;
-  border-color: grey;
-}
-#calendarPopupDiv{
-  border-style: solid;
-  border-width: 2px;
-  border-color: grey;
+#toptimer__settingPane {
+    border-style: solid;
+    border-width: 2px;
+    border-color: grey;
 }
 
-.red{
-  background-color:red;
-}
-.green{
-  background-color:green;
-}
-.blue{
-  background-color:blue;
-}
-.orange{
-  background-color:orange;
+#calendarPopupDiv {
+    border-style: solid;
+    border-width: 2px;
+    border-color: grey;
+    z-index: 10001;
 }
 
-.colorbox{
-  height: 20px;
-  width: 20px;
-  float: left;
+.red {
+    background-color: red;
 }
 
-.line{
-  margin-bottom:5px;
+.green {
+    background-color: green;
 }
 
-.__TTsubTitle{
-  color: white !important;
+.blue {
+    background-color: blue;
 }
 
-#setCal{
-  background-color: orange;
+.orange {
+    background-color: orange;
 }
 
-#__TTcb-hide-calendarLabel{
-  background-color: white !important;
+.colorbox {
+    height: 20px;
+    width: 20px;
+    float: left;
+}
+
+.line {
+    margin-bottom: 5px;
+}
+
+.__TTsubTitle {
+    color: white !important;
+}
+
+#setCal {
+    background-color: orange;
+    height: 30px;
+    width: 40px;
+}
+
+#__TTcb-hide-calendarLabel {
+    color: white;
+}
+
+.__TTBUTTON {
+    margin: 0px 0px 0px 0px;
+    height: 40px;
+    width: 40px;
+}
+
+#go_btn {
+    background: orange;
+    padding: 8px 20px;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #000;
+    cursor: pointer;
+    height: 40px;
+    width: 80px !important;
+}
+
+#toptimer__settingPane hr {
+    margin: 5px 5px 5px 5px;
+    border-top: solid 2px rgb(238, 238, 238) !important;
+    border-bottom: solid 2px rgb(238, 238, 238) !important;
+    display: block;
+    height: 1px !important;
+    background: transparent;
+    opacity: '0';
 }

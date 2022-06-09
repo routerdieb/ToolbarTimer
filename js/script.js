@@ -12,7 +12,7 @@ let ToptimerExtension = {};
     //let points = getOption("points");
     ToptimerExtension.isMuted = false;
     // The Bar
-    const toptimerTimer = $('<div class="toptimer toptimer-timer">');
+    const toptimerTimer = $('<div id="toptimer-bar" class="toptimer">');
     const progressBar = $('<div id="myProgress"><div id="myBar">');
     const controls = $('<div class="toptimer-timer-controls">');
     const rightWrapper = $('<div class="toptimer toptimer-right-wrapper">');
@@ -21,29 +21,30 @@ let ToptimerExtension = {};
     toptimerTimer.append(leftWrapper).append(controls).append(rightWrapper);
 
     //Left Wrapper
-    const btnCalendarBtn = $('<button class="toptimer" id="toptimer-calendar-btn" type="button">');
+    const btnCalendarBtn = $('<button class="toptimer __TTBUTTON" id="toptimer-calendar-btn" type="button" style="background-color: black !important;">');
     btnCalendarBtn.append(
-        $(`<img src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
+        $(`<img class="width2020" src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
     );
     btnCalendarBtn.click(open_Calendar);
 
     leftWrapper.append(btnCalendarBtn);
 
     //Center Stuff
-    const dropdownControl = $('<select class="toptimer toptimer-timer-dropdown">');
-    const btnGoControl = $('<button class="toptimer-timer-go" type="button">');
-    const mute_btn = $('<button id="mute_btn" class="toptimer" type="button">');
+    const dropdownControl = $('<select id="toptimer-timer-dropdown" class="toptimer">');
+    ToptimerExtension.dropdownControl = dropdownControl
+    const btnGoControl = $('<button id="go_btn" class="__TTBUTTON" type="button">');
+    const mute_btn = $('<button id="mute_btn" class="toptimer __TTBUTTON" type="button">');
     controls.append(dropdownControl);
 
     const countDown = $('<div class="toptimer-timer-countdown">');
-    const btnStop = $('<button class="toptimer toptimer-timer-stop">');
+    const btnStop = $('<button class="toptimer toptimer-timer-stop __TTBUTTON">');
     btnStop.html("✕");
     btnStop.click(handleStopClick);
 
     for (const value in dropdownOptions) {
         if (Object.hasOwnProperty.call(dropdownOptions, value)) {
             const label = dropdownOptions[value];
-            const option = $('<option value=${value}>');
+            const option = $(`<option value=${value}>`);
             option.text(label);
             $(dropdownControl).append(option);
         }
@@ -58,9 +59,9 @@ let ToptimerExtension = {};
 
     mute_btn.html('🔊').click(toggle_mute);
 
-    const settingsBtn = $('<button id="settings-btn" class="btn toptimer" type="button">').click(openSettingPane);
+    const settingsBtn = $('<button id="settings-btn" class="toptimer __TTBUTTON" type="button">').click(openSettingPane);
     settingsBtn.append(
-        $(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
+        $(`<img class="width2020" src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
     );
 
     rightWrapper.append(mute_btn);
@@ -74,21 +75,12 @@ let ToptimerExtension = {};
             //  $('header').prepend(toptimerTimer);
             //  console.log('prepending to header');
             //}else{
+        moveToDiv();
 
-        $(document.body).prepend('<div id="copyOfBody123">');
-        var style = css($("body"));
-        $("#copyOfBody123").css(style);
-
-        $(document.body).css('width', '100%');
-        let childs = Array.from($('body').children());
-        childs.forEach((item, index) => $(item).appendTo($('#copyOfBody123')));
         $(document.body).prepend(progressBar);
         $(document.body).prepend(toptimerTimer);
-        $('body').css("background-color", "");
-
 
         console.log('prepending to body');
-        //}
 
         let color = await getColor();
         $("#myBar").css("background-color", color)
@@ -99,6 +91,17 @@ let ToptimerExtension = {};
         if (hideCal) {
             $("#toptimer-calendar-btn").hide();
         }
+
+        //make my css more important
+        if (window.document.styleSheets.length > 0) {
+            var sheet = window.document.styleSheets[window.document.styleSheets.length - 1];
+            url = chrome.runtime.getURL('css/styles.css');
+            fetch(url).then((a) => console.log(a));
+
+
+        }
+
+
     });
 
     async function handleGoClick() {
@@ -109,7 +112,10 @@ let ToptimerExtension = {};
 
         // Set the date we're counting down to
         const now = new Date().getTime();
-        const minutes = parseInt(dropdownControl.val());
+
+        const minutes = parseInt(ToptimerExtension.dropdownControl.val());
+        console.log('ToptimerExtension val' + ToptimerExtension == null)
+        console.log('dropdownControl' + dropdownControl == null)
         const countDownDate = new Date().getTime() + minutes * 60 * 1000;
         const fullTime = minutes * 60;
         console.log(fullTime)
@@ -250,4 +256,24 @@ function css2json(css) {
         }
     }
     return s;
+}
+
+function moveToDiv() {
+    //BODY
+    $(document.body).prepend('<div id="copyOfBody123">');
+    var style = css($("body"));
+    $("#copyOfBody123").css(style);
+
+    $(document.body).css("all", "unset");
+    let childs = Array.from($('body').children());
+
+
+    childs.forEach((item, index) => $(item).appendTo($('#copyOfBody123')));
+
+    //IMAGE
+    //var style = css($("select"));
+    //console.log(style)
+    //$("#copyOfBody123 select").css(style);
+    //$("select").css("all","unset");
+
 }

@@ -21,14 +21,11 @@ async function open_Calendar() {
     calendarIFrame = calendarIFrame ? calendarIFrame : '<div class="error"> Set the Calendar in the settings.';
     calDiv.append(calendarPopup);
 
-    console.log(" heyho " + calendarIFrame)
     calendarPopup.html(
         calendarIFrame
     );
     calendarPopup.append(btnCalendarCloseControl);
     btnCalendarCloseControl.click(close_Calendar);
-
-
 
 
     $(document.body).prepend(calDiv);
@@ -46,10 +43,6 @@ async function open_Calendar() {
             close_Calendar();
         }
     });
-
-
-
-
 }
 
 

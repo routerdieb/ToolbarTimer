@@ -4,7 +4,7 @@ async function openSettingPane() {
     $(document.body).append(html_overflow);
 
     const html_container = '<div id="toptimer__settingPaneContainer">';
-    const html_setting_pane = '<div id="toptimer__settingPane" class="toptimer __TTsubTitle">Settings <hr>';
+    const html_setting_pane = '<div id="toptimer__settingPane" class="toptimer __TTsubTitle">Settings <hr >';
     const html = html_container + html_setting_pane;
     $(document.body).append(html);
     const optionsCloseButton = '<button id="optionsClose-btn" class="btn toptimer" type="button">X</button>';
@@ -25,7 +25,7 @@ async function openSettingPane() {
     //$("#toptimer__settingPane").append("Font:</br>");
 
     create_hide_cal_checkbox();
-    $('#cb-hide-calendarLabel').click(function() {
+    $('#__TTcb-hide-calendarLabel').click(function() {
         console.log("clicked checkbox");
         if ($('#cb-hide-calendar')[0].checked) {
             $("#toptimer-calendar-btn").hide();
@@ -58,13 +58,16 @@ async function openSettingPane() {
 
     $('#setCal').click(() => {
         val = $('#calLink').val()
-        console.log(val)
-        setCalendar(val)
+        if (val.startsWith('<iframe') && val.contains('google')) {
+            setCalendar(val)
+        } else {
+            showErrorMsg('This is not an Google Embed Link');
+        }
+
     });
-
-
-
 }
+
+
 
 
 function closeSettingsPane() {
@@ -103,6 +106,8 @@ function create_color_div() {
     return string + '</div><br>'
 
 }
+
+
 
 function AddColorBoxClickListener() {
     string = ""
