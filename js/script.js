@@ -17,6 +17,9 @@ let ToptimerExtension = {};
     const controls = $('<div class="toptimer-timer-controls">');
     const rightWrapper = $('<div class="toptimer toptimer-right-wrapper">');
     const leftWrapper = $('<div class="left-wrapper">');
+    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/options.html')}"></iframe>`)
+    toptimerTimer.append(IFrame)
+    console.log(chrome.runtime.getURL('html/options.html'))
 
     toptimerTimer.append(leftWrapper).append(controls).append(rightWrapper);
 
@@ -75,10 +78,25 @@ let ToptimerExtension = {};
             //  $('header').prepend(toptimerTimer);
             //  console.log('prepending to header');
             //}else{
-        moveToDiv();
 
-        $(document.body).prepend(progressBar);
-        $(document.body).prepend(toptimerTimer);
+        mode = 1
+        if (mode == 1) {
+            //wrap body into lower div
+            moveToDiv();
+            $(document.body).prepend(progressBar);
+            $(document.body).prepend(toptimerTimer);
+        }
+        if (mode == 2) {
+            //add to html5 header element
+            $('header').prepend(progressBar);
+            $('header').prepend(toptimerTimer);
+        }
+        if (mode == 3) {
+            //add top, don't care (may work)
+            $(document.body).prepend(progressBar);
+            $(document.body).prepend(toptimerTimer);
+
+        }
 
         console.log('prepending to body');
 
@@ -276,4 +294,19 @@ function moveToDiv() {
     //$("#copyOfBody123 select").css(style);
     //$("select").css("all","unset");
 
+}
+
+
+function style(){
+	return ' position: relative;
+    z-index: 9999;
+    height: 40px;
+    /*position: sticky;*/
+    top: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 0px;
+    width: 100%;'
 }
