@@ -18,7 +18,7 @@
   ],
   "web_accessible_resources": [{
     "resources":["media/engine-start.mp3","media/ring.mp3","media/calendar-icon.png",
-		"media/gear-icon.png","media/engine-start.mp3","media/ring.mp3","css/styles.css"],
+		"media/gear-icon.png","media/engine-start.mp3","media/ring.mp3","css/styles.css","html/options.html"],
 	"matches": ["<all_urls>"],
        "extension_ids": []
   }],
