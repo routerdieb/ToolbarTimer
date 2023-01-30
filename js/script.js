@@ -12,13 +12,13 @@ let ToptimerExtension = {};
     //let points = getOption("points");
     ToptimerExtension.isMuted = false;
     // The Bar
-    const toptimerTimer = $('<div id="toptimer-bar" class="toptimer">');
+    const toptimerTimer = $(`<div id="toptimer-bar" style="${style()}" class="toptimer">`);
     const progressBar = $('<div id="myProgress"><div id="myBar">');
     const controls = $('<div class="toptimer-timer-controls">');
     const rightWrapper = $('<div class="toptimer toptimer-right-wrapper">');
     const leftWrapper = $('<div class="left-wrapper">');
-    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/options.html')}"></iframe>`)
-    toptimerTimer.append(IFrame)
+    //const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/options.html')}"></iframe>`)
+    //toptimerTimer.append(IFrame)
     console.log(chrome.runtime.getURL('html/options.html'))
 
     toptimerTimer.append(leftWrapper).append(controls).append(rightWrapper);
@@ -26,7 +26,7 @@ let ToptimerExtension = {};
     //Left Wrapper
     const btnCalendarBtn = $('<button class="toptimer __TTBUTTON" id="toptimer-calendar-btn" type="button" style="background-color: black !important;">');
     btnCalendarBtn.append(
-        $(`<img class="width2020" src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
+        $(`<img class="width2020" style="${icon_style()}float:left;" src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
     );
     btnCalendarBtn.click(open_Calendar);
 
@@ -36,10 +36,10 @@ let ToptimerExtension = {};
     const dropdownControl = $('<select id="toptimer-timer-dropdown" class="toptimer">');
     ToptimerExtension.dropdownControl = dropdownControl
     const btnGoControl = $('<button id="go_btn" class="__TTBUTTON" type="button">');
-    const mute_btn = $('<button id="mute_btn" class="toptimer __TTBUTTON" type="button">');
+    const mute_btn = $('<button id="mute_btn" style="${icon_style()}float:right;" class="toptimer __TTBUTTON" type="button">');
     controls.append(dropdownControl);
 
-    const countDown = $('<div class="toptimer-timer-countdown">');
+    const countDown = $('<span class="toptimer-timer-countdown">');
     const btnStop = $('<button class="toptimer toptimer-timer-stop __TTBUTTON">');
     btnStop.html("✕");
     btnStop.click(handleStopClick);
@@ -64,7 +64,7 @@ let ToptimerExtension = {};
 
     const settingsBtn = $('<button id="settings-btn" class="toptimer __TTBUTTON" type="button">').click(openSettingPane);
     settingsBtn.append(
-        $(`<img class="width2020" src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
+        $(`<img class="width2020" style="${icon_style()}" src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
     );
 
     rightWrapper.append(mute_btn);
@@ -82,7 +82,7 @@ let ToptimerExtension = {};
         mode = 1
         if (mode == 1) {
             //wrap body into lower div
-            moveToDiv();
+            //moveToDiv();
             $(document.body).prepend(progressBar);
             $(document.body).prepend(toptimerTimer);
         }
@@ -298,15 +298,19 @@ function moveToDiv() {
 
 
 function style(){
-	return ' position: relative;
-    z-index: 9999;
-    height: 40px;
-    /*position: sticky;*/
-    top: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    margin-bottom: 0px;
-    margin-top: 0px;
-    padding: 0px;
+	return ' position: relative;\
+    z-index: 9999;\
+    height: 40px;\
+    /*position: sticky;*/\
+    top: 0;\
+    font-family: Arial, Helvetica, sans-serif;\
+    font-size: 12px;\
+    margin-bottom: 0px;\
+    margin-top: 0px;\
+    padding: 0px;\
     width: 100%;'
+}
+
+function icon_style(){
+    return 'width:20px;height:20px;'
 }
