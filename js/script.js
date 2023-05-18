@@ -12,16 +12,19 @@ let ToptimerExtension = {};
     //let points = getOption("points");
     ToptimerExtension.isMuted = false;
     // The Bar
-    const toptimerTimer = $(`<div id="toptimer-bar" style="${style()}" class="toptimer">`);
-    const progressBar = $('<div id="myProgress"><div id="myBar">');
-    const controls = $('<div class="toptimer-timer-controls">');
-    const rightWrapper = $('<div class="toptimer toptimer-right-wrapper">');
-    const leftWrapper = $('<div class="left-wrapper">');
-    //const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/options.html')}"></iframe>`)
-    //toptimerTimer.append(IFrame)
+    const toptimerTimer = $(`<div id="toptimer-bar" style="${toptimer_bar()}" class="toptimer">`);
+    const progressBar = $(`<div id="myProgress" style="${id_my_progress()}"><div id="myBar" style="${id_my_bar()}">`);
+    const controls = $(`<div style="${class_top_timer_controls()}">`);
+    const rightWrapper = $(`<div style="${right_wrapper()}">`);
+    const leftWrapper = $(`<div style="${left_wrapper()}">`);
+    
+    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/empty.html')}" width="100%" height="50px" style="margin:0px"></iframe>`)
+    toptimerTimer.append(IFrame)
     console.log(chrome.runtime.getURL('html/options.html'))
 
-    toptimerTimer.append(leftWrapper).append(controls).append(rightWrapper);
+    toptimerTimer.append(leftWrapper)
+    toptimerTimer.append(controls)
+    toptimerTimer.append(rightWrapper);
 
     //Left Wrapper
     const btnCalendarBtn = $('<button class="toptimer __TTBUTTON" id="toptimer-calendar-btn" type="button" style="background-color: black !important;">');
@@ -35,12 +38,12 @@ let ToptimerExtension = {};
     //Center Stuff
     const dropdownControl = $('<select id="toptimer-timer-dropdown" class="toptimer">');
     ToptimerExtension.dropdownControl = dropdownControl
-    const btnGoControl = $('<button id="go_btn" class="__TTBUTTON" type="button">');
-    const mute_btn = $('<button id="mute_btn" style="${icon_style()}float:right;" class="toptimer __TTBUTTON" type="button">');
+    const btnGoControl = $('<button id="go_btn" class="__TTBUTTON" style="${icon_style()}" type="button">');
+    const mute_btn = $(`<button id="mute_btn" style="${icon_style()}" class="toptimer __TTBUTTON" type="button">`);
     controls.append(dropdownControl);
 
     const countDown = $('<span class="toptimer-timer-countdown">');
-    const btnStop = $('<button class="toptimer toptimer-timer-stop __TTBUTTON">');
+    const btnStop = $(`<button class="toptimer toptimer-timer-stop __TTBUTTON" style="${icon_style()}">`);
     btnStop.html("✕");
     btnStop.click(handleStopClick);
 
@@ -73,18 +76,12 @@ let ToptimerExtension = {};
     //Init
     jQuery(document).ready(async function($) {
         console.log('site is ready')
-            //if ($('header').get(0) != "undefined"){
-            //  $('header').prepend(progressBar);
-            //  $('header').prepend(toptimerTimer);
-            //  console.log('prepending to header');
-            //}else{
 
         mode = 1
-        if (mode == 1) {
-            //wrap body into lower div
-            //moveToDiv();
-            $(document.body).prepend(progressBar);
-            $(document.body).prepend(toptimerTimer);
+        if (mode == 1){
+            $(document.body).prepend(IFrame);
+            IFrame.prepend(progressBar);
+            IFrame.prepend(toptimerTimer);
         }
         if (mode == 2) {
             //add to html5 header element
@@ -95,10 +92,11 @@ let ToptimerExtension = {};
             //add top, don't care (may work)
             $(document.body).prepend(progressBar);
             $(document.body).prepend(toptimerTimer);
-
+        }
+        if (mode == 4){
+            $(document.body).prepend(IFrame);
         }
 
-        console.log('prepending to body');
 
         let color = await getColor();
         $("#myBar").css("background-color", color)
@@ -110,14 +108,7 @@ let ToptimerExtension = {};
             $("#toptimer-calendar-btn").hide();
         }
 
-        //make my css more important
-        if (window.document.styleSheets.length > 0) {
-            var sheet = window.document.styleSheets[window.document.styleSheets.length - 1];
-            url = chrome.runtime.getURL('css/styles.css');
-            fetch(url).then((a) => console.log(a));
-
-
-        }
+       
 
 
     });
@@ -274,43 +265,4 @@ function css2json(css) {
         }
     }
     return s;
-}
-
-function moveToDiv() {
-    //BODY
-    $(document.body).prepend('<div id="copyOfBody123">');
-    var style = css($("body"));
-    $("#copyOfBody123").css(style);
-
-    $(document.body).css("all", "unset");
-    let childs = Array.from($('body').children());
-
-
-    childs.forEach((item, index) => $(item).appendTo($('#copyOfBody123')));
-
-    //IMAGE
-    //var style = css($("select"));
-    //console.log(style)
-    //$("#copyOfBody123 select").css(style);
-    //$("select").css("all","unset");
-
-}
-
-
-function style(){
-	return ' position: relative;\
-    z-index: 9999;\
-    height: 40px;\
-    /*position: sticky;*/\
-    top: 0;\
-    font-family: Arial, Helvetica, sans-serif;\
-    font-size: 12px;\
-    margin-bottom: 0px;\
-    margin-top: 0px;\
-    padding: 0px;\
-    width: 100%;'
-}
-
-function icon_style(){
-    return 'width:20px;height:20px;'
 }

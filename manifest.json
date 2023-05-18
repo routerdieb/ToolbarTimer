@@ -12,13 +12,13 @@
   "content_scripts": [
     {
       "matches": ["https://*/*","http://*/*"],
-      "css": ["/css/style.css","css/errorDiv.css"],
-      "js": ["js/jquery-3.6.0.slim.min.js","js/utils.js","js/loadStore.js","js/options.js", "js/calendar.js","js/script.js"]
+      "js": ["js/styles.js","js/jquery-3.6.0.slim.min.js","js/utils.js","js/loadStore.js","js/options.js", "js/calendar.js","js/script.js"]
     }
   ],
   "web_accessible_resources": [{
     "resources":["media/engine-start.mp3","media/ring.mp3","media/calendar-icon.png",
-		"media/gear-icon.png","media/engine-start.mp3","media/ring.mp3","css/styles.css","html/options.html"],
+		"media/gear-icon.png","media/engine-start.mp3","media/ring.mp3","css/styles.css","html/options.html","html/empty.html"],
+	"css":["css/styles"],
 	"matches": ["<all_urls>"],
        "extension_ids": []
   }],
