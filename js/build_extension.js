@@ -122,18 +122,14 @@ function playAudio(file) {
             ToptimerExtension.audio.pause();
             ToptimerExtension.audio.currentTime = 0;
         }
-		audio = new Audio(chrome.runtime.getURL(file));
-		audio.play();
+		ToptimerExtension.audio = new Audio(chrome.runtime.getURL(file));
+		ToptimerExtension.audio.play();
     }
 }
 
 
 async function handleGoClick() {
 		playAudio("../media/engine-start.mp3");
-		
-
-		console.log('activated handle go click');
-        //playAudio("../media/engine-start.mp3");
 		
 		ToptimerExtension.btnGo.hide();
 		ToptimerExtension.dropdownControl.hide();
@@ -172,17 +168,14 @@ async function handleGoClick() {
 }
 
 function handleStopClick() {
-		
-	
-        console.log("handleStopClick");
         clearInterval(ToptimerExtension.interval);
 		ToptimerExtension.btnGo.show();
 		ToptimerExtension.dropdownControl.show();
 		ToptimerExtension.countDown.hide();
 		ToptimerExtension.btnStop.hide();
 		
-        //if (ToptimerExtension.audio) {
-        //    ToptimerExtension.audio.pause();
-        //    ToptimerExtension.audio.currentTime = 0;
-        //}
+        if (ToptimerExtension.audio) {
+            ToptimerExtension.audio.pause();
+            ToptimerExtension.audio.currentTime = 0;
+        }
 }
