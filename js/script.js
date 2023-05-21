@@ -18,13 +18,13 @@ let ToptimerExtension = {};
     const rightWrapper = $(`<div style="${right_wrapper()}">`);
     const leftWrapper = $(`<div style="${left_wrapper()}">`);
     
-    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/empty.html')}" width="100%" height="50px" style="margin:0px"></iframe>`)
-    toptimerTimer.append(IFrame)
-    console.log(chrome.runtime.getURL('html/options.html'))
+    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/empty.html')}" width="100%" height="50px" style="margin:0px"></iframe>`);
+    //toptimerTimer.append(IFrame)
+    console.log(chrome.runtime.getURL('html/options.html'));
 
-    toptimerTimer.append(leftWrapper)
-    toptimerTimer.append(controls)
-    toptimerTimer.append(rightWrapper);
+    $('#toptimer-bar').append(leftWrapper);
+    //toptimerTimer.append(controls)
+    //toptimerTimer.append(rightWrapper);
 
     //Left Wrapper
     const btnCalendarBtn = $('<button class="toptimer __TTBUTTON" id="toptimer-calendar-btn" type="button" style="background-color: black !important;">');
@@ -80,8 +80,8 @@ let ToptimerExtension = {};
         mode = 1
         if (mode == 1){
             $(document.body).prepend(IFrame);
-            IFrame.prepend(progressBar);
-            IFrame.prepend(toptimerTimer);
+            //IFrame.prepend(progressBar);
+            //IFrame.prepend(toptimerTimer);
         }
         if (mode == 2) {
             //add to html5 header element
@@ -107,9 +107,6 @@ let ToptimerExtension = {};
         if (hideCal) {
             $("#toptimer-calendar-btn").hide();
         }
-
-       
-
 
     });
 
