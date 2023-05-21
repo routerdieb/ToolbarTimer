@@ -74,7 +74,7 @@ jQuery(document).ready(async function($) {
 	
 	
 	// progress bar
-	ToptimerExtension.progress_bar = $('<div style="height:24px;width:1%;background-color:red;"></div>');
+	ToptimerExtension.progress_bar = $('<div style="height:6px;width:1%;background-color:red;"></div>');
 	const progress_wrapper = $('#progress_container');
 	progress_wrapper.append(ToptimerExtension.progress_bar)
 	
