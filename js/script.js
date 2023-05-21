@@ -18,7 +18,7 @@ let ToptimerExtension = {};
     const rightWrapper = $(`<div style="${right_wrapper()}">`);
     const leftWrapper = $(`<div style="${left_wrapper()}">`);
     
-    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/empty.html')}" width="100%" height="50px" style="margin:0px"></iframe>`)
+    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/empty.html')}" width="100%" height="50px" style="margin:0px;padding:0px"></iframe>`)
     toptimerTimer.append(IFrame)
     console.log(chrome.runtime.getURL('html/options.html'))
 
