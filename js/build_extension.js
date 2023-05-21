@@ -10,7 +10,7 @@ jQuery(document).ready(async function($) {
         55: "55 Min",
         105: "1:45 Hours (1 hour 45 min)",
     };
-    //ToptimerExtension.isMuted = false;
+    ToptimerExtension.isMuted = false;
 	
 	// Left Wrapper
     const leftWrapper = $('#left_wrapper');
@@ -60,7 +60,7 @@ jQuery(document).ready(async function($) {
 
    
 	const mute_btn = $(`<button id="mute_btn" class="toptimer __TTBUTTON" type="button"><\button>`);
-	mute_btn.html('&#128263;')//.click(toggle_mute);
+	mute_btn.html('&#128266;').click(toggle_mute);
     const settingsBtn = $('<button id="settings-btn" class="toptimer __TTBUTTON" type="button">')//.click(openSettingPane);
     settingsBtn.append(
         $(`<img class="width2020" src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
@@ -68,9 +68,6 @@ jQuery(document).ready(async function($) {
 
     rightWrapper.append(mute_btn);
     rightWrapper.append(settingsBtn);
-	
-	
-	
 });
 
 
@@ -84,18 +81,17 @@ function updateProgressBar(percent) {
     elem.style.width = percent + "%";
 }
 
-/*
+
 function toggle_mute() {
     ToptimerExtension.isMuted = !ToptimerExtension.isMuted;
     if (ToptimerExtension.isMuted) {
-        $("#mute_btn")[0].innerHTML = "🔇";
+        $("#mute_btn")[0].innerHTML = "&#128263;";
         console.log("toptimer muted");
     } else {
-        $("#mute_btn")[0].innerHTML = "🔊";
+        $("#mute_btn")[0].innerHTML = "&#128266;";
         console.log("toptimer unmuted");
     }
 }
-*/
 
 
 
@@ -155,18 +151,20 @@ function css2json(css) {
 
 
 function playAudio(file) {
-	audio = new Audio(chrome.runtime.getURL(file));
-    audio.play();
-    //if (!ToptimerExtension.isMuted) {
-    //    if (ToptimerExtension.audio) {
-    //        ToptimerExtension.audio.pause();
-    //        ToptimerExtension.audio.currentTime = 0;
-    //    }   
-    //}
+    if (!ToptimerExtension.isMuted) {
+        if (ToptimerExtension.audio) {
+            ToptimerExtension.audio.pause();
+            ToptimerExtension.audio.currentTime = 0;
+        }
+		audio = new Audio(chrome.runtime.getURL(file));
+		audio.play();
+    }
 }
 
 
 async function handleGoClick() {
+		playAudio("../media/engine-start.mp3");
+		
 		//todo replace with Toptimer.something
 		countDown = $('#toptimer-countdown')
 		btnStop = $('#toptimer-stop')
@@ -207,7 +205,7 @@ async function handleGoClick() {
             if (distance < 0) {
                 clearInterval(ToptimerExtension.interval);
                 countDown.html("Finished");
-                //playAudio("../media/ring.mp3");
+                playAudio("../media/ring.mp3");
                 return;
             }
 

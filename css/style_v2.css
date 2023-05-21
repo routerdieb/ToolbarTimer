@@ -1,0 +1,12 @@
+#left_wrapper{
+	float:left;
+}
+
+#right_wrapper{
+	float: right;
+}
+
+#center_wrapper{
+	display: flex;
+    justify-content: center;
+}

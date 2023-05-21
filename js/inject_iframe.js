@@ -37,8 +37,18 @@
         //console.log("hideCal" + hideCal)
         //if (hideCal) {
         //    $("#toptimer-calendar-btn").hide();
-        //}
-
+        //)
     });
 })();
+
+function playAudio(file) {
+	audio = new Audio(chrome.runtime.getURL(file));
+    audio.play();
+    //if (!ToptimerExtension.isMuted) {
+    //    if (ToptimerExtension.audio) {
+    //        ToptimerExtension.audio.pause();
+    //        ToptimerExtension.audio.currentTime = 0;
+    //    }   
+    //}
+}
     

@@ -1,6 +1,6 @@
 {
   "name": "TopTimer",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "manifest_version": 3,
   "description": "TopTimer is a
    timer for sites. Especially for evernote, notion, kanban boards.
@@ -12,12 +12,12 @@
   "content_scripts": [
     {
       "matches": ["https://*/*","http://*/*"],
-      "js": ["js/styles.js","js/jquery-3.6.0.slim.min.js","js/utils.js","js/loadStore.js","js/options.js", "js/calendar.js","js/script.js"]
+      "js": ["js/styles.js","js/jquery-3.6.0.slim.min.js","js/utils.js","js/loadStore.js","js/options.js", "js/calendar.js","js/inject_iframe.js"]
     }
   ],
   "web_accessible_resources": [{
     "resources":["media/engine-start.mp3","media/ring.mp3","media/calendar-icon.png",
-		"media/gear-icon.png","media/engine-start.mp3","media/ring.mp3","css/styles.css","html/options.html","html/empty.html"],
+		"media/gear-icon.png","media/engine-start.mp3","media/ring.mp3","css/styles.css","html/options.html","html/extension_iframe.html"],
 	"css":["css/styles"],
 	"matches": ["<all_urls>"],
        "extension_ids": []
