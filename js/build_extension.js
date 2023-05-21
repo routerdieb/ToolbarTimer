@@ -1,8 +1,8 @@
 let ToptimerExtension = {};
-console.log('runung script 2');
+
 jQuery(document).ready(async function($) {
+	ToptimerExtension.isMuted = false;
 	
-	console.log('running build extenios inner');
 	const dropdownOptions = {
 		1: "1 min",
         5: "5 Min",
@@ -10,11 +10,11 @@ jQuery(document).ready(async function($) {
         55: "55 Min",
         105: "1:45 Hours (1 hour 45 min)",
     };
-    ToptimerExtension.isMuted = false;
-	
-	// Left Wrapper
+    
+	///////////////////////////
+    ////// Left   Wrapper /////
+	///////////////////////////
     const leftWrapper = $('#left_wrapper');
-	
     const btnCalendarBtn = $('<button class="toptimer __TTBUTTON" id="toptimer-calendar-btn" type="button" style="background-color: black !important;">');
     btnCalendarBtn.append(
         $(`<img class="width2020" style="float:left;" src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
@@ -23,39 +23,42 @@ jQuery(document).ready(async function($) {
 
     leftWrapper.append(btnCalendarBtn);
 	
-    //Center Stuff
+	///////////////////////////
+    ////// Center Wrapper /////
+	///////////////////////////
 	const centerWrapper = $('#center_wrapper');
 	
-    const dropdownControl = $('<select id="toptimer-dropdown" class="toptimer">');
-    const btnGoControl = $('<button id="go_btn" class="__TTBUTTON" type="button">Go!</button>');
+    ToptimerExtension.dropdownControl = $('<select id="toptimer-dropdown" class="toptimer">');
+    ToptimerExtension.btnGo = $('<button id="go_btn" class="__TTBUTTON" type="button">Go!</button>');
     
 
-    const countDown = $('<span id="toptimer-countdown">No Time<\span>');
-    const btnStop = $(`<button class="toptimer __TTBUTTON" id="toptimer-stop">X</button>`);
-    //btnStop.click(handleStopClick);
+    ToptimerExtension.countDown = $('<span id="toptimer-countdown">No Time<\span>');
+    ToptimerExtension.btnStop = $(`<button class="toptimer __TTBUTTON" id="toptimer-stop">X</button>`);
 
     for (const value in dropdownOptions) {
         if (Object.hasOwnProperty.call(dropdownOptions, value)) {
             const label = dropdownOptions[value];
             const option = $(`<option value=${value}>`);
             option.text(label);
-            $(dropdownControl).append(option);
+             ToptimerExtension.dropdownControl.append(option);
         }
     }
     
-	btnGoControl.click(handleGoClick);
-	btnStop.click(handleStopClick)
+	ToptimerExtension.btnGo.click(handleGoClick);
+	ToptimerExtension.btnStop.click(handleStopClick)
 
-    centerWrapper.append(countDown);
-	centerWrapper.append(btnStop);
-	centerWrapper.append(dropdownControl);
-	centerWrapper.append(btnGoControl);
+    centerWrapper.append(ToptimerExtension.countDown);
+	centerWrapper.append(ToptimerExtension.btnStop);
+	centerWrapper.append(ToptimerExtension.dropdownControl);
+	centerWrapper.append(ToptimerExtension.btnGo);
 	
-	countDown.hide()
-	btnStop.hide()
+	ToptimerExtension.countDown.hide()
+	ToptimerExtension.btnStop.hide()
 	
 
-    //Right Stuff
+    ///////////////////////////
+    ////// Right  Wrapper /////
+	///////////////////////////
 	const rightWrapper = $('#right_wrapper');
 
    
@@ -165,33 +168,26 @@ function playAudio(file) {
 async function handleGoClick() {
 		playAudio("../media/engine-start.mp3");
 		
-		//todo replace with Toptimer.something
-		countDown = $('#toptimer-countdown')
-		btnStop = $('#toptimer-stop')
-		btnGo 	= $('#go_btn')
-		dropdownControl = $('#toptimer-dropdown')
 
 		console.log('activated handle go click');
         //playAudio("../media/engine-start.mp3");
 		
-		btnGo.hide();
-		dropdownControl.hide();
-		countDown.show();
-		btnStop.show();
+		ToptimerExtension.btnGo.hide();
+		ToptimerExtension.dropdownControl.hide();
+		ToptimerExtension.countDown.show();
+		ToptimerExtension.btnStop.show();
 
         // Set the date we're counting down to
         const now = new Date().getTime();
 
-        const minutes = parseInt(dropdownControl.val());
-        console.log('dropdownControl' + dropdownControl == null)
+        const minutes = parseInt( ToptimerExtension.dropdownControl.val());
+        console.log('dropdownControl' + ToptimerExtension.dropdownControl == null)
         const countDownDate = new Date().getTime() + minutes * 60 * 1000;
         const fullTime = minutes * 60;
         console.log(fullTime)
         const distance = countDownDate - now;
-        countDown.html(formatedTimeSpan(fullTime, distance / 1000));
+        ToptimerExtension.countDown.html(formatedTimeSpan(fullTime, distance / 1000));
 		
-		//$(btnStop).click(handleStopClick);
-
         // Update the count down every 1 second
         ToptimerExtension.interval = setInterval(() => {
             // Get today's date and time
@@ -199,12 +195,12 @@ async function handleGoClick() {
 
             // Find the distance between now and the count down date
             const distance = countDownDate - now;
-            countDown.html(formatedTimeSpan(fullTime, distance / 1000));
+            ToptimerExtension.countDown.html(formatedTimeSpan(fullTime, distance / 1000));
             // If the count down is finished, write some text
 
             if (distance < 0) {
                 clearInterval(ToptimerExtension.interval);
-                countDown.html("Finished");
+                ToptimerExtension.countDown.html("Finished");
                 playAudio("../media/ring.mp3");
                 return;
             }
@@ -213,21 +209,15 @@ async function handleGoClick() {
 }
 
 function handleStopClick() {
-		countDown = $('#toptimer-countdown')
-		btnStop = $('#toptimer-stop')
-		btnGo 	= $('#go_btn')
-		dropdownControl = $('#toptimer-dropdown')
-	
+		
 	
         console.log("handleStopClick");
         clearInterval(ToptimerExtension.interval);
-		btnGo.show();
-		dropdownControl.show();
-		countDown.hide();
-		btnStop.hide();
+		ToptimerExtension.btnGo.show();
+		ToptimerExtension.dropdownControl.show();
+		ToptimerExtension.countDown.hide();
+		ToptimerExtension.btnStop.hide();
 		
-		
-        //controls.show();
         //if (ToptimerExtension.audio) {
         //    ToptimerExtension.audio.pause();
         //    ToptimerExtension.audio.currentTime = 0;
