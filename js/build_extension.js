@@ -71,6 +71,13 @@ jQuery(document).ready(async function($) {
 
     rightWrapper.append(mute_btn);
     rightWrapper.append(settingsBtn);
+	
+	
+	// progress bar
+	ToptimerExtension.progress_bar = $('<div style="height:24px;width:1%;background-color:red;"></div>');
+	const progress_wrapper = $('#progress_container');
+	progress_wrapper.append(ToptimerExtension.progress_bar)
+	
 });
 
 
@@ -80,8 +87,7 @@ jQuery(document).ready(async function($) {
 ////////// Functions /////////////////
 //////////////////////////////////////
 function updateProgressBar(percent) {
-    elem = document.getElementById("myBar");
-    elem.style.width = percent + "%";
+    ToptimerExtension.progress_bar.width(percent + "%");
 }
 
 
@@ -111,7 +117,7 @@ function formatedTimeSpan(fullTime, seconds) {
     document.title = m + ":" + s;
 
     console.log(seconds);
-    //updateProgressBar(100.0 - (seconds / fullTime) * 100.0);
+    updateProgressBar(100.0 - (seconds / fullTime) * 100.0);
     return `<span class="toptimer-timer-countdown-minute">${m}</span>:<span class="toptimer-timer-countdown-second">${s}</span><span style="margin-left: 5px">min</span>`;
 }
 
