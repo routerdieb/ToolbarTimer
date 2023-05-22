@@ -238,3 +238,7 @@
     background: transparent;
     opacity: '0';
 }
+
+#progress_bar{
+	transition: width 1s linear;
+}
