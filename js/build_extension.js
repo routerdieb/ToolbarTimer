@@ -1,5 +1,8 @@
 let ToptimerExtension = {};
 
+
+
+
 jQuery(document).ready(async function($) {
 	ToptimerExtension.isMuted = false;
 	
@@ -74,7 +77,7 @@ jQuery(document).ready(async function($) {
 	
 	
 	// progress bar
-	ToptimerExtension.progress_bar = $('<div style="height:6px;width:1%;background-color:red;"></div>');
+	ToptimerExtension.progress_bar = $('<div id="progress_bar" style="height:6px;width:1%;background-color:red;"></div>');
 	const progress_wrapper = $('#progress_container');
 	progress_wrapper.append(ToptimerExtension.progress_bar)
 	
@@ -102,7 +105,9 @@ function toggle_mute() {
     }
 }
 
-
+chrome.runtime.onMessage.addListener(function (response, sendResponse) {
+          console.log(response);
+});
 
 
 function formatedTimeSpan(fullTime, seconds) {
@@ -136,6 +141,7 @@ function playAudio(file) {
 
 async function handleGoClick() {
 		playAudio("../media/engine-start.mp3");
+		chrome.runtime.sendMessage({type: "hello",status:"false"});
 		
 		ToptimerExtension.btnGo.hide();
 		ToptimerExtension.dropdownControl.hide();
