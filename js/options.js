@@ -15,9 +15,6 @@ async function openSettingPane() {
     $("#toptimer__settingPane").append(create_color_div());
     AddColorBoxClickListener();
 
-    a = $('<iframe src="https://www.amazon.de/gp/video/detail/B089Y4SPDB/ref=atv_dp_season_select_s5" width="500px" height="500px"></iframe>');
-    $("#toptimer__settingPane").append(a);
-
     $("#toptimer__settingPane").append('<div class="line __TTsubTitle">Google Calendar:');
     $("#toptimer__settingPane").click((event) => {
         event.stopPropagation();

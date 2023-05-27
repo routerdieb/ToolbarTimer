@@ -1,8 +1,6 @@
 let ToptimerExtension = {};
 
 
-
-
 jQuery(document).ready(async function($) {
 	ToptimerExtension.isMuted = false;
 	
@@ -67,7 +65,7 @@ jQuery(document).ready(async function($) {
    
 	const mute_btn = $(`<button id="mute_btn" class="toptimer __TTBUTTON" type="button"><\button>`);
 	mute_btn.html('&#128266;').click(toggle_mute);
-    const settingsBtn = $('<button id="settings-btn" class="toptimer __TTBUTTON" type="button">')//.click(openSettingPane);
+    const settingsBtn = $('<button id="settings-btn" class="toptimer __TTBUTTON" type="button">').click(handleSettingClick);
     settingsBtn.append(
         $(`<img class="width2020" src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
     );
@@ -105,9 +103,7 @@ function toggle_mute() {
     }
 }
 
-chrome.runtime.onMessage.addListener(function (response, sendResponse) {
-          console.log(response);
-});
+
 
 
 function formatedTimeSpan(fullTime, seconds) {
@@ -121,7 +117,7 @@ function formatedTimeSpan(fullTime, seconds) {
     if (s < 10) s = "0" + s;
     document.title = m + ":" + s;
 
-    console.log(seconds);
+    //console.log(seconds);
     updateProgressBar(100.0 - (seconds / fullTime) * 100.0);
     return `<span class="toptimer-timer-countdown-minute">${m}</span>:<span class="toptimer-timer-countdown-second">${s}</span><span style="margin-left: 5px">min</span>`;
 }
@@ -141,7 +137,7 @@ function playAudio(file) {
 
 async function handleGoClick() {
 		playAudio("../media/engine-start.mp3");
-		chrome.runtime.sendMessage({type: "hello",status:"false"});
+		chrome.runtime.sendMessage({type: "go_btn",status:"true"});
 		
 		ToptimerExtension.btnGo.hide();
 		ToptimerExtension.dropdownControl.hide();
@@ -190,4 +186,12 @@ function handleStopClick() {
             ToptimerExtension.audio.pause();
             ToptimerExtension.audio.currentTime = 0;
         }
+}
+
+chrome.runtime.onMessage.addListener(function (response, sendResponse) {
+   console.log(response);
+});
+
+function handleSettingClick(){
+	chrome.runtime.sendMessage({type: "setting_pane",direction:'to_backend'});
 }

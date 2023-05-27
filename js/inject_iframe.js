@@ -6,7 +6,7 @@
 
     //Init
     jQuery(document).ready(async function($) {
-        console.log('site is ready')
+        console.log('site is ready');
 
         mode = 1
         if (mode == 1){
@@ -39,16 +39,13 @@
         //    $("#toptimer-calendar-btn").hide();
         //)
     });
+
 })();
 
-function playAudio(file) {
-	audio = new Audio(chrome.runtime.getURL(file));
-    audio.play();
-    //if (!ToptimerExtension.isMuted) {
-    //    if (ToptimerExtension.audio) {
-    //        ToptimerExtension.audio.pause();
-    //        ToptimerExtension.audio.currentTime = 0;
-    //    }   
-    //}
-}
-    
+// respond to messages
+chrome.runtime.onMessage.addListener(function (response, sendResponse) {
+	console.log(response);
+	if (response.type == 'setting_pane'){
+		openSettingPane();
+	}
+});
