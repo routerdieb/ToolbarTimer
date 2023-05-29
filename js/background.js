@@ -1,27 +1,27 @@
-function send_back_to_first(){
-	chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-		console.log(tabs)
-		console.log(tabs.length)
-		
-		chrome.tabs.sendMessage(tabs[0].id, {action: "open_dialog_box"}, function(response) {});  
-	});
-}
-
 
 console.log('service worker started (background.js)');
 try{
     chrome.runtime.onMessage.addListener(async function(request, sender) {
-		//console.log("sender.tab.id")
-		//console.log(sender.tab.id)
-		console.log('running listener')
-		console.log(request)
-		console.log(request['type'])
+		console.log('running listener');
+		console.log(request);
         if (request.type == 'go_btn'){
 			//send_back_to_all();
+			console.log('go_btn logic');
         }
 		else if (request.type == 'setting_pane'){
 			 console.log('setting pane');
 			 send_back_to_all("setting_pane","open");
+			 console.log('setting pane logic');
+		}
+		console.log('between ifs');
+		console.log(!!request.reciver);
+		if (!!request.reciver){
+			console.log('reciver exits');
+		}
+		
+		if (!!request.reciver && request.reciver == 1 || request.reciver == 2){
+			console.log('universal logic');
+			send_back_to_content(request.reciver,request.type,request.payload);
 		}
 		
 		return true

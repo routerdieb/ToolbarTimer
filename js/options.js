@@ -15,29 +15,13 @@ async function openSettingPane() {
     $("#toptimer__settingPane").append(create_color_div());
     AddColorBoxClickListener();
 
-    $("#toptimer__settingPane").append('<div class="line __TTsubTitle">Google Calendar:');
     $("#toptimer__settingPane").click((event) => {
         event.stopPropagation();
         console.log('stopPropagation');
     });
     $('#toptimer__settingPaneContainer').click(closeSettingsPane); //masks the overflow thing for some reason
 
-    create_hide_cal_checkbox();
-    $('#__TTcb-hide-calendarLabel').click(function() {
-        console.log("clicked checkbox");
-        if ($('#cb-hide-calendar')[0].checked) {
-            $("#toptimer-calendar-btn").hide();
-            console.log("hide cal");
-            setHideCalendar(true);
-        } else {
-            $("#toptimer-calendar-btn").show();
-            console.log("show cal");
-            setHideCalendar(false);
-        }
-    });
-    $('#cb-hide-calendar')[0].checked = await getHideCalendar();
-
-    create_SetCalendarText();
+    
 
     //lock scrolling
     $('body').css({ 'overflow': 'hidden' });
@@ -54,15 +38,6 @@ async function openSettingPane() {
         }
     });
 
-    $('#setCal').click(() => {
-        val = $('#calLink').val()
-        if (val.startsWith('<iframe') && val.contains('google')) {
-            setCalendar(val)
-        } else {
-            showErrorMsg('This is not an Google Embed Link');
-        }
-
-    });
 }
 
 
@@ -77,19 +52,6 @@ function closeSettingsPane() {
     $('body').css({ 'overflow': 'visible' });
     $('#settings-btn').prop('disabled', false);
 }
-
-function create_hide_cal_checkbox() {
-    $("#toptimer__settingPane").append('<label for="accept" id="__TTcb-hide-calendarLabel"><input type="checkbox" id="cb-hide-calendar" name="accept" value="yes">  Hide the Calendar Button</label>');
-}
-
-
-function create_SetCalendarText() {
-    const calContainer = $('<div id="calContainer"><label for="calLink">Insert Google Calendar embedd Link:</label><br><input type="text" id="calLink" name="calLink">');
-    const set_button = $('<button id="setCal" type="button">Set!</button>');
-    calContainer.append(set_button);
-    $("#toptimer__settingPane").append(calContainer);
-}
-
 
 
 ////////
@@ -111,9 +73,9 @@ function AddColorBoxClickListener() {
     string = ""
     for (const color of colors) {
         $('#' + color + 'box').click(() => {
-            console.log("clicked the colorbox" + color)
-            $("#myBar").css("background-color", color)
-            setColor(color)
+            console.log("clicked the colorbox" + color);
+            setColor(color);
+			send_message_to_backend(RECIEVER_IFRAME,'progressbar_color',color);
         })
     }
     return string

@@ -27,17 +27,6 @@
         if (mode == 4){
             $(document.body).prepend(IFrame);
         }
-
-
-        //let color = await getColor();
-        //$("#myBar").css("background-color", color)
-
-        //close_Calendar();
-        //let hideCal = await getHideCalendar();
-        //console.log("hideCal" + hideCal)
-        //if (hideCal) {
-        //    $("#toptimer-calendar-btn").hide();
-        //)
     });
 
 })();

@@ -1,7 +1,6 @@
 let ToptimerExtension = {};
 
-
-jQuery(document).ready(async function($) {
+async function build_extension($){
 	ToptimerExtension.isMuted = false;
 	
 	const dropdownOptions = {
@@ -16,13 +15,6 @@ jQuery(document).ready(async function($) {
     ////// Left   Wrapper /////
 	///////////////////////////
     const leftWrapper = $('#left_wrapper');
-    const btnCalendarBtn = $('<button class="toptimer __TTBUTTON" id="toptimer-calendar-btn" type="button" style="background-color: black !important;">');
-    btnCalendarBtn.append(
-        $(`<img class="width2020" style="float:left;" src="${chrome.runtime.getURL("media/calendar-icon.png")}" />`)
-    );
-    //btnCalendarBtn.click(open_Calendar);
-
-    leftWrapper.append(btnCalendarBtn);
 	
 	///////////////////////////
     ////// Center Wrapper /////
@@ -79,10 +71,12 @@ jQuery(document).ready(async function($) {
 	const progress_wrapper = $('#progress_container');
 	progress_wrapper.append(ToptimerExtension.progress_bar)
 	
-});
+	let color = await getColor();
+	$("#progress_bar").css("background-color", color);
+}
 
 
-
+jQuery(document).ready(build_extension);
 
 //////////////////////////////////////
 ////////// Functions /////////////////
