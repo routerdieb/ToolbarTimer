@@ -3,7 +3,7 @@ const RECIEVER_INJECT = 2;
 const RECIEVER_BACKGROUND = 3;
 
 function create_message(reciever, type, payload){
-	return {'reciver':reciever,'type':type, 'payload':payload}
+	return {'reciever':reciever,'type':type, 'payload':payload}
 }
 
 

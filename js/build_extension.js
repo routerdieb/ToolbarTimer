@@ -184,8 +184,11 @@ function handleStopClick() {
 
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
    console.log(response);
+   if( response.type == 'progressbar_color'){
+	   $("#progress_bar").css("background-color", response.payload);
+   }
 });
 
 function handleSettingClick(){
-	chrome.runtime.sendMessage({type: "setting_pane",direction:'to_backend'});
+	chrome.runtime.sendMessage({type: "setting_pane"});
 }

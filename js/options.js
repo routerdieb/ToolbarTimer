@@ -1,3 +1,4 @@
+
 async function openSettingPane() {
     $('#settings-btn').prop('disabled', true);
     html_overflow = '<div id="toptimer__overflow">';

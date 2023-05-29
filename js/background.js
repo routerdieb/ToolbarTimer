@@ -14,14 +14,14 @@ try{
 			 console.log('setting pane logic');
 		}
 		console.log('between ifs');
-		console.log(!!request.reciver);
-		if (!!request.reciver){
+		console.log(!!request.reciever);
+		if (!!request.reciever){
 			console.log('reciver exits');
 		}
 		
-		if (!!request.reciver && request.reciver == 1 || request.reciver == 2){
+		if (!!request.reciever && request.reciever == 1 || request.reciever == 2){
 			console.log('universal logic');
-			send_back_to_content(request.reciver,request.type,request.payload);
+			send_back_to_content(request.reciever,request.type,request.payload);
 		}
 		
 		return true
@@ -43,3 +43,28 @@ function send_back_to_all(type,message_text){
 }
 
 console.log('finished loading');
+const RECIEVER_IFRAME = 1;
+const RECIEVER_INJECT = 2;
+const RECIEVER_BACKGROUND = 3;
+
+function create_message(reciever, type, payload){
+	return {'reciever':reciever,'type':type, 'payload':payload}
+}
+
+
+function send_message_to_backend(reciever, type, payload){
+	message = create_message(reciever, type, payload)
+	chrome.runtime.sendMessage(message);
+}
+
+
+function send_back_to_content(reciever, type, payload){
+	chrome.tabs.query({}, function(tabs) {
+    let message = create_message(reciever, type, payload);
+    for (var i=0; i<tabs.length; ++i) {
+		try{
+			chrome.tabs.sendMessage(tabs[i].id, message);
+		}catch(err){}
+    }
+	});
+}
