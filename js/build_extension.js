@@ -21,12 +21,12 @@ async function build_extension($){
 	///////////////////////////
 	const centerWrapper = $('#center_wrapper');
 	
-    ToptimerExtension.dropdownControl = $('<select id="toptimer-dropdown" class="toptimer">');
-    ToptimerExtension.btnGo = $('<button id="go_btn" class="__TTBUTTON" type="button">Go!</button>');
+    ToptimerExtension.dropdownControl = $('<select id="toptimer-dropdown">');
+    ToptimerExtension.btnGo = $('<button id="go_btn" type="button">Go!</button>');
     
 
     ToptimerExtension.countDown = $('<span id="toptimer-countdown">No Time<\span>');
-    ToptimerExtension.btnStop = $(`<button class="toptimer __TTBUTTON" id="toptimer-stop">X</button>`);
+    ToptimerExtension.btnStop = $(`<button id="toptimer-stop">X</button>`);
 
     for (const value in dropdownOptions) {
         if (Object.hasOwnProperty.call(dropdownOptions, value)) {
@@ -55,11 +55,11 @@ async function build_extension($){
 	const rightWrapper = $('#right_wrapper');
 
    
-	const mute_btn = $(`<button id="mute_btn" class="toptimer __TTBUTTON" type="button"><\button>`);
-	mute_btn.html('&#128266;').click(toggle_mute);
-    const settingsBtn = $('<button id="settings-btn" class="toptimer __TTBUTTON" type="button">').click(handleSettingClick);
+	const mute_btn = $(`<button id="mute_btn" type="button"><\button>`);
+	mute_btn.html('&#128266;').click(handle_mute_click);
+    const settingsBtn = $('<button id="settings-btn" type="button">').click(handle_setting_click);
     settingsBtn.append(
-        $(`<img class="width2020" src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
+        $(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
     );
 
     rightWrapper.append(mute_btn);
@@ -73,6 +73,8 @@ async function build_extension($){
 	
 	let color = await getColor();
 	$("#progress_bar").css("background-color", color);
+	
+	send_message_to_backend(3,'init_tab',{});
 }
 
 
@@ -85,9 +87,21 @@ function updateProgressBar(percent) {
     ToptimerExtension.progress_bar.width(percent + "%");
 }
 
+function handle_setting_click(){
+	console.log('clicked on settings');
+	send_message_to_backend(RECIEVER_ACTIVE_INJECT,"open_setting_pane",{})
+}
+
+function handle_mute_click(){
+	ToptimerExtension.isMuted = !ToptimerExtension.isMuted;
+	
+	send_message_to_backend(RECIEVER_IFRAME,'is_muted',{'is_muted':ToptimerExtension.isMuted});
+	send_message_to_backend(RECIEVER_BACKGROUND,'is_muted',{'is_muted':ToptimerExtension.isMuted});
+	toggle_mute();
+}
 
 function toggle_mute() {
-    ToptimerExtension.isMuted = !ToptimerExtension.isMuted;
+	
     if (ToptimerExtension.isMuted) {
         $("#mute_btn")[0].innerHTML = "&#128263;";
         console.log("toptimer muted");
@@ -112,8 +126,13 @@ function formatedTimeSpan(fullTime, seconds) {
     document.title = m + ":" + s;
 
     //console.log(seconds);
-    updateProgressBar(100.0 - (seconds / fullTime) * 100.0);
-    return `<span class="toptimer-timer-countdown-minute">${m}</span>:<span class="toptimer-timer-countdown-second">${s}</span><span style="margin-left: 5px">min</span>`;
+	if (seconds < 0){
+		updateProgressBar(100.0);
+		return `<span class="toptimer-timer-countdown-minute">00</span>:<span class="toptimer-timer-countdown-second">00</span><span style="margin-left: 5px">min</span>`;
+	}else{
+		updateProgressBar(100.0 - (seconds / fullTime) * 100.0);
+		return `<span class="toptimer-timer-countdown-minute">${m}</span>:<span class="toptimer-timer-countdown-second">${s}</span><span style="margin-left: 5px">min</span>`;
+	}
 }
 
 
@@ -131,38 +150,39 @@ function playAudio(file) {
 
 async function handleGoClick() {
 		playAudio("../media/engine-start.mp3");
-		chrome.runtime.sendMessage({type: "go_btn",status:"true"});
 		
-		ToptimerExtension.btnGo.hide();
-		ToptimerExtension.dropdownControl.hide();
-		ToptimerExtension.countDown.show();
-		ToptimerExtension.btnStop.show();
-
-        // Set the date we're counting down to
-        const now = new Date().getTime();
-
         const minutes = parseInt( ToptimerExtension.dropdownControl.val());
         console.log('dropdownControl' + ToptimerExtension.dropdownControl == null)
-        const countDownDate = new Date().getTime() + minutes * 60 * 1000;
-        const fullTime = minutes * 60;
-        console.log(fullTime)
-        const distance = countDownDate - now;
-        ToptimerExtension.countDown.html(formatedTimeSpan(fullTime, distance / 1000));
+        const countDownDate_ms = new Date().getTime() + minutes * 60 * 1000;
+        const duration_s = minutes * 60;
+		send_message_to_backend(RECIEVER_IFRAME,'start_timer',{'countDownDate_ms':countDownDate_ms,'duration_s':duration_s})
+		send_message_to_backend(RECIEVER_BACKGROUND,'start_timer',{'countDownDate_ms':countDownDate_ms,'duration_s':duration_s})
+		start_update_intervall(countDownDate_ms,duration_s)
+}
+
+function start_update_intervall(countDownDate,duration_in_seconds){
+	const now = new Date().getTime();
+	const distance = countDownDate - now;
+    ToptimerExtension.countDown.html(formatedTimeSpan(duration_in_seconds, distance / 1000));
 		
-        // Update the count down every 1 second
+	ToptimerExtension.btnGo.hide();
+	ToptimerExtension.dropdownControl.hide();
+	ToptimerExtension.countDown.show();
+	ToptimerExtension.btnStop.show();
+	
+	// Update the count down every 1 second
         ToptimerExtension.interval = setInterval(() => {
             // Get today's date and time
             const now = new Date().getTime();
 
             // Find the distance between now and the count down date
             const distance = countDownDate - now;
-            ToptimerExtension.countDown.html(formatedTimeSpan(fullTime, distance / 1000));
+            ToptimerExtension.countDown.html(formatedTimeSpan(duration_in_seconds, distance / 1000));
             // If the count down is finished, write some text
 
-            if (distance < 0) {
+            if (distance <= 0) {
                 clearInterval(ToptimerExtension.interval);
                 ToptimerExtension.countDown.html("Finished");
-                playAudio("../media/ring.mp3");
                 return;
             }
 
@@ -170,25 +190,59 @@ async function handleGoClick() {
 }
 
 function handleStopClick() {
-        clearInterval(ToptimerExtension.interval);
-		ToptimerExtension.btnGo.show();
-		ToptimerExtension.dropdownControl.show();
-		ToptimerExtension.countDown.hide();
-		ToptimerExtension.btnStop.hide();
+		send_message_to_backend(RECIEVER_IFRAME,'stop_timer',{});
+		send_message_to_backend(RECIEVER_BACKGROUND,'stop_timer',{});
+        stop_timer();
+}
+
+function stop_timer(){
+	clearInterval(ToptimerExtension.interval);
+	ToptimerExtension.btnGo.show();
+	ToptimerExtension.dropdownControl.show();
+	ToptimerExtension.countDown.hide();
+	ToptimerExtension.btnStop.hide();
 		
-        if (ToptimerExtension.audio) {
-            ToptimerExtension.audio.pause();
-            ToptimerExtension.audio.currentTime = 0;
-        }
+    if (ToptimerExtension.audio) {
+        ToptimerExtension.audio.pause();
+        ToptimerExtension.audio.currentTime = 0;
+    }
 }
 
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
    console.log(response);
-   if( response.type == 'progressbar_color'){
+	if( response.type == 'progressbar_color'){
 	   $("#progress_bar").css("background-color", response.payload);
+	}
+   if(response.type == 'start_timer'){
+	   clearInterval(ToptimerExtension.interval);
+	   start_update_intervall(response.payload['countDownDate_ms'],response.payload['duration_s'])
    }
+   if(response.type == 'stop_timer'){
+	   stop_timer();
+   }
+   if(response.type == 'play_stop_sound'){
+	   console.log('i should play stop sound now');
+	   playAudio("../media/ring.mp3");
+   }
+   
+   if (response.type == 'is_muted'){
+		ToptimerExtension.isMuted = response.payload['is_muted']
+		toggle_mute();
+	}
+   if (response.type == 'get_init_info'){
+	   console.log(response.payload);
+	   ToptimerExtension.isMuted = response.payload['is_muted']
+	   toggle_mute();
+	   if ('countDownDate_ms' in response.payload){
+		   console.log('i am doing something!!!!!!!!!!!!!!!');
+			date = response.payload['countDownDate_ms']
+			dur = response.payload['duration_s']
+			start_update_intervall(date,dur)
+	   }
+   }
+   console.log('processed response');
+   
+   
 });
 
-function handleSettingClick(){
-	chrome.runtime.sendMessage({type: "setting_pane"});
-}
+

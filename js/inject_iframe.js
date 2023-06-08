@@ -32,7 +32,7 @@
 // respond to messages
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 	console.log(response);
-	if (response.type == 'setting_pane'){
+	if (response.type == 'open_setting_pane'){
 		openSettingPane();
 	}
 });

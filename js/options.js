@@ -4,7 +4,7 @@ async function openSettingPane() {
     html_overflow = '<div id="toptimer__overflow">';
     $(document.body).append(html_overflow);
 
-    const html_container = '<div id="toptimer__settingPaneContainer">';
+    const html_container = '<div id="toptimer__settingPaneContainer" class="toptimer-container">';
     const html_setting_pane = '<div id="toptimer__settingPane" class="toptimer __TTsubTitle">Settings <hr >';
     const html = html_container + html_setting_pane;
     $(document.body).append(html);
@@ -13,7 +13,7 @@ async function openSettingPane() {
     $("#optionsClose-btn").click(closeSettingsPane);
     $("#toptimer__settingPane").append('<div class="line"> Select your Colour:</br>');
 
-    $("#toptimer__settingPane").append(create_color_div());
+    $("#toptimer__settingPane").append(create_color_buttons());
     AddColorBoxClickListener();
 
     $("#toptimer__settingPane").click((event) => {
@@ -57,12 +57,12 @@ function closeSettingsPane() {
 
 ////////
 
-let colors = ['red', 'green', 'blue', 'orange']
+let colors = ['red', 'green', 'blue', 'orange','yellow']
 
-function create_color_div() {
+function create_color_buttons() {
     string = '<div id="colorContainer">'
     for (const color of colors) {
-        string += '<div id=' + color + 'box class="' + color + ' colorbox"></div>'
+        string += '<button id="' + color + 'box" yellow class="' + color + ' colorbox"></button>'
     }
     return string + '</div><br>'
 

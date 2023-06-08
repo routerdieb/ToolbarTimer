@@ -1,6 +1,6 @@
 {
   "name": "TopTimer",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "manifest_version": 3,
   "description": "TopTimer is a
    timer for sites. Especially usefol for meetings discussing results in evernote, notion, kanban boards.
