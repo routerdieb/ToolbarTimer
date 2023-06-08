@@ -102,26 +102,24 @@
 
 
 .red {
-    background-color: red;
+    background-color: red !important;
 }
 
 .green {
-    background-color: green;
+    background-color: green !important;
 }
 
 .blue {
-    background-color: blue;
+    background-color: blue !important;
 }
 
 .orange {
-    background-color: orange;
+    background-color: orange !important;
+}
+.yellow {
+    background-color: yellow !important;
 }
 
-.colorbox {
-    height: 20px;
-    width: 20px;
-    float: left;
-}
 
 .line {
     margin-bottom: 5px;
