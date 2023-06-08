@@ -1,54 +1,38 @@
 .toptimer-container{
-	background: #353535 !important;
-    color: #fff !important;
+	background-color: #353535;
+	background:  #353535;
+    color: #fff;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
-	
-	> button{
-		height: 39px;
-		width: 30px;
-		justify-content: center;
-		cursor: pointer;
-		float: left;
-		
-		> img {
-			height: 20px;
-			width: 20px;
-		}
-	}
-	
-	
+	top: 0;
+	width: 100%;
+}
+
+.toptimer-container button{
+	background-color: #353535;
+	height: 40px;
+	width: 40px;
+	justify-content: center;
+	cursor: pointer;
+	float: left;
+}
+
+.toptimer-container button img{
+	height: 20px;
+	width: 20px;
+}
+
+.toptimer-container option{
+	background-color: #353535;
+	color: #fff;
+}
+
+.toptimer-container select{
+	background-color: #353535;
+	color: #fff;
 }
 
 
-.toptimer {
-    background: #353535 !important;
-    color: #fff !important;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-}
-
-#toptimer-bar {
-    position: relative;
-    z-index: 9999;
-    height: 40px;
-    /*position: sticky;*/
-    top: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    margin-bottom: 0px;
-    margin-top: 0px;
-    padding: 0px;
-    width: 100%;
-}
-
-
-#toptimer-timer-dropdown {
-    margin-top: 0px;
-    padding: 8px 20px;
-    width: 10%;
-    height: 40px;
-}
 
 
 .toptimer-timer-stop {
@@ -59,42 +43,6 @@
 
 
 
-/* settings btn */
-
-#settings-btn {
-    height: 39px;
-    width: 30px;
-    justify-content: center;
-    cursor: pointer;
-    float: left;
-}
-
-.width2020 {
-    height: 20px !important;
-    width: 20px !important;
-}
-
-
-#mute_btn {
-    height: 39px;
-    width: 30px;
-    justify-content: center;
-    cursor: pointer;
-    float: left;
-}
-
-#mute_btn img {
-    height: 20px;
-    width: 20px;
-}
-
-#calendarPopupDiv {
-    position: absolute;
-    top: 15%;
-    width: auto;
-    height: 40%;
-    z-index: 10002;
-}
 
 
 #optionsClose-btn {
@@ -181,12 +129,6 @@
 
 .__TTsubTitle {
     color: white !important;
-}
-
-.__TTBUTTON {
-    margin: 0px 0px 0px 0px;
-    height: 40px;
-    width: 40px;
 }
 
 #go_btn {
