@@ -27,6 +27,7 @@ async function build_extension($){
 
     ToptimerExtension.countDown = $('<span id="toptimer-countdown">No Time<\span>');
     ToptimerExtension.btnStop = $(`<button id="toptimer-stop">X</button>`);
+	
 
     for (const value in dropdownOptions) {
         if (Object.hasOwnProperty.call(dropdownOptions, value)) {
@@ -61,9 +62,13 @@ async function build_extension($){
     settingsBtn.append(
         $(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
     );
+	
+	ToptimerExtension.dialog_btn = $(`<button id="toptimer-stop">dia</button>`);
 
     rightWrapper.append(mute_btn);
     rightWrapper.append(settingsBtn);
+	rightWrapper.append(ToptimerExtension.dialog_btn);
+	ToptimerExtension.dialog_btn.click(handle_dialog_click);
 	
 	
 	// progress bar
@@ -73,6 +78,7 @@ async function build_extension($){
 	
 	let color = await getColor();
 	$("#progress_bar").css("background-color", color);
+	ToptimerExtension.btnGo.css("background-color", color);
 	
 	send_message_to_backend(3,'init_tab',{});
 }
@@ -90,6 +96,10 @@ function updateProgressBar(percent) {
 function handle_setting_click(){
 	console.log('clicked on settings');
 	send_message_to_backend(RECIEVER_ACTIVE_INJECT,"open_setting_pane",{})
+}
+function handle_dialog_click(){
+	console.log('clicked on settings');
+	send_message_to_backend(RECIEVER_ACTIVE_INJECT,"open_dialog_pane",{})
 }
 
 function handle_mute_click(){
@@ -210,8 +220,10 @@ function stop_timer(){
 
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
    console.log(response);
-	if( response.type == 'progressbar_color'){
+	if (response.reciever == RECIEVER_ACTIVE_IFRAME || response.reciever == RECIEVER_IFRAME){
+		if( response.type == 'progressbar_color'){
 	   $("#progress_bar").css("background-color", response.payload);
+	   ToptimerExtension.btnGo.css("background-color", response.payload);
 	}
    if(response.type == 'start_timer'){
 	   clearInterval(ToptimerExtension.interval);
@@ -241,6 +253,9 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 	   }
    }
    console.log('processed response');
+	}
+   
+	
    
    
 });

@@ -1,3 +1,5 @@
+let dialog_modal = {};
+
 (async function() {
     // this is the code which will be injected into a given page...
 	const height = '50px';
@@ -31,8 +33,16 @@
 
 // respond to messages
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
-	console.log(response);
-	if (response.type == 'open_setting_pane'){
-		openSettingPane();
+	if (response.reciever == RECIEVER_INJECT || response.reciever == RECIEVER_ACTIVE_INJECT){
+		console.log(response);
+		if (response.type == 'open_setting_pane'){
+			openSettingPane();
+		}
+		if (response.type == 'open_dialog_pane'){
+			dialog_modal = $('<dialog data-modal class="modal"><p>Greetings, one and all!</p><form method="dialog"><button>OK</button></form></dialog>');
+			$(document.body).prepend(dialog_modal);
+			const modal = document.querySelector("[data-modal]")
+			modal.showModal();
+		}
 	}
 });
