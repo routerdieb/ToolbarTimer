@@ -49,6 +49,15 @@
 	bottom: 0;
 	margin: auto;
 	position:absolute;
+	min-width: 60%;
+	min-height: 50%;
+}
+
+
+.settings_modal{
+	padding: 5px;
+	border: none;
+	border-radius: 1rem;
 }
 
 dialog::backdrop{
@@ -131,6 +140,9 @@ dialog::backdrop{
     background-color: yellow !important;
 }
 
+.silver {
+	background-color: silver !important;
+}
 
 .line {
     margin-bottom: 5px;
