@@ -1,6 +1,7 @@
 let are_muted = false;
 let current_duration_s = undefined;
 let current_countDownDate_ms = undefined;
+let timer = undefined
 
 // messageing
 console.log('service worker started (background.js)');
@@ -17,7 +18,7 @@ async function background_msg_listener(request, sender) {
 		if (request.type == 'start_timer') {
 			console.log('starting background timer');
 			let timeout = parseInt(request.payload['duration_s']) * 1000
-			setTimeout(active_tab_play_stop_music, timeout);
+			timer = setTimeout(active_tab_play_stop_music, timeout);
 			current_duration_s = request.payload['duration_s']
 			current_countDownDate_ms = request.payload['countDownDate_ms']
 		}
@@ -28,6 +29,7 @@ async function background_msg_listener(request, sender) {
 		if (request.type == 'stop_timer') {
 			current_duration_s = undefined;
 			current_countDownDate_ms = undefined;
+			clearTimeout(timer);
 		}
 
 		if (request.type == 'init_tab') {
