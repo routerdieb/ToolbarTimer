@@ -1,108 +1,18 @@
-async function openSettingPane() {
-    $('#settings-btn').prop('disabled', true);
-    html_overflow = '<div id="toptimer__overflow">';
-    $(document.body).append(html_overflow);
-
-    const html_container = '<div id="toptimer__settingPaneContainer">';
-    const html_setting_pane = '<div id="toptimer__settingPane" class="toptimer __TTsubTitle">Settings <hr >';
-    const html = html_container + html_setting_pane;
-    $(document.body).append(html);
-    const optionsCloseButton = '<button id="optionsClose-btn" class="btn toptimer" type="button">X</button>';
-    $("#toptimer__settingPane").append(optionsCloseButton);
-    $("#optionsClose-btn").click(closeSettingsPane);
-    $("#toptimer__settingPane").append('<div class="line"> Select your Colour:</br>');
-
-    $("#toptimer__settingPane").append(create_color_div());
-    AddColorBoxClickListener();
-
-    a = $('<iframe src="https://www.amazon.de/gp/video/detail/B089Y4SPDB/ref=atv_dp_season_select_s5" width="500px" height="500px"></iframe>');
-    $("#toptimer__settingPane").append(a);
-
-    $("#toptimer__settingPane").append('<div class="line __TTsubTitle">Google Calendar:');
-    $("#toptimer__settingPane").click((event) => {
-        event.stopPropagation();
-        console.log('stopPropagation');
-    });
-    $('#toptimer__settingPaneContainer').click(closeSettingsPane); //masks the overflow thing for some reason
-
-    create_hide_cal_checkbox();
-    $('#__TTcb-hide-calendarLabel').click(function() {
-        console.log("clicked checkbox");
-        if ($('#cb-hide-calendar')[0].checked) {
-            $("#toptimer-calendar-btn").hide();
-            console.log("hide cal");
-            setHideCalendar(true);
-        } else {
-            $("#toptimer-calendar-btn").show();
-            console.log("show cal");
-            setHideCalendar(false);
-        }
-    });
-    $('#cb-hide-calendar')[0].checked = await getHideCalendar();
-
-    create_SetCalendarText();
-
-    //lock scrolling
-    $('body').css({ 'overflow': 'hidden' });
-    $(document).bind('scroll', function() {
-        window.scrollTo(0, 0);
-    });
-
-    //
-    $(document).keydown(function(event) {
-
-        if (event.key === "Escape") {
-            console.log("esc was pressed");
-            closeSettingsPane();
-        }
-    });
-
-    $('#setCal').click(() => {
-        val = $('#calLink').val()
-        if (val.startsWith('<iframe') && val.contains('google')) {
-            setCalendar(val)
-        } else {
-            showErrorMsg('This is not an Google Embed Link');
-        }
-
-    });
-}
-
-
-
-
 function closeSettingsPane() {
-    console.log("closeSettings Called")
-    $('#toptimer__overflow').remove();
-    $('#toptimer__settingPaneContainer').remove();
     //unlock scrolling
-    $(document).unbind('scroll');
-    $('body').css({ 'overflow': 'visible' });
-    $('#settings-btn').prop('disabled', false);
+    const modal = document.querySelector("[data-modal]")
+    modal.close();
 }
-
-function create_hide_cal_checkbox() {
-    $("#toptimer__settingPane").append('<label for="accept" id="__TTcb-hide-calendarLabel"><input type="checkbox" id="cb-hide-calendar" name="accept" value="yes">  Hide the Calendar Button</label>');
-}
-
-
-function create_SetCalendarText() {
-    const calContainer = $('<div id="calContainer"><label for="calLink">Insert Google Calendar embedd Link:</label><br><input type="text" id="calLink" name="calLink">');
-    const set_button = $('<button id="setCal" type="button">Set!</button>');
-    calContainer.append(set_button);
-    $("#toptimer__settingPane").append(calContainer);
-}
-
 
 
 ////////
 
-let colors = ['red', 'green', 'blue', 'orange']
+let colors = ['red', 'green', 'blue', 'orange', 'yellow', 'silver']
 
-function create_color_div() {
+function create_color_buttons() {
     string = '<div id="colorContainer">'
     for (const color of colors) {
-        string += '<div id=' + color + 'box class="' + color + ' colorbox"></div>'
+        string += '<button id="' + color + 'box" class="' + color + ' colorbox"></button>'
     }
     return string + '</div><br>'
 
@@ -110,15 +20,61 @@ function create_color_div() {
 
 
 
-function AddColorBoxClickListener() {
+function AddColorBoxClickListener(outer_element) {
+
     string = ""
     for (const color of colors) {
-        $('#' + color + 'box').click(() => {
-            console.log("clicked the colorbox" + color)
-            $("#myBar").css("background-color", color)
-            setColor(color)
+        outer_element.find('#' + color + 'box').click(() => {
+            console.log('i am executed v2');
+            console.log("clicked the colorbox" + color);
+            send_message_to_backend(RECIEVER_IFRAME, 'progressbar_color', color);
         })
     }
     return string
 
+}
+
+
+function add_inner_div_for_dialog(outer_query_element, modal) {
+
+    const optionsCloseButton = $('<button id="optionsClose-btn" class="btn toptimer" type="button">X</button>');
+    outer_query_element.append(optionsCloseButton)
+    optionsCloseButton.click(() => {
+        
+        closeSettingsPane();
+    })
+
+    const html_setting_pane = $('<h1>Settings<\h1> <hr >');
+    outer_query_element.append(html_setting_pane)
+    line = $('<div class="line"> Select your Colour:</br> <\div>')
+    outer_query_element.append(line);
+
+    outer_query_element.append(create_color_buttons());
+    AddColorBoxClickListener(outer_query_element);
+
+
+
+    //lock scrolling
+    $('body').css({ 'overflow': 'hidden' });
+    $(document).bind('scroll', function () {
+        window.scrollTo(0, 0);
+    });
+
+}
+
+
+function add_outside_click_detect() {
+    const modal = document.querySelector("[data-modal]")
+    modal.addEventListener("click", e => {
+        const dialogDimensions = modal.getBoundingClientRect()
+        if (e.clientX < dialogDimensions.left ||
+            e.clientX > dialogDimensions.right ||
+            e.clientY < dialogDimensions.top ||
+            e.clientY > dialogDimensions.bottom) {
+            closeSettingsPane();
+        }
+    });
+
+    modal.addEventListener("close", (event) => { $('body').css({ 'overflow': 'visible' });
+                    $(document).unbind('scroll'); });
 }

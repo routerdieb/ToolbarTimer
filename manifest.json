@@ -1,9 +1,9 @@
 {
   "name": "TopTimer",
-  "version": "0.0.5",
+  "version": "0.1.1b",
   "manifest_version": 3,
   "description": "TopTimer is a
-   timer for sites. Especially for evernote, notion, kanban boards.
+   timer for sites. Especially usefol for meetings discussing results in evernote, notion, kanban boards.
   ",
   "options_ui": {
     "page": "html/options.html",
@@ -12,15 +12,20 @@
   "content_scripts": [
     {
       "matches": ["https://*/*","http://*/*"],
-      "css": ["/css/style.css","css/errorDiv.css"],
-      "js": ["js/jquery-3.6.0.slim.min.js","js/utils.js","js/loadStore.js","js/options.js", "js/calendar.js","js/script.js"]
+      "js": ["js/jquery-3.6.0.slim.min.js","js/loadStore.js","js/messageHelper.js","js/options.js","js/inject_iframe.js"],
+	  "css": ["/css/style.css","css/errorDiv.css"]
     }
   ],
   "web_accessible_resources": [{
     "resources":["media/engine-start.mp3","media/ring.mp3","media/calendar-icon.png",
-		"media/gear-icon.png","media/engine-start.mp3","media/ring.mp3","css/styles.css","html/options.html"],
+		"media/gear-icon.png","css/styles.css","html/options.html","html/extension_iframe.html"],
+	"css":["css/styles.css"],
 	"matches": ["<all_urls>"],
        "extension_ids": []
   }],
-  "permissions": ["storage"]
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "js/background.js",
+    "type": "module"
+  }
 }
