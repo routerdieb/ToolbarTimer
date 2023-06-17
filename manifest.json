@@ -1,6 +1,6 @@
 {
   "name": "TopTimer",
-  "version": "0.0.9",
+  "version": "0.1.1b",
   "manifest_version": 3,
   "description": "TopTimer is a
    timer for sites. Especially usefol for meetings discussing results in evernote, notion, kanban boards.
@@ -12,7 +12,7 @@
   "content_scripts": [
     {
       "matches": ["https://*/*","http://*/*"],
-      "js": ["js/jquery-3.6.0.slim.min.js","js/utils.js","js/loadStore.js","js/messageHelper.js","js/options.js","js/inject_iframe.js"],
+      "js": ["js/jquery-3.6.0.slim.min.js","js/loadStore.js","js/messageHelper.js","js/options.js","js/inject_iframe.js"],
 	  "css": ["/css/style.css","css/errorDiv.css"]
     }
   ],

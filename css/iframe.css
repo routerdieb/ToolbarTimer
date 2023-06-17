@@ -6,8 +6,8 @@ html, body {
     height: 100%;
 }
 iframe {
-    width: 50%;
-    height: 50%;
+    overflow-x: hidden;
+    overflow-y: hidden;
     margin: 0px;
     padding: 0px;
     background: blue;

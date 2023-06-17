@@ -1,31 +1,38 @@
-.toptimer {
-    background: #353535 !important;
-    color: #fff !important;
+.toptimer-container{
+	background-color: #353535;
+	background:  #353535;
+    color: #fff;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
+	top: 0;
+	width: 100%;
 }
 
-#toptimer-bar {
-    position: relative;
-    z-index: 9999;
-    height: 40px;
-    /*position: sticky;*/
-    top: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    margin-bottom: 0px;
-    margin-top: 0px;
-    padding: 0px;
-    width: 100%;
+.toptimer-container button{
+	background-color: #353535;
+	height: 40px;
+	width: 40px;
+	justify-content: center;
+	cursor: pointer;
+	float: left;
+}
+
+.toptimer-container button img{
+	height: 20px;
+	width: 20px;
+}
+
+.toptimer-container option{
+	background-color: #353535;
+	color: #fff;
+}
+
+.toptimer-container select{
+	background-color: #353535;
+	color: #fff;
 }
 
 
-#toptimer-timer-dropdown {
-    margin-top: 0px;
-    padding: 8px 20px;
-    width: 10%;
-    height: 40px;
-}
 
 
 .toptimer-timer-stop {
@@ -35,64 +42,28 @@
 }
 
 
-
-/* settings btn */
-
-#settings-btn {
-    height: 39px;
-    width: 30px;
-    justify-content: center;
-    cursor: pointer;
-    float: left;
+.modal{
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	position:absolute;
+	min-width: 60%;
+	min-height: 50%;
 }
 
-.width2020 {
-    height: 20px !important;
-    width: 20px !important;
+
+.settings_modal{
+	padding: 5px;
+	border: none;
+	border-radius: 1rem;
 }
 
-#toptimer-calendar-btn {
-    height: 39px;
-    width: 30px;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+dialog::backdrop{
+	background-color: rgba(0.5,0.5,0.5,0.5);
 }
 
-#mute_btn {
-    height: 39px;
-    width: 30px;
-    justify-content: center;
-    cursor: pointer;
-    float: left;
-}
-
-#mute_btn img {
-    height: 20px;
-    width: 20px;
-}
-
-#calendarPopupDiv {
-    position: absolute;
-    top: 15%;
-    width: auto;
-    height: 40%;
-    z-index: 10002;
-}
-
-.toptimer-calendar-popup-close-btn {
-    content: "x";
-    top: 0;
-    right: 0;
-    position: absolute;
-    z-index: 10002;
-    width: 10px;
-    line-height: 1;
-    padding: 2px 12px;
-    display: flex;
-    justify-content: center;
-    cursor: pointer;
-}
 
 #optionsClose-btn {
     float: right;
@@ -107,18 +78,6 @@
     display: flex;
     justify-content: center;
     cursor: pointer;
-}
-
-#myProgress {
-    width: 100%;
-    height: 10px;
-    border-bottom: 1px solid grey;
-}
-
-#myBar {
-    width: 1%;
-    height: 10px;
-    background-color: #04AA6D;
 }
 
 #toptimer__overflow {
@@ -154,10 +113,6 @@
     padding: 10px;
 }
 
-#calLink {
-    width: 80%;
-    height: 20px;
-}
 
 #toptimer__settingPane {
     border-style: solid;
@@ -165,33 +120,28 @@
     border-color: grey;
 }
 
-#calendarPopupDiv {
-    border-style: solid;
-    border-width: 2px;
-    border-color: grey;
-    z-index: 10001;
-}
 
 .red {
-    background-color: red;
+    background-color: red !important;
 }
 
 .green {
-    background-color: green;
+    background-color: green !important;
 }
 
 .blue {
-    background-color: blue;
+    background-color: blue !important;
 }
 
 .orange {
-    background-color: orange;
+    background-color: orange !important;
+}
+.yellow {
+    background-color: yellow !important;
 }
 
-.colorbox {
-    height: 20px;
-    width: 20px;
-    float: left;
+.silver {
+	background-color: silver !important;
 }
 
 .line {
@@ -200,22 +150,6 @@
 
 .__TTsubTitle {
     color: white !important;
-}
-
-#setCal {
-    background-color: orange;
-    height: 30px;
-    width: 40px;
-}
-
-#__TTcb-hide-calendarLabel {
-    color: white;
-}
-
-.__TTBUTTON {
-    margin: 0px 0px 0px 0px;
-    height: 40px;
-    width: 40px;
 }
 
 #go_btn {

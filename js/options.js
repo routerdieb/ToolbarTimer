@@ -1,68 +1,18 @@
-
-async function openSettingPane() {
-    $('#settings-btn').prop('disabled', true);
-    html_overflow = '<div id="toptimer__overflow">';
-    $(document.body).append(html_overflow);
-
-    const html_container = '<div id="toptimer__settingPaneContainer">';
-    const html_setting_pane = '<div id="toptimer__settingPane" class="toptimer __TTsubTitle">Settings <hr >';
-    const html = html_container + html_setting_pane;
-    $(document.body).append(html);
-    const optionsCloseButton = '<button id="optionsClose-btn" class="btn toptimer" type="button">X</button>';
-    $("#toptimer__settingPane").append(optionsCloseButton);
-    $("#optionsClose-btn").click(closeSettingsPane);
-    $("#toptimer__settingPane").append('<div class="line"> Select your Colour:</br>');
-
-    $("#toptimer__settingPane").append(create_color_div());
-    AddColorBoxClickListener();
-
-    $("#toptimer__settingPane").click((event) => {
-        event.stopPropagation();
-        console.log('stopPropagation');
-    });
-    $('#toptimer__settingPaneContainer').click(closeSettingsPane); //masks the overflow thing for some reason
-
-    
-
-    //lock scrolling
-    $('body').css({ 'overflow': 'hidden' });
-    $(document).bind('scroll', function() {
-        window.scrollTo(0, 0);
-    });
-
-    //
-    $(document).keydown(function(event) {
-
-        if (event.key === "Escape") {
-            console.log("esc was pressed");
-            closeSettingsPane();
-        }
-    });
-
-}
-
-
-
-
 function closeSettingsPane() {
-    console.log("closeSettings Called")
-    $('#toptimer__overflow').remove();
-    $('#toptimer__settingPaneContainer').remove();
     //unlock scrolling
-    $(document).unbind('scroll');
-    $('body').css({ 'overflow': 'visible' });
-    $('#settings-btn').prop('disabled', false);
+    const modal = document.querySelector("[data-modal]")
+    modal.close();
 }
 
 
 ////////
 
-let colors = ['red', 'green', 'blue', 'orange']
+let colors = ['red', 'green', 'blue', 'orange', 'yellow', 'silver']
 
-function create_color_div() {
+function create_color_buttons() {
     string = '<div id="colorContainer">'
     for (const color of colors) {
-        string += '<div id=' + color + 'box class="' + color + ' colorbox"></div>'
+        string += '<button id="' + color + 'box" class="' + color + ' colorbox"></button>'
     }
     return string + '</div><br>'
 
@@ -70,15 +20,61 @@ function create_color_div() {
 
 
 
-function AddColorBoxClickListener() {
+function AddColorBoxClickListener(outer_element) {
+
     string = ""
     for (const color of colors) {
-        $('#' + color + 'box').click(() => {
+        outer_element.find('#' + color + 'box').click(() => {
+            console.log('i am executed v2');
             console.log("clicked the colorbox" + color);
-            setColor(color);
-			send_message_to_backend(RECIEVER_IFRAME,'progressbar_color',color);
+            send_message_to_backend(RECIEVER_IFRAME, 'progressbar_color', color);
         })
     }
     return string
 
+}
+
+
+function add_inner_div_for_dialog(outer_query_element, modal) {
+
+    const optionsCloseButton = $('<button id="optionsClose-btn" class="btn toptimer" type="button">X</button>');
+    outer_query_element.append(optionsCloseButton)
+    optionsCloseButton.click(() => {
+        
+        closeSettingsPane();
+    })
+
+    const html_setting_pane = $('<h1>Settings<\h1> <hr >');
+    outer_query_element.append(html_setting_pane)
+    line = $('<div class="line"> Select your Colour:</br> <\div>')
+    outer_query_element.append(line);
+
+    outer_query_element.append(create_color_buttons());
+    AddColorBoxClickListener(outer_query_element);
+
+
+
+    //lock scrolling
+    $('body').css({ 'overflow': 'hidden' });
+    $(document).bind('scroll', function () {
+        window.scrollTo(0, 0);
+    });
+
+}
+
+
+function add_outside_click_detect() {
+    const modal = document.querySelector("[data-modal]")
+    modal.addEventListener("click", e => {
+        const dialogDimensions = modal.getBoundingClientRect()
+        if (e.clientX < dialogDimensions.left ||
+            e.clientX > dialogDimensions.right ||
+            e.clientY < dialogDimensions.top ||
+            e.clientY > dialogDimensions.bottom) {
+            closeSettingsPane();
+        }
+    });
+
+    modal.addEventListener("close", (event) => { $('body').css({ 'overflow': 'visible' });
+                    $(document).unbind('scroll'); });
 }
