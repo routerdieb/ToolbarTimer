@@ -2,18 +2,6 @@ let ToptimerExtension = {};
 
 async function build_extension($) {
 	ToptimerExtension.isMuted = false;
-
-	const dropdownOptions = {
-		1: "1 min",
-		5: "5 Min",
-		25: "25 Min",
-		55: "55 Min",
-		105: "1:45 Hours (1 hour 45 min)",
-	};
-
-	///////////////////////////
-	////// Left   Wrapper /////
-	///////////////////////////
 	const leftWrapper = $('#left_wrapper');
 
 	///////////////////////////
@@ -28,15 +16,29 @@ async function build_extension($) {
 	ToptimerExtension.countDown = $('<span id="toptimer-countdown">No Time<\span>');
 	ToptimerExtension.btnStop = $(`<button id="toptimer-stop">X</button>`);
 
+	const dropdown_time = {
+		1: "1 min",
+		5: "5 Min",
+		25: "25 Min",
+		55: "55 Min",
+		105: "1:45 Hours (1 hour 45 min)",
+	};
 
-	for (const value in dropdownOptions) {
-		if (Object.hasOwnProperty.call(dropdownOptions, value)) {
-			const label = dropdownOptions[value];
+	//options minutes
+	for (const value in dropdown_time) {
+		if (Object.hasOwnProperty.call(dropdown_time, value)) {
+			const label = dropdown_time[value];
 			const option = $(`<option value=${value}>`);
 			option.text(label);
 			ToptimerExtension.dropdownControl.append(option);
 		}
 	}
+	//other options 
+	ToptimerExtension.dropdownControl.append('<hr>');
+	let option = $(`<option value=fill_60>till full Hour</option>`);
+	ToptimerExtension.dropdownControl.append(option);
+	option = $(`<option value=fill_30>till half Hour</option>`);
+	ToptimerExtension.dropdownControl.append(option);
 
 	ToptimerExtension.btnGo.click(handleGoClick);
 	ToptimerExtension.btnStop.click(handleStopClick)
@@ -111,13 +113,12 @@ function toggle_mute() {
 	if (ToptimerExtension.isMuted) {
 		$("#mute_btn")[0].innerHTML = "&#128263;";
 		console.log("toptimer muted");
+		ToptimerExtension.audio.pause();
 	} else {
 		$("#mute_btn")[0].innerHTML = "&#128266;";
 		console.log("toptimer unmuted");
 	}
 }
-
-
 
 
 function formatedTimeSpan(fullTime, seconds) {
@@ -153,14 +154,35 @@ function playAudio(file) {
 	}
 }
 
+function msToNextHour() {
+    return 3600000 - new Date().getTime() % 3600000;
+}
+
+function msToNextHalfHour() {
+    return 1800000 - new Date().getTime() % 3600000;
+}
 
 async function handleGoClick() {
 	playAudio("../media/engine-start.mp3");
 
-	const minutes = parseInt(ToptimerExtension.dropdownControl.val());
-	console.log('dropdownControl' + ToptimerExtension.dropdownControl == null)
-	const countDownDate_ms = new Date().getTime() + minutes * 60 * 1000;
-	const duration_s = minutes * 60;
+	text = ToptimerExtension.dropdownControl.val();
+	let duration_s;
+	let countDownDate_ms;
+	if (text.startsWith('fill',0)){
+		if (text == 'fill_30'){
+			countDownDate_ms = new Date().getTime() + msToNextHalfHour();
+			duration_s = msToNextHalfHour()/1000.0;
+		}else if (text == 'fill_60'){
+			countDownDate_ms = new Date().getTime() + msToNextHour();
+			duration_s = msToNextHour()/1000.0;
+		}
+	}else{
+		const minutes = parseInt(text);
+		countDownDate_ms = new Date().getTime() + minutes * 60 * 1000;
+		duration_s = minutes * 60;
+	}
+	console.log(duration_s)
+	console.log(countDownDate_ms)
 	send_message_to_backend(RECIEVER_IFRAME, 'start_timer', { 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
 	send_message_to_backend(RECIEVER_BACKGROUND, 'start_timer', { 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
 	start_update_intervall(countDownDate_ms, duration_s)
