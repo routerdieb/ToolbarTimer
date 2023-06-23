@@ -5,12 +5,33 @@ let dialog_modal = {};
     const height = '50px';
     console.log('running inject iframe')
     const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/extension_iframe.html')}" width="100%" height=${height} style="margin:0px"></iframe>`);
-
+	const IFrameContainer = $("<div id='toptimer-fixed-container'></div>");
     //Init
     jQuery(document).ready(async function ($) {
         console.log('site is ready');
 
-        mode = 1
+        mode = 1;
+		include_strategy = ['.topnav','.pagetop','header']
+		if (mode == 0){
+			for (i = 0; i < include_strategy.length; i++) {
+				string = include_strategy[i];
+				console.log('trying '+string);
+				
+				if ($(string).length){
+					if ($(string).length > 1){
+						$(string)[0].prepend(IFrame);
+					}else{
+						$(string).prepend(IFrame);
+					}
+					
+					
+					console.log(string);
+					return;
+				}
+			}
+			//$(document.body).prepend(IFrame);
+			//console.log('body');
+		}
         if (mode == 1) {
             $(document.body).prepend(IFrame);
             // continuing add-toolbar.js

@@ -96,7 +96,6 @@ function updateProgressBar(percent) {
 }
 
 function handle_dialog_click() {
-	console.log('clicked on settings');
 	send_message_to_backend(RECIEVER_ACTIVE_INJECT, "open_settings_dialog", {})
 }
 
@@ -112,11 +111,9 @@ function toggle_mute() {
 
 	if (ToptimerExtension.isMuted) {
 		$("#mute_btn")[0].innerHTML = "&#128263;";
-		console.log("toptimer muted");
 		ToptimerExtension.audio.pause();
 	} else {
 		$("#mute_btn")[0].innerHTML = "&#128266;";
-		console.log("toptimer unmuted");
 	}
 }
 
@@ -181,8 +178,6 @@ async function handleGoClick() {
 		countDownDate_ms = new Date().getTime() + minutes * 60 * 1000;
 		duration_s = minutes * 60;
 	}
-	console.log(duration_s)
-	console.log(countDownDate_ms)
 	send_message_to_backend(RECIEVER_IFRAME, 'start_timer', { 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
 	send_message_to_backend(RECIEVER_BACKGROUND, 'start_timer', { 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
 	start_update_intervall(countDownDate_ms, duration_s)
@@ -237,7 +232,6 @@ function stop_timer() {
 }
 
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
-	console.log(response);
 	if (response.reciever == RECIEVER_ACTIVE_IFRAME || response.reciever == RECIEVER_IFRAME) {
 		if (response.type == 'progressbar_color') {
 			$("#progress_bar").css("background-color", response.payload);
@@ -251,7 +245,6 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 			stop_timer();
 		}
 		if (response.type == 'play_stop_sound') {
-			console.log('i should play stop sound now');
 			playAudio("../media/ring.mp3");
 		}
 
@@ -260,22 +253,15 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 			toggle_mute();
 		}
 		if (response.type == 'get_init_info') {
-			console.log(response.payload);
 			ToptimerExtension.isMuted = response.payload['is_muted']
 			toggle_mute();
 			if ('countDownDate_ms' in response.payload) {
-				console.log('i am doing something!!!!!!!!!!!!!!!');
 				date = response.payload['countDownDate_ms']
 				dur = response.payload['duration_s']
 				start_update_intervall(date, dur)
 			}
 		}
-		console.log('processed response');
 	}
-
-
-
-
 });
 
 

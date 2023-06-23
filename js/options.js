@@ -12,7 +12,7 @@ let colors = ['red', 'green', 'blue', 'orange', 'yellow', 'silver']
 function create_color_buttons() {
     string = '<div id="colorContainer">'
     for (const color of colors) {
-        string += '<button id="' + color + 'box" class="' + color + ' colorbox"></button>'
+        string += '<button id="' + color + 'box" class="__toptimer_' + color + ' colorbox"></button>'
     }
     return string + '</div><br>'
 
