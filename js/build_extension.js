@@ -16,7 +16,7 @@ async function build_extension($) {
 	ToptimerExtension.countDown = $('<span id="toptimer-countdown">No Time<\span>');
 	ToptimerExtension.btnStop = $(`<button id="toptimer-stop">X</button>`);
 
-	const dropdown_time = {
+	ToptimerExtension.dropdown_time = {
 		1: "1 min",
 		5: "5 Min",
 		25: "25 Min",
@@ -25,9 +25,9 @@ async function build_extension($) {
 	};
 
 	//options minutes
-	for (const value in dropdown_time) {
-		if (Object.hasOwnProperty.call(dropdown_time, value)) {
-			const label = dropdown_time[value];
+	for (const value in ToptimerExtension.dropdown_time) {
+		if (Object.hasOwnProperty.call(ToptimerExtension.dropdown_time, value)) {
+			const label = ToptimerExtension.dropdown_time[value];
 			const option = $(`<option value=${value}>`);
 			option.text(label);
 			ToptimerExtension.dropdownControl.append(option);

@@ -52,7 +52,10 @@ function add_inner_div_for_dialog(outer_query_element, modal) {
     outer_query_element.append(create_color_buttons());
     AddColorBoxClickListener(outer_query_element);
 
-
+	const html_minute_options_header = $('<br><br><br><div class="line">Minute Options<\div>');
+    outer_query_element.append(html_minute_options_header);
+	
+	outer_query_element.append(get_minute_options());
 
     //lock scrolling
     $('body').css({ 'overflow': 'hidden' });
@@ -77,4 +80,22 @@ function add_outside_click_detect() {
 
     modal.addEventListener("close", (event) => { $('body').css({ 'overflow': 'visible' });
                     $(document).unbind('scroll'); });
+}
+
+function get_minute_options(){
+	// todo replace with load
+	let dropdown_time = {
+		1: "1 min",
+		5: "5 Min",
+		25: "25 Min",
+		55: "55 Min",
+		105: "1:45 Hours (1 hour 45 min)",
+	};
+	
+	const selection_div = $('<div id="selection_div"><\div>');
+	for (let key in dropdown_time) {
+		let s = $(`<div id="timeoption_${key}"><button class="non_float">X</button>${dropdown_time[key]} </div>`)
+		selection_div.append(s); 
+	}
+	return selection_div
 }
