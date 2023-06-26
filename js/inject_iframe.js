@@ -4,7 +4,7 @@ let dialog_modal = {};
     // this is the code which will be injected into a given page...
     const height = '50px';
     console.log('running inject iframe')
-    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/extension_iframe.html')}" width="100%" height=${height} style="margin:0px"></iframe>`);
+    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe" height=${height}></iframe>`);
 	const IFrameContainer = $("<div id='toptimer-fixed-container'></div>");
     //Init
     jQuery(document).ready(async function ($) {
@@ -33,7 +33,18 @@ let dialog_modal = {};
 			//console.log('body');
 		}
         if (mode == 1) {
+			console.log("i am working");
             $(document.body).prepend(IFrame);
+			
+			let margins = ['margin-top',"margin-bottom","margin-left","margin-right"];
+			for (let i = 0; i < margins.length; i++){
+				let margin_in_direction = $('body').css(margins[i]);
+				IFrame.css(margins[i],"-"+margin_in_direction);
+			}
+			var margin_top = $('body').css("margin-top");
+			
+			
+			console.log("i am working2");
             // continuing add-toolbar.js
         }
         if (mode == 2) {

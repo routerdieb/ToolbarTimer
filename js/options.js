@@ -18,8 +18,6 @@ function create_color_buttons() {
 
 }
 
-
-
 function AddColorBoxClickListener(outer_element) {
 
     string = ""
@@ -56,6 +54,9 @@ function add_inner_div_for_dialog(outer_query_element, modal) {
     outer_query_element.append(html_minute_options_header);
 	
 	outer_query_element.append(get_minute_options());
+	
+	let add_option_ta = $('<textarea id="add_minutes" rows="1" cols="50"></textarea>')
+	outer_query_element.append(add_option_ta);
 
     //lock scrolling
     $('body').css({ 'overflow': 'hidden' });
@@ -94,8 +95,20 @@ function get_minute_options(){
 	
 	const selection_div = $('<div id="selection_div"><\div>');
 	for (let key in dropdown_time) {
-		let s = $(`<div id="timeoption_${key}"><button class="non_float">X</button>${dropdown_time[key]} </div>`)
+		let button = $('<button class="non_float">X</button>')
+		button.click(function(e){
+			$(`#timeoption_${key}`).remove();
+			send_message_to_backend(RECIEVER_IFRAME, 'rm_timeoption', `#timeoption_${key}`);
+		});
+		let s = $(`<div id="timeoption_${key}">${dropdown_time[key]} </div>`)
+		s.prepend(button);
 		selection_div.append(s); 
 	}
 	return selection_div
+}
+
+
+function delete_minute_option_click(){
+	
+	
 }
