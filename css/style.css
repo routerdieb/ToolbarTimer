@@ -32,7 +32,11 @@
 	color: #fff;
 }
 
-
+.toptimer-container .non_float{
+	float: unset;
+    height: 20px;
+	width: 20px;
+}
 
 
 .toptimer-timer-stop {
@@ -121,30 +125,30 @@ dialog::backdrop{
 }
 
 
-.red {
+.__toptimer_red {
     background-color: red !important;
 }
 
-.green {
+.__toptimer_green {
     background-color: green !important;
 }
 
-.blue {
+.__toptimer_blue {
     background-color: blue !important;
 }
 
-.orange {
+.__toptimer_orange {
     background-color: orange !important;
 }
-.yellow {
+.__toptimer_yellow {
     background-color: yellow !important;
 }
 
-.silver {
+.__toptimer_silver {
 	background-color: silver !important;
 }
 
-.line {
+.__toptimer_line {
     margin-bottom: 5px;
 }
 
@@ -175,4 +179,20 @@ dialog::backdrop{
 
 #progress_bar{
 	transition: width 1s linear;
+}
+
+#progress_container{
+	background: white;
+}
+
+#toptimer-fixed-container{
+	position: fixed;
+	width: 100%;
+}
+
+#__toptimer_iframe{
+    top: 0;
+	position: sticky;
+    width: 100vw;
+	z-index: 7999999;
 }

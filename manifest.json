@@ -1,9 +1,9 @@
 {
   "name": "TopTimer",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "manifest_version": 3,
-  "description": "TopTimer is a
-   timer for sites. Especially usefol for meetings discussing results in evernote, notion, kanban boards.
+  "description": "TopTimer is a for every Website. Especially usefol for meetings discussing results in evernote, notion, kanban boards.
+  Or Google Sheets and the like.
   ",
   "options_ui": {
     "page": "html/options.html",
@@ -11,7 +11,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://*/*","http://*/*"],
+      "matches": ["https://*/*","http://*/*","file://*/*"],
       "js": ["js/jquery-3.6.0.slim.min.js","js/loadStore.js","js/messageHelper.js","js/options.js","js/inject_iframe.js"],
 	  "css": ["/css/style.css","css/errorDiv.css"]
     }
