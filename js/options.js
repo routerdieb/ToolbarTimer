@@ -33,7 +33,7 @@ function AddColorBoxClickListener(outer_element) {
 }
 
 
-function add_inner_div_for_dialog(outer_query_element, modal) {
+async function add_inner_div_for_dialog(outer_query_element, modal) {
 
     const optionsCloseButton = $('<button id="optionsClose-btn" class="btn toptimer" type="button">X</button>');
     outer_query_element.append(optionsCloseButton)
@@ -53,10 +53,26 @@ function add_inner_div_for_dialog(outer_query_element, modal) {
 	const html_minute_options_header = $('<br><br><br><div class="line">Minute Options<\div>');
     outer_query_element.append(html_minute_options_header);
 	
-	outer_query_element.append(get_minute_options());
+	let options = await get_minute_options();
+	outer_query_element.append(options);
 	
 	let add_option_ta = $('<textarea id="add_minutes" rows="1" cols="50"></textarea>')
 	outer_query_element.append(add_option_ta);
+	
+	$('#add_minutes').keypress(function(e){
+      if(e.which == 13){
+           // submit via ajax or
+		   new_string = add_option_ta.val()
+		   new_int = parseInt(new_string);
+		   console.log(new_int);
+		   if (isNaN(new_int)){
+			   add_option_ta.val('insert a minute time');
+		   }else{
+			   console.log('do the magic');
+		   }
+		   return false;
+       }
+    });
 
     //lock scrolling
     $('body').css({ 'overflow': 'hidden' });
@@ -83,32 +99,33 @@ function add_outside_click_detect() {
                     $(document).unbind('scroll'); });
 }
 
-function get_minute_options(){
+async function get_minute_options(){
 	// todo replace with load
-	let dropdown_time = {
-		1: "1 min",
-		5: "5 Min",
-		25: "25 Min",
-		55: "55 Min",
-		105: "1:45 Hours (1 hour 45 min)",
+	let min_options = await getMinOptions();
+	
+	if (min_options == null){
+		console.log('no min options found');
+		min_options = [
+			1,
+			5,
+			25,
+			55,
+			105]
 	};
 	
 	const selection_div = $('<div id="selection_div"><\div>');
-	for (let key in dropdown_time) {
+	for (let i = 0; i < min_options.length; i++) {
+		time = min_options[i];
 		let button = $('<button class="non_float">X</button>')
 		button.click(function(e){
-			$(`#timeoption_${key}`).remove();
-			send_message_to_backend(RECIEVER_IFRAME, 'rm_timeoption', `#timeoption_${key}`);
+			$(`#timeoption_${time}`).remove();
+			
+			min_options.splice(i, 1);
+			setMinOptions(min_options);
 		});
-		let s = $(`<div id="timeoption_${key}">${dropdown_time[key]} </div>`)
+		let s = $(`<div id="timeoption_${time}">${time} </div>`)
 		s.prepend(button);
 		selection_div.append(s); 
 	}
 	return selection_div
-}
-
-
-function delete_minute_option_click(){
-	
-	
 }
