@@ -1,3 +1,8 @@
+let options_pane = {}
+options_pane.min_options = []
+options_pane.colors = ['red', 'green', 'blue', 'orange', 'yellow', 'silver']
+
+
 function closeSettingsPane() {
     //unlock scrolling
     const modal = document.querySelector("[data-modal]")
@@ -7,11 +12,9 @@ function closeSettingsPane() {
 
 ////////
 
-let colors = ['red', 'green', 'blue', 'orange', 'yellow', 'silver']
-
 function create_color_buttons() {
     string = '<div id="colorContainer">'
-    for (const color of colors) {
+    for (const color of options_pane.colors) {
         string += '<button id="' + color + 'box" class="__toptimer_' + color + ' colorbox"></button>'
     }
     return string + '</div><br>'
@@ -19,17 +22,14 @@ function create_color_buttons() {
 }
 
 function AddColorBoxClickListener(outer_element) {
-
     string = ""
-    for (const color of colors) {
+    for (const color of options_pane.colors) {
         outer_element.find('#' + color + 'box').click(() => {
-            console.log('i am executed v2');
             console.log("clicked the colorbox" + color);
             send_message_to_backend(RECIEVER_IFRAME, 'progressbar_color', color);
         })
     }
     return string
-
 }
 
 
@@ -53,9 +53,11 @@ async function add_inner_div_for_dialog(outer_query_element, modal) {
 	const html_minute_options_header = $('<br><br><br><div class="line">Minute Options<\div>');
     outer_query_element.append(html_minute_options_header);
 	
-	let options = await get_minute_options();
-	outer_query_element.append(options);
-	
+	options_pane.min_options = await getMinOptions();
+
+	outer_query_element.append('<\hr>');
+	outer_query_element.append(get_minute_options_div(options_pane.min_options));
+	outer_query_element.append('<\hr>');
 	let add_option_ta = $('<textarea id="add_minutes" rows="1" cols="50"></textarea>')
 	outer_query_element.append(add_option_ta);
 	
@@ -69,6 +71,13 @@ async function add_inner_div_for_dialog(outer_query_element, modal) {
 			   add_option_ta.val('insert a minute time');
 		   }else{
 			   console.log('do the magic');
+			   options_pane.min_options.push(new_int);
+			   console.log(options_pane.min_options);
+			   send_message_to_backend(RECIEVER_IFRAME,"min_options",options_pane.min_options);
+			   setMinOptions(options_pane.min_options);
+			   console.log('done some of the magic');
+			   let selection_div = $('#selection_div');
+			   add_min_option(selection_div,new_int)
 		   }
 		   return false;
        }
@@ -99,33 +108,40 @@ function add_outside_click_detect() {
                     $(document).unbind('scroll'); });
 }
 
-async function get_minute_options(){
+function get_minute_options_div(min_options){
 	// todo replace with load
-	let min_options = await getMinOptions();
-	
-	if (min_options == null){
-		console.log('no min options found');
-		min_options = [
-			1,
-			5,
-			25,
-			55,
-			105]
-	};
+	console.log(min_options);
 	
 	const selection_div = $('<div id="selection_div"><\div>');
 	for (let i = 0; i < min_options.length; i++) {
 		time = min_options[i];
-		let button = $('<button class="non_float">X</button>')
-		button.click(function(e){
-			$(`#timeoption_${time}`).remove();
+		add_min_option(selection_div,time)
+	}
+	console.log(selection_div);
+	return selection_div
+}
+
+function add_min_option(parent_element,time){
+	let button1 = $(`<button id='tt_btn_${time}' class="non_float">X</button>`)
+		
+		button1.click(function(e){
+			let time_id = this.id.split("_")[2];
 			
-			min_options.splice(i, 1);
-			setMinOptions(min_options);
+			console.log(`removing ${time_id}`);
+			$(`#timeoption_${time_id}`).remove();
+			
+			time_int = parseInt(time_id);
+			var index = options_pane.min_options.indexOf(time_int);
+			console.log('index ',index);
+			if (index !== -1) {
+				options_pane.min_options.splice(index, 1);
+			}
+
+			console.log(options_pane.min_options);
+			setMinOptions(options_pane.min_options);
+			send_message_to_backend(RECIEVER_IFRAME,"min_options",options_pane.min_options);
 		});
 		let s = $(`<div id="timeoption_${time}">${time} </div>`)
-		s.prepend(button);
-		selection_div.append(s); 
-	}
-	return selection_div
+		s.prepend(button1);
+		parent_element.append(s); 
 }

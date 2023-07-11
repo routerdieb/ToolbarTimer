@@ -33,7 +33,6 @@ let dialog_modal = {};
 			//console.log('body');
 		}
         if (mode == 1) {
-			console.log("i am working");
             $(document.body).prepend(IFrame);
 			
 			let margins = ['margin-top',"margin-bottom","margin-left","margin-right"];
@@ -43,8 +42,6 @@ let dialog_modal = {};
 			}
 			var margin_top = $('body').css("margin-top");
 			
-			
-			console.log("i am working2");
             // continuing add-toolbar.js
         }
         if (mode == 2) {

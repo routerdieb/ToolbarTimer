@@ -48,16 +48,12 @@ async function background_msg_listener(request, sender) {
 	return true;
 }
 
-// A function to get the current content options
-function new_tab() { }
-
 function active_tab_play_stop_music() {
 	console.log('sending play stop sound');
 	send_back_to_active(1, 'play_stop_sound', {});
 	current_duration_s = undefined;
 	current_countDownDate_ms = undefined;
 }
-
 
 
 function awnser_tab(tab_id) {
@@ -67,8 +63,9 @@ function awnser_tab(tab_id) {
 	} catch (err) { }
 }
 
+////////////////////////////////////////////////////////////////////////////
 // HERE come the copy of message Helper.js
-
+///////////////// NO OTHER CODE BELOW THIS /////////////////////////////////
 console.log('finished loading');
 const RECIEVER_IFRAME = 1;
 const RECIEVER_INJECT = 2;

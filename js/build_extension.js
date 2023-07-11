@@ -1,4 +1,6 @@
 let ToptimerExtension = {};
+chrome.runtime.onMessage.addListener(responde_to_msg);
+jQuery(document).ready(build_extension);
 
 async function build_extension($) {
 	ToptimerExtension.isMuted = false;
@@ -16,29 +18,14 @@ async function build_extension($) {
 	ToptimerExtension.countDown = $('<span id="toptimer-countdown">No Time<\span>');
 	ToptimerExtension.btnStop = $(`<button id="toptimer-stop">X</button>`);
 
-	ToptimerExtension.dropdown_time = {
-		1: "1 min",
-		5: "5 Min",
-		25: "25 Min",
-		55: "55 Min",
-		105: "1:45 Hours (1 hour 45 min)",
-	};
+	min_options = await getMinOptions()
+	ToptimerExtension.dropdown_time = to_time_dict(min_options);
+
 
 	//options minutes
-	for (const value in ToptimerExtension.dropdown_time) {
-		if (Object.hasOwnProperty.call(ToptimerExtension.dropdown_time, value)) {
-			const label = ToptimerExtension.dropdown_time[value];
-			const option = $(`<option value=${value}>`);
-			option.text(label);
-			ToptimerExtension.dropdownControl.append(option);
-		}
-	}
-	//other options 
-	ToptimerExtension.dropdownControl.append('<hr>');
-	let option = $(`<option value=fill_60>till full Hour</option>`);
-	ToptimerExtension.dropdownControl.append(option);
-	option = $(`<option value=fill_30>till half Hour</option>`);
-	ToptimerExtension.dropdownControl.append(option);
+	apply_time_dict();
+
+	
 
 	ToptimerExtension.btnGo.click(handleGoClick);
 	ToptimerExtension.btnStop.click(handleStopClick)
@@ -86,7 +73,7 @@ async function build_extension($) {
 }
 
 
-jQuery(document).ready(build_extension);
+
 
 //////////////////////////////////////
 ////////// Functions /////////////////
@@ -231,7 +218,10 @@ function stop_timer() {
 	}
 }
 
-chrome.runtime.onMessage.addListener(function (response, sendResponse) {
+
+
+
+function responde_to_msg(response, sendResponse) {
 	if (response.reciever == RECIEVER_ACTIVE_IFRAME || response.reciever == RECIEVER_IFRAME) {
 		if (response.type == 'progressbar_color') {
 			$("#progress_bar").css("background-color", response.payload);
@@ -258,10 +248,45 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 			if ('countDownDate_ms' in response.payload) {
 				date = response.payload['countDownDate_ms']
 				dur = response.payload['duration_s']
-				start_update_intervall(date, dur)
+				start_update_intervall(date, dur);
 			}
 		}
+		if (response.type == 'min_options'){
+			console.log(response);
+			min_options = response.payload
+			console.log(min_options);
+			
+			ToptimerExtension.dropdown_time = to_time_dict(min_options);
+			console.log("to_time_dict ",ToptimerExtension.dropdown_time)
+			apply_time_dict();
+		}
 	}
-});
+};
 
+function to_time_dict(min_options){
+	console.log(min_options);
+	min_dict = {};
+	for (let i = 0; i < min_options.length; i++) {
+		time_in_min = min_options[i];
+		min_dict[time_in_min] = `${time_in_min} minutes`
+	}
+	return min_dict
+}
 
+function apply_time_dict(){
+	ToptimerExtension.dropdownControl.empty();
+	for (const value in ToptimerExtension.dropdown_time) {
+		if (Object.hasOwnProperty.call(ToptimerExtension.dropdown_time, value)) {
+			const label = ToptimerExtension.dropdown_time[value];
+			const option = $(`<option value=${value}>`);
+			option.text(label);
+			ToptimerExtension.dropdownControl.append(option);
+		}
+	}
+	//other options
+	ToptimerExtension.dropdownControl.append('<hr>');
+	let option = $(`<option value=fill_60>till full Hour</option>`);
+	ToptimerExtension.dropdownControl.append(option);
+	option = $(`<option value=fill_30>till half Hour</option>`);
+	ToptimerExtension.dropdownControl.append(option);
+}

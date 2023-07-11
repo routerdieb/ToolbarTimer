@@ -33,7 +33,12 @@ function getMinOptions() {
         console.error(chrome.runtime.lastError.message);
         reject(chrome.runtime.lastError.message);
       } else {
-        resolve(items[sKey]);
+		  let min_options = items[sKey]
+		  if (min_options === undefined){
+			console.log('no min options found');
+			min_options = [1,5,25,55,105]
+		  };
+        resolve(min_options);
       }
     });
   });
