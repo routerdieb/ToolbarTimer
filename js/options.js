@@ -104,8 +104,6 @@ function add_outside_click_detect() {
         }
     });
 
-    modal.addEventListener("close", (event) => { $('body').css({ 'overflow': 'visible' });
-                    $(document).unbind('scroll'); });
 }
 
 function get_minute_options_div(min_options){
@@ -141,7 +139,7 @@ function add_min_option(parent_element,time){
 			setMinOptions(options_pane.min_options);
 			send_message_to_backend(RECIEVER_IFRAME,"min_options",options_pane.min_options);
 		});
-		let s = $(`<div id="timeoption_${time}">${time} </div>`)
+		let s = $(`<div id="timeoption_${time}">${time} minutes</div>`)
 		s.prepend(button1);
 		parent_element.append(s); 
 }
