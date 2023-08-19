@@ -23,10 +23,21 @@
 	"matches": ["<all_urls>"],
        "extension_ids": []
   }],
-  "permissions": ["storage"],
+  "permissions": ["storage","declarativeNetRequest"],
+   "host_permissions": [
+    "<all_urls>"
+  ],
   "background": {
     "service_worker": "js/background.js",
     "type": "module"
   },
-   "icons": { "64": "media/icon64.png"}
+   "icons": { "64": "media/icon64.png"},
+   "declarative_net_request" : {
+    "rule_resources" : [{
+      "id": "ruleset_1",
+      "enabled": true,
+      "path": "rules_1.json"
+   }]
+   }
 }
+

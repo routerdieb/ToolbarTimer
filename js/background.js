@@ -56,12 +56,14 @@ function active_tab_play_stop_music() {
 }
 
 
+
 function awnser_tab(tab_id) {
 	let message = create_message(RECIEVER_IFRAME, 'get_init_info', { 'is_muted': are_muted, 'duration_s': current_duration_s, 'countDownDate_ms': current_countDownDate_ms })
 	try {
 		chrome.tabs.sendMessage(tab_id, message);
 	} catch (err) { }
 }
+
 
 ////////////////////////////////////////////////////////////////////////////
 // HERE come the copy of message Helper.js

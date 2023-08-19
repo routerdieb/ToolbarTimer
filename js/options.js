@@ -7,6 +7,7 @@ function closeSettingsPane() {
     //unlock scrolling
     const modal = document.querySelector("[data-modal]")
     modal.close();
+	send_message_to_backend(RECIEVER_ACTIVE_INJECT, 'close_modal');
 }
 
 
@@ -84,10 +85,10 @@ async function add_inner_div_for_dialog(outer_query_element, modal) {
     });
 
     //lock scrolling
-    $('body').css({ 'overflow': 'hidden' });
-    $(document).bind('scroll', function () {
-        window.scrollTo(0, 0);
-    });
+    //$('body').css({ 'overflow': 'hidden' });
+    //$(document).bind('scroll', function () {
+    //    window.scrollTo(0, 0);
+    //});
 
 }
 

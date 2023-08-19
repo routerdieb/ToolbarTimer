@@ -10,9 +10,9 @@ let dialog_modal = {};
     jQuery(document).ready(async function ($) {
         console.log('site is ready');
 
-        mode = 1;
+        mode = 3;
 		include_strategy = ['.topnav','.pagetop','header']
-		if (mode == 0){
+		if (mode == 0){ // something about adding to already floating element
 			for (i = 0; i < include_strategy.length; i++) {
 				string = include_strategy[i];
 				console.log('trying '+string);
@@ -40,15 +40,36 @@ let dialog_modal = {};
 				let margin_in_direction = $('body').css(margins[i]);
 				IFrame.css(margins[i],"-"+margin_in_direction);
 			}
-			var margin_top = $('body').css("margin-top");
 			
             // continuing add-toolbar.js
         }
-        if (mode == 2) {
+        if (mode == 2) { // old something transform
             var bodyStyle = document.body.style;
             var cssTransform = 'transform' in bodyStyle ? 'transform' : 'webkitTransform';
             bodyStyle[cssTransform] = 'translateY(' + height + ')';
         }
+		
+		if (mode == 3) {
+			// step one clear body
+			$('body').empty();
+			
+			// step two, add iframe of current site
+			$(document.body).prepend(IFrame);
+			
+			
+			let url = window.location.href
+			let content_frame = $(`<iframe id="__toptimer_content_iframe" src="${url}"</iframe>`);
+			$(document.body).append(content_frame);
+			
+			let margins = ['margin-top',"margin-bottom","margin-left","margin-right"];
+			for (let i = 0; i < margins.length; i++){
+				let margin_in_direction = $('body').css(margins[i]);
+				IFrame.css(margins[i],"-"+margin_in_direction);
+				content_frame.css(margins[i],"-"+margin_in_direction);
+			}
+			$('body').css('overflow','hidden');
+			
+		}
     })
 })();
 
@@ -69,5 +90,8 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
 
             add_outside_click_detect();
         }
+		if (response.type == 'close_modal'){
+			$('body').css('overflow','hidden');
+		}
     }
 });
