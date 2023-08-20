@@ -7,9 +7,13 @@ $( document ).ready(function() {
 
 
 function checkFlag() {
-    if(flag == false) {
-		$('a').attr('target','_top');
-		window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
+    if(finished == false) {
+		try {
+			$('a').attr('target','_top');
+			window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
+		} catch (exep){
+			//nothing
+		}
     }
 }
 checkFlag();

@@ -91,9 +91,6 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 				content_frame.css(margins[i],"-"+margin_in_direction);
 			}
 			$('body').css('overflow','hidden');
-			
-			// set all a href to parent
-			$('a').attr('target','_top');
 		}
     
 })();
