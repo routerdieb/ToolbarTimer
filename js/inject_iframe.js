@@ -8,18 +8,21 @@ let dialog_modal = {};
 
 const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 
-let content_frame = $(`<iframe hidden id="__toptimer_content_iframe" src="${window.location.href}" class="${very_long_safe_class_string}"</iframe>`);
-$(document.body).prepend(content_frame);
-const filterlist = ["stackoverflow.com"];
 
-console.log('running window.stop()');
-window.stop();
+
+//console.log('running window.stop()');
+//window.stop();
 (async function () {
+	const filterlist = ["stackoverflow.com"];
 	for (filter_url of filterlist) {
 		if(document.URL.indexOf(filter_url) > -1){
 			return;
 		}
 	}
+	
+	let content_frame = $(`<iframe hidden id="__toptimer_content_iframe" src="${window.location.href}" class="${very_long_safe_class_string}"</iframe>`);
+	$(document.body).prepend(content_frame);
+	
 	
     // this is the code which will be injected into a given page...
     const height = '50px';
