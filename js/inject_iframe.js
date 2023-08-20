@@ -3,6 +3,11 @@ let dialog_modal = {};
 
 const filterlist = ["stackoverflow.com"];
 
+const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
+let content_frame = $(`<iframe hidden id="__toptimer_content_iframe" src="${window.location.href}" class="KkJVErhPbp3FBHwt6WAI6qjW"</iframe>`);
+$(document.body).prepend(content_frame);
+
+
 (async function () {
 	for (filter_url of filterlist) {
 		if(document.URL.indexOf(filter_url) > -1){
@@ -60,15 +65,14 @@ const filterlist = ["stackoverflow.com"];
 		
 		if (mode == 3) {
 			// step one clear body
-			$('body').empty();
+			//$('body').empty();
+			$('body').find('*').not('.'+very_long_safe_class_string).remove();
 			
 			// step two, add iframe of current site
 			$(document.body).prepend(IFrame);
 			
 			
-			let url = window.location.href
-			let content_frame = $(`<iframe id="__toptimer_content_iframe" src="${url}"</iframe>`);
-			$(document.body).append(content_frame);
+			content_frame.show();
 			
 			let margins = ['margin-top',"margin-bottom","margin-left","margin-right"];
 			for (let i = 0; i < margins.length; i++){
