@@ -1,6 +1,15 @@
 let dialog_modal = {};
 
+
+const filterlist = ["stackoverflow.com"];
+
 (async function () {
+	for (filter_url of filterlist) {
+		if(document.URL.indexOf(filter_url) > -1){
+			return;
+		}
+	}
+	
     // this is the code which will be injected into a given page...
     const height = '50px';
     console.log('running inject iframe')
