@@ -1,13 +1,19 @@
+/* 
+	This is the starting point of the extension.
+	Mode = 3 is currently the default.
+	It injects two iframe, one for the toolbar and one for the normal website, you are trying to visit.
+*/
 let dialog_modal = {};
 
 
+const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
+
+let content_frame = $(`<iframe hidden id="__toptimer_content_iframe" src="${window.location.href}" class="${very_long_safe_class_string}"</iframe>`);
+$(document.body).prepend(content_frame);
 const filterlist = ["stackoverflow.com"];
 
-const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
-let content_frame = $(`<iframe hidden id="__toptimer_content_iframe" src="${window.location.href}" class="KkJVErhPbp3FBHwt6WAI6qjW"</iframe>`);
-$(document.body).prepend(content_frame);
-
-
+console.log('running window.stop()');
+window.stop();
 (async function () {
 	for (filter_url of filterlist) {
 		if(document.URL.indexOf(filter_url) > -1){
@@ -65,13 +71,10 @@ $(document.body).prepend(content_frame);
 		
 		if (mode == 3) {
 			// step one clear body
-			//$('body').empty();
 			$('body').find('*').not('.'+very_long_safe_class_string).remove();
 			
 			// step two, add iframe of current site
 			$(document.body).prepend(IFrame);
-			
-			
 			content_frame.show();
 			
 			let margins = ['margin-top',"margin-bottom","margin-left","margin-right"];
@@ -89,7 +92,7 @@ $(document.body).prepend(content_frame);
 
 
 
-// respond to messages
+// respond to messages from background service worker
 chrome.runtime.onMessage.addListener(function (response, sendResponse) {
     if (response.reciever == RECIEVER_INJECT || response.reciever == RECIEVER_ACTIVE_INJECT) {
         console.log(response);
