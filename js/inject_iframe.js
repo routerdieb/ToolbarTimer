@@ -19,9 +19,12 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 			return;
 		}
 	}
+	//window.stop();
 	
-	let content_frame = $(`<iframe hidden id="__toptimer_content_iframe" src="${window.location.href}" class="${very_long_safe_class_string}"</iframe>`);
-	$(document.body).prepend(content_frame);
+	console.log('stopped the window');
+	document.body = document.createElement("body");
+	document.body.innerHTML = "<p>Hello World!</p>";
+	
 	
 	
     // this is the code which will be injected into a given page...
@@ -30,7 +33,7 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
     const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe" height=${height}></iframe>`);
 	const IFrameContainer = $("<div id='toptimer-fixed-container'></div>");
     //Init
-    jQuery(document).ready(async function ($) {
+  
         console.log('site is ready');
 
         mode = 3;
@@ -76,6 +79,8 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 			// step one clear body
 			$('body').find('*').not('.'+very_long_safe_class_string).remove();
 			
+			let content_frame = $(`<iframe id="__toptimer_content_iframe" src="${window.location.href}" class="${very_long_safe_class_string}"</iframe>`);
+			$(document.body).prepend(content_frame);
 			// step two, add iframe of current site
 			$(document.body).prepend(IFrame);
 			content_frame.show();
@@ -89,7 +94,7 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 			$('body').css('overflow','hidden');
 			
 		}
-    })
+    
 })();
 
 
