@@ -1,6 +1,6 @@
 {
   "name": "TopTimer",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "manifest_version": 3,
   "description": "TopTimer is a for every Website. Especially usefol for meetings discussing results in evernote, notion, kanban boards.
   Or Google Sheets and the like.
@@ -18,8 +18,9 @@
     },
 	{
 		"matches": ["https://*/*","http://*/*","file://*/*"],
-		"js": ["js/jquery-3.6.0.slim.min.js","js/href_target_top.js"],
-		"all_frames": true
+		"js": ["js/jquery-3.6.0.slim.min.js","js/messageHelper.js","js/href_target_top.js"],
+		"all_frames": true,
+		"run_at":"document_start"
 	}
   ],
   "web_accessible_resources": [{
@@ -29,7 +30,7 @@
 	"matches": ["<all_urls>"],
        "extension_ids": []
   }],
-  "permissions": ["storage","declarativeNetRequest"],
+  "permissions": ["storage","declarativeNetRequest","webRequest"],
    "host_permissions": [
     "<all_urls>"
   ],

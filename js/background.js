@@ -64,6 +64,23 @@ function awnser_tab(tab_id) {
 	} catch (err) { }
 }
 
+// Try to detect an uncatched navigation event
+function logURLfiltered(requestDetails) {
+  console.log(`Error: ${requestDetails.url}`);
+  console.log(`Error: ${requestDetails.tabId}`);
+  
+  chrome.tabs.query( { active: true, currentWindow: true }, function( tabs ) {
+		chrome.tabs.update( requestDetails.tabId, { url: requestDetails.url } ); 
+  });
+}
+
+
+chrome.webRequest.onBeforeRedirect.addListener(logURLfiltered, {
+  urls: ["<all_urls>"],types:["sub_frame"]
+});
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////
 // HERE come the copy of message Helper.js

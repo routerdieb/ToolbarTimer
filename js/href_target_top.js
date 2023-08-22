@@ -1,3 +1,4 @@
+console.log('i am helping');
 // set all a href to top
 let finished = false;
 $( document ).ready(function() {
@@ -6,14 +7,16 @@ $( document ).ready(function() {
 });
 
 
+
+setInterval(checkFlag,1000);
 function checkFlag() {
-    if(finished == false) {
-		try {
-			$('a').attr('target','_top');
-			window.setTimeout(checkFlag, 100); /* this checks the flag every 100 milliseconds*/
-		} catch (exep){
-			//nothing
-		}
-    }
+    if ($(".net-error").length > 0) {
+		console.log('oh no');
+		console.log(window.location.href);
+		send_message_to_backend(RECIEVER_BACKGROUND, 'Iframe navigation',window.location.href )
+	}
 }
-checkFlag();
+
+function onload2(){
+	send_message_to_backend(RECIEVER_BACKGROUND, 'Iframe navigation',window.location.href )
+}
