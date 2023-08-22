@@ -31,7 +31,6 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
     const height = '50px';
     console.log('running inject iframe')
     const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe" height=${height}></iframe>`);
-	const IFrameContainer = $("<div id='toptimer-fixed-container'></div>");
     //Init
   
         console.log('site is ready');
@@ -92,7 +91,6 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 				content_frame.css(margins[i],"-"+margin_in_direction);
 			}
 			$('body').css('overflow','hidden');
-			
 		}
     
 })();
