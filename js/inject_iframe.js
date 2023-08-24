@@ -19,7 +19,7 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 			return;
 		}
 	}
-	//window.stop();
+		
 	
 	console.log('stopped the window');
 	document.body = document.createElement("body");
@@ -30,7 +30,7 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
     // this is the code which will be injected into a given page...
     const height = '50px';
     console.log('running inject iframe')
-    const IFrame = $(`<iframe src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe" height=${height}></iframe>`);
+    const IFrame = $(`<iframe class="${very_long_safe_class_string}" src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe" height='${height}'></iframe>`);
     //Init
   
         console.log('site is ready');
@@ -76,7 +76,7 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 		
 		if (mode == 3) {
 			// step one clear body
-			$('body').find('*').not('.'+very_long_safe_class_string).remove();
+			remove_old_page();
 			
 			let content_frame = $(`<iframe id="__toptimer_content_iframe" src="${window.location.href}" class="${very_long_safe_class_string}"</iframe>`);
 			$(document.body).prepend(content_frame);
@@ -95,6 +95,27 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
     
 })();
 
+
+function remove_old_page(){
+	$('body').find('*').not('.'+very_long_safe_class_string).remove();
+}
+
+
+MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+var observer = new MutationObserver(function(mutations, observer) {
+    // fired when a mutation occurs
+    console.log(mutations, observer);
+    // ...
+	remove_old_page();
+});
+
+// define what element should be observed by the observer
+// and what types of mutations trigger the callback
+observer.observe(document.body, {
+  subtree: false,
+  childList: true,
+});
 
 
 
