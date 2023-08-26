@@ -9,4 +9,5 @@
         ]
     },
     "condition": { "urlFilter": "*", "resourceTypes": ["main_frame","sub_frame"]}
-}]
+}
+]

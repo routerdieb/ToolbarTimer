@@ -30,7 +30,7 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
     // this is the code which will be injected into a given page...
     const height = '50px';
     console.log('running inject iframe')
-    const IFrame = $(`<iframe class="${very_long_safe_class_string}" src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe" height='${height}'></iframe>`);
+    const IFrame = $(`<iframe class="${very_long_safe_class_string}" src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe"></iframe>`);
     //Init
   
         console.log('site is ready');
