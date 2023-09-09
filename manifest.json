@@ -1,10 +1,8 @@
 {
-  "name": "TopTimer",
-  "version": "0.3.2",
+  "name": "Toolbar Timer",
+  "version": "0.4.0",
   "manifest_version": 3,
-  "description": "TopTimer is a for every Website. Especially usefol for meetings discussing results in evernote, notion, kanban boards.
-  Or Google Sheets and the like.
-  ",
+  "description": "A Timer for almost every Website. Especially useful for meetings discussing results in evernote, notion, kanban boards or a Github codereview. Useful to track time effectivly.",
   "options_ui": {
     "page": "html/options.html",
     "open_in_tab": true
