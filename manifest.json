@@ -1,6 +1,6 @@
 {
   "name": "Toolbar Timer",
-  "version": "0.4.0",
+  "version": "0.5.1",
   "manifest_version": 3,
   "description": "A Timer for almost every Website. Especially useful for meetings discussing results in evernote, notion, kanban boards or a Github codereview. Useful to track time effectivly.",
   "options_ui": {

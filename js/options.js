@@ -27,6 +27,7 @@ function AddColorBoxClickListener(outer_element) {
     for (const color of options_pane.colors) {
         outer_element.find('#' + color + 'box').click(() => {
             console.log("clicked the colorbox" + color);
+			setColor(color);
             send_message_to_backend(RECIEVER_IFRAME, 'progressbar_color', color);
         })
     }
@@ -63,6 +64,7 @@ async function add_inner_div_for_dialog(outer_query_element, modal) {
 	outer_query_element.append(add_option_ta);
 	
 	$('#add_minutes').keypress(function(e){
+	  console.log('keypress');
       if(e.which == 13){
            // submit via ajax or
 		   new_string = add_option_ta.val()
@@ -121,7 +123,7 @@ function get_minute_options_div(min_options){
 }
 
 function add_min_option(parent_element,time){
-	let button1 = $(`<button id='tt_btn_${time}' class="non_float">X</button>`)
+	let button1 = $(`<button id='tt_btn_${time}' class="non_float">X</button>`);
 		
 		button1.click(function(e){
 			let time_id = this.id.split("_")[2];
