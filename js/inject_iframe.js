@@ -90,6 +90,21 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 			}
 			$('body').css('overflow','hidden');
 		}
+		
+		MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+	var observer = new MutationObserver(function(mutations, observer) {
+		// fired when a mutation occurs
+		console.log(mutations, observer);
+		// ...
+		remove_old_page();
+	});
+	// define what element should be observed by the observer
+// and what types of mutations trigger the callback
+observer.observe(document.documentElement, {
+  subtree: false,
+  childList: true,
+});
     
 })();
 
@@ -99,24 +114,6 @@ function remove_old_page(){
 	$('body').children().not('.'+very_long_safe_class_string).not('dialog').remove();
 	$(document).find('body').not('.'+very_long_safe_class_string).remove();
 }
-
-
-MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-
-var observer = new MutationObserver(function(mutations, observer) {
-    // fired when a mutation occurs
-    console.log(mutations, observer);
-    // ...
-	remove_old_page();
-});
-
-// define what element should be observed by the observer
-// and what types of mutations trigger the callback
-observer.observe(document.documentElement, {
-  subtree: false,
-  childList: true,
-});
-
 
 
 // respond to messages from background service worker
