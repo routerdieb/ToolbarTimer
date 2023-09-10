@@ -13,15 +13,10 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 //console.log('running window.stop()');
 //window.stop();
 (async function () {
-	const filterlist = ["stackoverflow.com"];
-	for (filter_url of filterlist) {
-		if(document.URL.indexOf(filter_url) > -1){
-			return;
-		}
+	if is_filtered_url(){
+		return;
 	}
 		
-	
-	console.log('stopped the window');
 	document.body = document.createElement("body");
 	document.body.innerHTML = "<p>Hello World!</p>";
 	
