@@ -13,19 +13,22 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 //console.log('running window.stop()');
 //window.stop();
 (async function () {
-	if is_filtered_url(){
+	if(is_filtered_url()){
 		return;
 	}
-		
-	document.body = document.createElement("body");
-	document.body.innerHTML = "<p>Hello World!</p>";
+	
+	body = document.createElement("body");
+	body.setAttribute("class",very_long_safe_class_string);
+	
+	document.body = body;
+	//document.body.innerHTML = "<p>Hello World!</p>";
 	
 	
 	
     // this is the code which will be injected into a given page...
     const height = '50px';
     console.log('running inject iframe')
-    const IFrame = $(`<iframe class="${very_long_safe_class_string}" src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe"></iframe>`);
+    const IFrame = $(`<iframe class="${very_long_safe_class_string}" src="${chrome.runtime.getURL('html/extension_iframe.html')}" id="__toptimer_iframe" height="50px"></iframe>`);
     //Init
   
         console.log('site is ready');
@@ -92,7 +95,9 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 
 
 function remove_old_page(){
-	$('body').find('*').not('.'+very_long_safe_class_string).remove();
+	console.log('remove old page');
+	$('body').children().not('.'+very_long_safe_class_string).not('dialog').remove();
+	$(document).find('body').not('.'+very_long_safe_class_string).remove();
 }
 
 
@@ -107,7 +112,7 @@ var observer = new MutationObserver(function(mutations, observer) {
 
 // define what element should be observed by the observer
 // and what types of mutations trigger the callback
-observer.observe(document.body, {
+observer.observe(document.documentElement, {
   subtree: false,
   childList: true,
 });
@@ -119,7 +124,7 @@ chrome.runtime.onMessage.addListener(function (response, sendResponse) {
     if (response.reciever == RECIEVER_INJECT || response.reciever == RECIEVER_ACTIVE_INJECT) {
         console.log(response);
         if (response.type == 'open_settings_dialog') {
-            dialog_modal = $('<dialog data-modal class="modal settings_modal toptimer-container"></dialog>');
+            dialog_modal = $(`<dialog data-modal class="modal settings_modal toptimer-container ${very_long_safe_class_string}"></dialog>`);
             add_inner_div_for_dialog(dialog_modal)
 
             $(document.body).prepend(dialog_modal);

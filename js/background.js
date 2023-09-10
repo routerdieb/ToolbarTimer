@@ -50,7 +50,7 @@ async function background_msg_listener(request, sender) {
 
 function active_tab_play_stop_music() {
 	console.log('sending play stop sound');
-	send_back_to_active(1, 'play_stop_sound', {});
+	send_back_to_content(RECIEVER_ACTIVE_IFRAME, 'play_stop_sound', {});
 	current_duration_s = undefined;
 	current_countDownDate_ms = undefined;
 }

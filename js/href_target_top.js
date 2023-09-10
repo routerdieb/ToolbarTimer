@@ -1,6 +1,6 @@
 let finished = false;
 function set_up_listening(){
-	if is_filtered_url(){
+	if (is_filtered_url()){
 		return;
 	}
 	$( document ).ready(function() {
@@ -9,7 +9,7 @@ function set_up_listening(){
 	});
 	setInterval(checkFlag,1000);
 }
-
+set_up_listening();
 
 function checkFlag() {
     if ($(".net-error").length > 0) {

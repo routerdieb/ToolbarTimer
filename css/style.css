@@ -196,3 +196,7 @@ dialog::backdrop{
     width: 100vw;
 	z-index: 7999999;
 }
+
+#add_minutes{
+	color: black;
+}
