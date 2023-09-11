@@ -2,7 +2,7 @@
   "name": "Toolbar Timer",
   "version": "0.5.1",
   "manifest_version": 3,
-  "description": "A Timer for almost every Website. Especially useful for meetings discussing results in evernote, notion, kanban boards or a Github codereview. Useful to track time effectivly.",
+  "description": "Track time during screensharing in the webbrowser. Useful for use with evernote, Excel Online or a Github codereview.",
   "options_ui": {
     "page": "html/options.html",
     "open_in_tab": true
