@@ -15,3 +15,10 @@ This extension just allows set the xframe police to same origin, basically just 
 Sometimes reloading solves the issue.
 If it still doesn't work, please create a github issue with the Website url
 and idealy with a good description and a Screenshot. 
+
+
+#How to build
+Install typescript
+npm install chrome types and Jquery.
+type 'tsc' in console
+after that there may be some bundling necessary

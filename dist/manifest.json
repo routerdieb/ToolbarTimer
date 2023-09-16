@@ -1,6 +1,6 @@
 {
   "name": "Toolbar Timer",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "manifest_version": 3,
   "description": "Track time during screensharing in the webbrowser. Useful for use with evernote, Excel Online or a Github codereview.",
   "options_ui": {
@@ -10,7 +10,7 @@
   "content_scripts": [
     {
       "matches": ["https://*/*","http://*/*","file://*/*"],
-      "js": ["js/jquery-3.6.0.slim.min.js","js/loadStore.js","js/messageHelper.js","js/options.js","js/exclusion.js","js/inject_iframe.js"],
+      "js": ["js/jquery-3.6.0.slim.min.js","js/loadStore2.js","js/messageHelper2.js","js/exclusion2.js","js/inject_iframe2.js"],
 	  "css": ["/css/style.css","css/errorDiv.css"],
 	  "run_at":"document_start"
     },
