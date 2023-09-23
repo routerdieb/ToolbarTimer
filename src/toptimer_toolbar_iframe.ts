@@ -1,35 +1,36 @@
-import { message_recievers, message_type, message_types, send_message_to_backend } from "./messageHelper2";
+import { message_recievers, message, message_types, send_message_to_backend, create_message } from "./messageHelper";
+import { getMinOptions, getColor} from "./load_and_store";
 
-let ToptimerExtension = {};
+jQuery(document).ready(() => {// hacky way for typescript
+	build_extension()
+});
+
+const me:message_recievers[] = [message_recievers.ACTIVE_IFRAME,message_recievers.IFRAME]
 chrome.runtime.onMessage.addListener(responde_to_msg);
-jQuery(document).ready(build_extension);
 
-let dropdown_time
-let countDown
-let btnStop
-let btnGo
+let dropdown_time: { [x: string]: any; }
+let countDown: JQuery<HTMLElement>
+
 let is_muted:boolean
-let min_options:[number]
-let dropdownControl
-let progress_bar
-let audio
-let interval
+let min_options:number[]
+let dropdownControl: JQuery<HTMLElement>
+let progress_bar: JQuery<HTMLElement>
+let audio: HTMLAudioElement
+let interval: ReturnType<typeof setInterval>
+let btnStop: JQuery<HTMLButtonElement>
+let btnGo: JQuery<HTMLButtonElement>
 
-async function build_extension($) {
+
+async function build_extension() {
 	is_muted = false
-	const leftWrapper = $('#left_wrapper')
 
-	///////////////////////////
-	////// Center Wrapper /////
-	///////////////////////////
-	const centerWrapper = $('#center_wrapper')
+	btnStop =  jQuery('#stop_btn')
+	btnGo	=  jQuery('#go_btn')
+	dropdownControl = jQuery('#toptimer-dropdown')
+	countDown = jQuery('#toptimer-countdown')
+	progress_bar = jQuery('#progress_bar')
+	const mute_btn:JQuery<HTMLElement> = jQuery(`#mute_btn`)
 
-	dropdownControl = $('<select id="toptimer-dropdown">')
-	btnGo = $('<button id="go_btn" type="button">Go!</button>')
-
-
-	countDown = $('<span id="toptimer-countdown">No Time<\span>')
-	btnStop = $(`<button id="toptimer-stop">X</button>`)
 
 	min_options = await getMinOptions()
 	dropdown_time = to_time_dict(min_options)
@@ -38,15 +39,8 @@ async function build_extension($) {
 	//options minutes
 	apply_time_dict();
 
-	
-
-	btnGo.click(handleGoClick);
+	btnGo.click(handleGoClick)
 	btnStop.click(handleStopClick)
-
-	centerWrapper.append(countDown);
-	centerWrapper.append(btnStop);
-	centerWrapper.append(dropdownControl);
-	centerWrapper.append(btnGo);
 
 	countDown.hide()
 	btnStop.hide()
@@ -55,18 +49,13 @@ async function build_extension($) {
 	///////////////////////////
 	////// Right  Wrapper /////
 	///////////////////////////
-	const rightWrapper = $('#right_wrapper');
+	
+	mute_btn.html('&#128266;').click(handle_mute_click)
 
+	let dialog_btn = jQuery(`#dialog-open`)
 
-	const mute_btn = $(`<button id="mute_btn" type="button"><\button>`);
-	mute_btn.html('&#128266;').click(handle_mute_click);
-
-
-	let dialog_btn = $(`<button id="toptimer-stop"></button>`);
-
-	rightWrapper.append(mute_btn);
-	//rightWrapper.append(settingsBtn);
-	rightWrapper.append(dialog_btn);
+	//rightWrapper.append(mute_btn)
+	//rightWrapper.append(dialog_btn)
 	dialog_btn.append(
 		$(`<img src="${chrome.runtime.getURL("media/gear-icon.png")}" />`)
 	);
@@ -74,15 +63,16 @@ async function build_extension($) {
 
 
 	// progress bar
-	progress_bar = $('<div id="progress_bar" style="height:6px;width:1%;background-color:red;"></div>');
-	const progress_wrapper = $('#progress_container');
-	progress_wrapper.append(progress_bar)
+	
 
-	let color = await getColor();
-	$("#progress_bar").css("background-color", color);
-	btnGo.css("background-color", color);
+	let color:any = await getColor();// todo remove any here
+	$("#progress_bar").css("background-color", color)
+	btnGo.css("background-color", color)
 
-    send_message_to_backend(message_recievers.RECIEVER_BACKGROUND,message_types.init_tab,{})
+	let msg = create_message([message_recievers.BACKGROUND],message_types.init_tab)
+    send_message_to_backend(msg)
+
+	$('body').css('overflow','hidden')
 }
 
 
@@ -96,22 +86,22 @@ function updateProgressBar(percent: number) {
 }
 
 function handle_dialog_click() {
-	send_message_to_backend(message_recievers.RECIEVER_ACTIVE_INJECT,message_types.open_settings_dialog,{})
+	let msg = create_message([message_recievers.ACTIVE_INJECT],message_types.open_settings_dialog)
+	send_message_to_backend(msg)
 }
 
 function handle_mute_click() {
 	is_muted= !is_muted
 
-	send_message_to_backend(message_recievers.RECIEVER_IFRAME,message_types.is_muted,{'is_muted':'is_muted'})
-	send_message_to_backend(message_recievers.RECIEVER_BACKGROUND,message_types.is_muted,{'is_muted':'is_muted'})
-	toggle_mute();
+	let msg = create_message([message_recievers.BACKGROUND,message_recievers.IFRAME],message_types.is_muted,{'is_muted':is_muted})
+	send_message_to_backend(msg)
 }
 
-function toggle_mute() {
-
+function apply_mute(muted:boolean) {
+	is_muted = muted
 	if (is_muted) {
 		$("#mute_btn")[0].innerHTML = "&#128263;";
-		audio.pause();
+		audio?.pause();
 	} else {
 		$("#mute_btn")[0].innerHTML = "&#128266;";
 	}
@@ -149,7 +139,7 @@ function formatedTimeSpan(fullTime:number, seconds:number) {
 
 function playAudio(file:string) {
 	if (!is_muted) {
-		if (audio) {
+		if (audio != undefined) {
 			audio.pause();
 			audio.currentTime = 0;
 		}
@@ -169,7 +159,10 @@ function msToNextHalfHour() {
 async function handleGoClick() {
 	playAudio("../media/engine-start.mp3");
 
-	let text:string = dropdownControl.val();
+	console.log('handleGOClick')
+	let text:any = dropdownControl.val();
+
+
 	let duration_s:number = 0;
 	let countDownDate_ms:number = 0;
 	if (text.startsWith('fill',0)){
@@ -185,20 +178,24 @@ async function handleGoClick() {
 		countDownDate_ms = new Date().getTime() + minutes * 60 * 1000;
 		duration_s = minutes * 60;
 	}
-	send_message_to_backend(message_recievers.RECIEVER_IFRAME,message_types.start_timer,{ 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
-	send_message_to_backend(message_recievers.RECIEVER_BACKGROUND,message_types.start_timer,{ 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
+
 	start_update_intervall(countDownDate_ms, duration_s)
+	let msg = create_message([message_recievers.IFRAME,message_recievers.BACKGROUND],message_types.start_timer,{ 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
+	send_message_to_backend(msg)
+	
 }
 
 function start_update_intervall(countDownDate:number, duration_in_seconds:number) {
+	dropdownControl.hide()
+	btnGo.hide()
+	btnStop.show()
+	countDown.show()
+	
+
 	const now = new Date().getTime();
 	const distance = countDownDate - now;
 	countDown.html(formatedTimeSpan(duration_in_seconds, distance / 1000));
 
-	btnGo.hide();
-	dropdownControl.hide();
-	countDown.show();
-	btnStop.show();
 
 	// Update the count down every 1 second
 	interval = setInterval(() => {
@@ -217,11 +214,11 @@ function start_update_intervall(countDownDate:number, duration_in_seconds:number
 		}
 
 	}, 1000);
+	
 }
 
 function handleStopClick() {
-	send_message_to_backend(message_recievers.RECIEVER_IFRAME,message_types.stop_timer)
-	send_message_to_backend(message_recievers.RECIEVER_BACKGROUND,message_types.stop_timer)
+	let msg = create_message([message_recievers.IFRAME,message_recievers.BACKGROUND],message_types.stop_timer)
 	stop_timer();
 }
 
@@ -241,39 +238,40 @@ function stop_timer() {
 
 
 
-function responde_to_msg(response:message_type, sendResponse:chrome.runtime.MessageSender) {
-	if (response.reciever == message_recievers.RECIEVER_ACTIVE_IFRAME || response.reciever == message_recievers.RECIEVER_IFRAME) {
-		if (response.type == message_types.progressbar_color) {
-			$("#progress_bar").css("background-color", response.payload);
-			btnGo.css("background-color", response.payload);
+async function responde_to_msg(msg:message, sendResponse:any) {
+	console.log(msg)
+	let response = new message(msg.message_type,msg.payload,msg.msg_recs)
+	if (response.is_for(me)){
+		if (response.message_type == message_types.progressbar_color) {
+			$("#progress_bar").css("background-color", <string>response.payload['color']);
+			btnGo.css("background-color", <string>response.payload['color']);
 		}
-		if (response.type == message_types.start_timer) {
+		if (response.message_type == message_types.start_timer) {
 			clearInterval(interval);
-			start_update_intervall(response.payload['countDownDate_ms'], response.payload['duration_s'])
+			start_update_intervall(<number>response.payload['countDownDate_ms'], <number>response.payload['duration_s'])
 		}
-		if (response.type == message_types.stop_timer) {
+		if (response.message_type == message_types.stop_timer) {
 			stop_timer();
 		}
-		if (response.type == message_types.play_stop_sound) {
+		if (response.message_type == message_types.play_stop_sound) {
 			playAudio("../media/ring.mp3");
 		}
 
-		if (response.type == message_types.is_muted) {
-			is_muted = response.payload['is_muted']
-			toggle_mute();
+		if (response.message_type == message_types.is_muted) {
+			apply_mute(<boolean>response.payload['is_muted']);
 		}
-		if (response.type == message_types.get_init_info) {
-			is_muted = response.payload['is_muted']
-			toggle_mute();
-			if ('countDownDate_ms' in response.payload) {
-				let date:number = response.payload['countDownDate_ms']
-				let dur:number = response.payload['duration_s']
+		if (response.message_type == message_types.get_init_info) {
+			apply_mute(<boolean>response.payload['is_muted']); 
+
+			if ( <boolean>response.payload['is_running']){
+				let date:number = <number>response.payload['countDownDate_ms']
+				let dur:number = <number>response.payload['duration_s']
 				start_update_intervall(date, dur);
 			}
 		}
-		if (response.type == message_types.min_options){
+		if (response.message_type == message_types.min_options){
 			console.log(response);
-			min_options = response.payload['min_options']
+			min_options = <[number]>response.payload['min_options']
 			console.log(min_options);
 			
 			dropdown_time = to_time_dict(min_options);
@@ -283,30 +281,32 @@ function responde_to_msg(response:message_type, sendResponse:chrome.runtime.Mess
 	}
 };
 
-function to_time_dict(min_options:[number]){
+function to_time_dict(min_options:number[]){
 	console.log(min_options);
-	let min_dict = {};
+	let min_dict:{[key:number]:string} = {};
 	for (let i = 0; i < min_options.length; i++) {
-		let time_in_min = min_options[i];
+		let time_in_min:number = min_options[i];
 		min_dict[time_in_min] = `${time_in_min} minutes`
 	}
 	return min_dict
 }
 
 function apply_time_dict(){
+	console.log(dropdownControl)
 	dropdownControl.empty();
 	for (const value in dropdown_time) {
-		if (Object.hasOwnProperty.call(dropdown_time, value)) {
-			const label = dropdown_time[value];
-			const option = $(`<option value=${value}>`);
-			option.text(label);
-			dropdownControl.append(option);
-		}
+		console.log(value)
+
+		const label = dropdown_time[value];
+		const option = $(`<option value=${value}>`);
+		option.text(label);
+		dropdownControl.append(option);
+
 	}
 	//other options
 	dropdownControl.append('<hr>');
-	let option = $(`<option value=fill_60>till full Hour</option>`);
+	const option:JQuery<HTMLElement> = $('<option value=fill_60>till full Hour</option>');
 	dropdownControl.append(option);
-	option = $(`<option value=fill_30>till half Hour</option>`);
-	dropdownControl.append(option);
+	const option2:JQuery<HTMLElement> = $('<option value=fill_30>till half Hour</option>');
+	dropdownControl.append(option2);
 }

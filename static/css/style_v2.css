@@ -1,0 +1,46 @@
+#left_wrapper{
+	float:left;
+}
+
+#right_wrapper{
+	float: right;
+}
+
+#center_wrapper{
+	display: flex;
+    justify-content: center;
+}
+
+.toptimer-timer-stop {
+    margin-left: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#go_btn {
+    background: orange;
+    padding: 8px 20px;
+    font-weight: bold;
+    margin-left: 10px;
+    color: #000;
+    cursor: pointer;
+    height: 40px;
+    width: 80px !important;
+}
+
+
+#progress_bar{
+	transition: width 1s linear;
+}
+
+#progress_container{
+	background: grey;
+	height: 4px;
+}
+
+#toptimer-countdown{
+	font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+}

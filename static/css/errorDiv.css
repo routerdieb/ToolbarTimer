@@ -1,0 +1,27 @@
+.msgBox1{
+position: absolute;
+top: 0px;
+z-index: 200;
+display: block;
+background-color: black;
+color: white !important;
+margin-left: auto;
+margin-right: auto;
+margin-top: 10%;
+padding: 10px;
+width:20%;
+height:20%;
+left: 50%;
+transform: translateX(-50%);
+}
+
+#msgButtonContainer{
+    position: relative;
+}
+
+#okButtonMsgBox{
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+}

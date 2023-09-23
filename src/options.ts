@@ -1,16 +1,18 @@
-import { message_recievers, message_types, send_message_to_backend } from "./messageHelper2";
+import { create_message, message_recievers, message_types, send_message_to_backend } from "./messageHelper";
+import { setMinOptions,getMinOptions, setColor } from "./load_and_store";
 
-let min_options:[number]
+let min_options:number[]
 const colors = ['red', 'green', 'blue', 'orange', 'yellow', 'silver']
 
 
 function closeSettingsPane() {
     //unlock scrolling
-    const modal = document.querySelector("[data-modal]")
+    const modal:HTMLDialogElement = <HTMLDialogElement> document.querySelector("[data-modal]")
     if(modal != undefined){
         modal.close();
     }
-    send_message_to_backend(message_recievers.RECIEVER_ACTIVE_INJECT,message_types.close_modal);
+    let msg = create_message([message_recievers.ACTIVE_INJECT],message_types.close_modal)
+    send_message_to_backend(msg)
 }
 
 
@@ -25,20 +27,21 @@ function create_color_buttons() {
 
 }
 
-function AddColorBoxClickListener(outer_element) {
+function AddColorBoxClickListener(outer_element:JQuery<HTMLElement>) {
     let string = ""
     for (const color of colors) {
         outer_element.find('#' + color + 'box').click(() => {
             console.log("clicked the colorbox" + color);
 			setColor(color);
-            send_message_to_backend(message_recievers.RECIEVER_IFRAME, message_types.progressbar_color, {'color':color});
+            let msg = create_message([message_recievers.IFRAME], message_types.progressbar_color, {'color':color})
+            send_message_to_backend(msg)
         })
     }
     return string
 }
 
 
-export async function add_inner_div_for_dialog(outer_query_element) {
+export async function add_inner_div_for_dialog(outer_query_element:JQuery<HTMLElement>) {
 
     const optionsCloseButton = $('<button id="optionsClose-btn" class="btn toptimer" type="button">X</button>');
     outer_query_element.append(optionsCloseButton)
@@ -49,20 +52,20 @@ export async function add_inner_div_for_dialog(outer_query_element) {
 
     const html_setting_pane = $('<h1>Settings<\h1> <hr >');
     outer_query_element.append(html_setting_pane)
-    let line = $('<div class="line"> Select your Colour:</br> <\div>')
+    let line = $('<div class="line"> Select your Colour:</br> </div>')
     outer_query_element.append(line);
 
     outer_query_element.append(create_color_buttons());
     AddColorBoxClickListener(outer_query_element);
 
-	const html_minute_options_header = $('<br><br><br><div class="line">Minute Options<\div>');
+	const html_minute_options_header = $('<br><br><br><div class="line">Minute Options</div>');
     outer_query_element.append(html_minute_options_header);
 	
 	min_options = await getMinOptions();
 
-	outer_query_element.append('<\hr>');
+	outer_query_element.append('</hr>');
 	outer_query_element.append(get_minute_options_div(min_options));
-	outer_query_element.append('<\hr>');
+	outer_query_element.append('</hr>');
 	let add_option_ta = $('<textarea id="add_minutes" rows="1" cols="50"></textarea>')
 	outer_query_element.append(add_option_ta);
 	
@@ -70,7 +73,7 @@ export async function add_inner_div_for_dialog(outer_query_element) {
 	  console.log('keypress');
       if(e.which == 13){
            // submit via ajax or
-		   let new_string = add_option_ta.val()
+		   let new_string:string = <string> add_option_ta.val()
 		   let new_int:number = parseInt(new_string);
 		   console.log(new_int);
 		   if (isNaN(new_int)){
@@ -79,7 +82,8 @@ export async function add_inner_div_for_dialog(outer_query_element) {
 			   console.log('do the magic');
 			   min_options.push(new_int);
 			   console.log('min options',min_options);
-               send_message_to_backend(message_recievers.RECIEVER_IFRAME,message_types.min_options,{'min_options':min_options})
+               let msg = create_message([message_recievers.IFRAME],message_types.min_options,{'min_options':min_options})
+               send_message_to_backend(msg)
 			   setMinOptions(min_options);
 			   console.log('done some of the magic');
 			   let selection_div = $('#selection_div');
@@ -102,11 +106,12 @@ export function add_outside_click_detect() {
     const modal = document.querySelector("[data-modal]")
     if(modal != undefined){
         modal.addEventListener("click", e => {
+            let event:any = <any> e
             const dialogDimensions = modal.getBoundingClientRect()
-            if (e.clientX < dialogDimensions.left ||
-                e.clientX > dialogDimensions.right ||
-                e.clientY < dialogDimensions.top ||
-                e.clientY > dialogDimensions.bottom) {
+            if (event.clientX < dialogDimensions.left ||
+                event.clientX > dialogDimensions.right ||
+                event.clientY < dialogDimensions.top ||
+                event.clientY > dialogDimensions.bottom) {
                 closeSettingsPane();
             }
         });
@@ -114,7 +119,7 @@ export function add_outside_click_detect() {
 
 }
 
-function get_minute_options_div(min_options:[number]){
+function get_minute_options_div(min_options:number[]){
 	// todo replace with load
 	console.log(min_options);
 	
@@ -127,7 +132,7 @@ function get_minute_options_div(min_options:[number]){
 	return selection_div
 }
 
-function add_min_option(parent_element,time){
+function add_min_option(parent_element: JQuery<HTMLElement>,time: number){
 	let button1 = $(`<button id='tt_btn_${time}' class="non_float">X</button>`);
 		
 		button1.click(function(e){
@@ -145,7 +150,8 @@ function add_min_option(parent_element,time){
 
 			console.log(min_options);
 			setMinOptions(min_options);
-            send_message_to_backend(message_recievers.RECIEVER_IFRAME,message_types.min_options,{'min_options':min_options})
+            let msg = create_message([message_recievers.IFRAME],message_types.min_options,{'min_options':min_options})
+            send_message_to_backend(msg)
 		});
 		let s = $(`<div id="timeoption_${time}">${time} minutes</div>`)
 		s.prepend(button1);

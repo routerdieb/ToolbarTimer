@@ -1,0 +1,189 @@
+.toptimer-container{
+	background-color: #353535;
+	background:  #353535 !important;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+	top: 0;
+	width: 100%;
+	height: 42px;
+}
+
+.toptimer-container button{
+	background-color: #353535;
+	height: 40px;
+	width: 40px;
+	justify-content: center;
+	cursor: pointer;
+	float: left;
+}
+
+.toptimer-container button img{
+	height: 20px;
+	width: 20px;
+}
+
+.toptimer-container option{
+	background-color: #353535;
+	color: #fff;
+}
+
+.toptimer-container select{
+	background-color: #353535;
+	color: #fff;
+}
+
+.toptimer-container .non_float{
+	float: unset;
+    height: 20px;
+	width: 20px;
+}
+
+
+
+.modal{
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	position:absolute;
+	min-width: 60%;
+	min-height: 50%;
+	background-color:initial;
+}
+
+.modal.toptimer-container div{
+	background-color:initial;
+	width: initial;
+	padding:initial;
+	margin: initial;	
+}
+
+.modal.toptimer-container button{
+	padding-inline:initial;
+	padding-block: initial;
+	color: black;
+	border-width: 2px;
+	border-style: outset;
+	border-color: buttonborder;
+}
+
+.modal.toptimer-container *{
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+
+.settings_modal{
+	padding: 5px;
+	border: none;
+	border-radius: 1rem;
+}
+
+dialog::backdrop{
+	background-color: rgba(0.5,0.5,0.5,0.5);
+}
+
+
+#optionsClose-btn {
+    float: right;
+    right: 0;
+    top: 0;
+    content: "x";
+    position: absolute;
+    z-index: 10003;
+    width: 10px;
+    line-height: 1;
+    padding: 2px 12px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+#toptimer__settingPaneContainer {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    z-index: 10001;
+}
+
+#toptimer__settingPane {
+    position: relative;
+    display: block;
+    height: 60%;
+    width: 80%;
+    background-color: black;
+    color: white !important;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    padding: 10px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: grey;
+}
+
+.__toptimer_red {
+    background-color: red !important;
+}
+
+.__toptimer_green {
+    background-color: green !important;
+}
+
+.__toptimer_blue {
+    background-color: blue !important;
+}
+
+.__toptimer_orange {
+    background-color: orange !important;
+}
+.__toptimer_yellow {
+    background-color: yellow !important;
+}
+
+.__toptimer_silver {
+	background-color: silver !important;
+}
+
+.__toptimer_line {
+    margin-bottom: 5px;
+}
+
+.__TTsubTitle {
+    color: white !important;
+}
+
+
+
+#toptimer__settingPane hr {
+    margin: 5px 5px 5px 5px;
+    border-top: solid 2px rgb(238, 238, 238) !important;
+    border-bottom: solid 2px rgb(238, 238, 238) !important;
+    display: block;
+    height: 1px !important;
+    background: transparent;
+    opacity: '0';
+}
+
+
+
+#__toptimer_content_iframe{
+	width: 100vw;
+	height: calc(100vh - 40px);
+}
+
+#__toptimer_iframe{
+    top: 0;
+	position: sticky;
+    width: 100vw;
+	z-index: 7999999;
+}
+
+#add_minutes{
+	color: black;
+}

@@ -1,5 +1,5 @@
 // Colour
-function getColor() {
+export function getColor():Promise<string> {
     let sKey:string = "Color";
     return new Promise(function (resolve, reject) {
       chrome.storage.local.get(sKey, function (items) {
@@ -13,19 +13,19 @@ function getColor() {
     });
   }
   
-  function setColor(value:string) {
+  export function setColor(value:string):void {
     chrome.storage.local.set({ "Color": value }, function () {
       console.log('Value is set to ' + value);
     });
   }
   
-  function setMinOptions(values:[number]){
+ export function setMinOptions(values:number[]){
       chrome.storage.local.set({ "Minoptions": values }, function () {
           console.log('Min Options is set to ' + values);
       });
   }
   
-  function getMinOptions() :Promise<[number]>{
+  export function getMinOptions() :Promise<number[]>{
     let sKey:string = "Minoptions"
     return new Promise(function (resolve, reject) {
       chrome.storage.local.get(sKey, function (items) {
