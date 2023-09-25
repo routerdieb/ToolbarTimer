@@ -1,5 +1,5 @@
 import { is_filtered_url } from "./exclusion"
-import { message_recievers, message, message_types } from "./messageHelper"
+import { MsgRecievers, message, MsgTypes } from "./messageHelper"
 import {add_inner_div_for_dialog,add_outside_click_detect} from "./options"
 
 /* 
@@ -8,7 +8,7 @@ import {add_inner_div_for_dialog,add_outside_click_detect} from "./options"
 	It injects two iframe, one for the toolbar and one for the normal website, you are trying to visit.
 */
 
-const me = [ message_recievers.INJECT, message_recievers.ACTIVE_INJECT]
+const me = [ MsgRecievers.INJECT, MsgRecievers.ACTIVE_INJECT]
 const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 
 
@@ -38,8 +38,12 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 		
 	// step one clear body
 	//remove_old_page();
-			
-	let content_frame = $(`<iframe id="__toptimer_content_iframe" src="${window.location.href}" class="${very_long_safe_class_string}"</iframe>`);
+	let sandbox_string:string = `sandbox="allow-forms allow-modals allow-orientation-lock allow-popups allow-popups-to-escape-sandbox	 allow-presentation
+		allow-same-origin allow-scripts allow-top-navigation-by-user-activation"
+	`
+	
+	
+	let content_frame = $(`<iframe id="__toptimer_content_iframe" src="${window.location.href}" ${sandbox_string} class="${very_long_safe_class_string}"</iframe>`);
 	$(document.body).prepend(content_frame);
 	// step two, add iframe of current site
 	$(document.body).prepend(IFrame);
@@ -73,10 +77,11 @@ const very_long_safe_class_string = "KkJVErhPbp3FBHwt6WAI6qjW";
 
 
 function remove_old_page():void{
-	console.log('remove old page');
-	$('body').children().not('.'+very_long_safe_class_string).not('dialog').remove();
-	$(document).find('body').not('.'+very_long_safe_class_string).remove();
-	$('body').css('overflow','hidden');
+	console.log('remove old page')
+	$('body').children().not('.'+very_long_safe_class_string).not('dialog').remove()
+	$(document).find('body').not('.'+very_long_safe_class_string).remove()
+	$('body').css('overflow','hidden')
+	$('head').remove()
 }
 
 
@@ -86,20 +91,30 @@ chrome.runtime.onMessage.addListener(function (msg:message, sendResponse:any) {
 	console.log('it works in Typescript')
     if (response.is_for(me)) {
         console.log(response);
-        if (response.message_type == message_types.open_settings_dialog) {
-			console.log('detected open settings')
-            let dialog_modal:JQuery<HTMLDialogElement> = jQuery(`<dialog data-modal id="_top_timer_modal" class="modal settings_modal toptimer-container ${very_long_safe_class_string}"></dialog>`);
-            add_inner_div_for_dialog(dialog_modal)
-
-            $(document.body).prepend(dialog_modal);
-            const modal = <any>document.getElementById("_top_timer_modal");
-            modal.showModal(); // todo fix showModal here (deprecated ?)
 
 
-            add_outside_click_detect();
-        } else if (response.message_type == message_types.close_modal){
-			console.log('detected close settings')
-			$('body').css('overflow','hidden');
+		switch (response.message_type as MsgTypes) {
+			case MsgTypes.open_settings_dialog:
+				console.log('detected open settings')
+            	let dialog_modal:JQuery<HTMLDialogElement> = jQuery(`<dialog data-modal id="_top_timer_modal" class="modal settings_modal toptimer-container ${very_long_safe_class_string}"></dialog>`);
+            	add_inner_div_for_dialog(dialog_modal)
+
+            	$(document.body).prepend(dialog_modal);
+            	const modal = <any>document.getElementById("_top_timer_modal");
+            	modal.showModal(); // todo fix showModal here (deprecated ?)
+
+            	add_outside_click_detect();
+				break; 
+			case MsgTypes.close_modal:
+				console.log('detected close settings')
+				$('body').css('overflow','hidden');
+				break;
+
+			default:
+				console.log('unknown message type')
+				break;
 		}
+
     }
 });
+

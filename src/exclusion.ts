@@ -1,4 +1,4 @@
-const filterlist:string[] = ["stackoverflow.com","stackexchange.com"];
+const filterlist:string[] = [];
 export function is_filtered_url(){	
 	for (let filter_url of filterlist) {
 		if(document.URL.indexOf(filter_url) > -1){

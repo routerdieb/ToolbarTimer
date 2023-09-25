@@ -1,4 +1,4 @@
-import { create_message, message_recievers, message_types, send_message_to_backend } from "./messageHelper";
+import { create_message, MsgRecievers, MsgTypes, send_message_to_backend } from "./messageHelper";
 import { setMinOptions,getMinOptions, setColor } from "./load_and_store";
 
 let min_options:number[]
@@ -11,7 +11,7 @@ function closeSettingsPane() {
     if(modal != undefined){
         modal.close();
     }
-    let msg = create_message([message_recievers.ACTIVE_INJECT],message_types.close_modal)
+    let msg = create_message([MsgRecievers.ACTIVE_INJECT],MsgTypes.close_modal)
     send_message_to_backend(msg)
 }
 
@@ -33,7 +33,7 @@ function AddColorBoxClickListener(outer_element:JQuery<HTMLElement>) {
         outer_element.find('#' + color + 'box').click(() => {
             console.log("clicked the colorbox" + color);
 			setColor(color);
-            let msg = create_message([message_recievers.IFRAME], message_types.progressbar_color, {'color':color})
+            let msg = create_message([MsgRecievers.IFRAME], MsgTypes.progressbar_color, {'color':color})
             send_message_to_backend(msg)
         })
     }
@@ -82,7 +82,7 @@ export async function add_inner_div_for_dialog(outer_query_element:JQuery<HTMLEl
 			   console.log('do the magic');
 			   min_options.push(new_int);
 			   console.log('min options',min_options);
-               let msg = create_message([message_recievers.IFRAME],message_types.min_options,{'min_options':min_options})
+               let msg = create_message([MsgRecievers.IFRAME],MsgTypes.min_options,{'min_options':min_options})
                send_message_to_backend(msg)
 			   setMinOptions(min_options);
 			   console.log('done some of the magic');
@@ -150,7 +150,7 @@ function add_min_option(parent_element: JQuery<HTMLElement>,time: number){
 
 			console.log(min_options);
 			setMinOptions(min_options);
-            let msg = create_message([message_recievers.IFRAME],message_types.min_options,{'min_options':min_options})
+            let msg = create_message([MsgRecievers.IFRAME],MsgTypes.min_options,{'min_options':min_options})
             send_message_to_backend(msg)
 		});
 		let s = $(`<div id="timeoption_${time}">${time} minutes</div>`)

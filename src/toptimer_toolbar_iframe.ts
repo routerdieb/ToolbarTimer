@@ -1,11 +1,11 @@
-import { message_recievers, message, message_types, send_message_to_backend, create_message } from "./messageHelper";
+import { MsgRecievers, message, MsgTypes, send_message_to_backend, create_message } from "./messageHelper";
 import { getMinOptions, getColor} from "./load_and_store";
 
 jQuery(document).ready(() => {// hacky way for typescript
 	build_extension()
 });
 
-const me:message_recievers[] = [message_recievers.ACTIVE_IFRAME,message_recievers.IFRAME]
+const me:MsgRecievers[] = [MsgRecievers.ACTIVE_IFRAME,MsgRecievers.IFRAME]
 chrome.runtime.onMessage.addListener(responde_to_msg);
 
 let dropdown_time: { [x: string]: any; }
@@ -37,7 +37,7 @@ async function build_extension() {
 
 
 	//options minutes
-	apply_time_dict();
+	time_dict_2_html();
 
 	btnGo.click(handleGoClick)
 	btnStop.click(handleStopClick)
@@ -69,7 +69,7 @@ async function build_extension() {
 	$("#progress_bar").css("background-color", color)
 	btnGo.css("background-color", color)
 
-	let msg = create_message([message_recievers.BACKGROUND],message_types.init_tab)
+	let msg = create_message([MsgRecievers.BACKGROUND],MsgTypes.init_tab)
     send_message_to_backend(msg)
 
 	$('body').css('overflow','hidden')
@@ -86,14 +86,14 @@ function updateProgressBar(percent: number) {
 }
 
 function handle_dialog_click() {
-	let msg = create_message([message_recievers.ACTIVE_INJECT],message_types.open_settings_dialog)
+	let msg = create_message([MsgRecievers.ACTIVE_INJECT],MsgTypes.open_settings_dialog)
 	send_message_to_backend(msg)
 }
 
 function handle_mute_click() {
 	is_muted= !is_muted
 
-	let msg = create_message([message_recievers.BACKGROUND,message_recievers.IFRAME],message_types.is_muted,{'is_muted':is_muted})
+	let msg = create_message([MsgRecievers.BACKGROUND,MsgRecievers.IFRAME],MsgTypes.is_muted,{'is_muted':is_muted})
 	send_message_to_backend(msg)
 }
 
@@ -180,7 +180,7 @@ async function handleGoClick() {
 	}
 
 	start_update_intervall(countDownDate_ms, duration_s)
-	let msg = create_message([message_recievers.IFRAME,message_recievers.BACKGROUND],message_types.start_timer,{ 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
+	let msg = create_message([MsgRecievers.IFRAME,MsgRecievers.BACKGROUND],MsgTypes.start_timer,{ 'countDownDate_ms': countDownDate_ms, 'duration_s': duration_s })
 	send_message_to_backend(msg)
 	
 }
@@ -218,7 +218,8 @@ function start_update_intervall(countDownDate:number, duration_in_seconds:number
 }
 
 function handleStopClick() {
-	let msg = create_message([message_recievers.IFRAME,message_recievers.BACKGROUND],message_types.stop_timer)
+	let msg = create_message([MsgRecievers.IFRAME,MsgRecievers.BACKGROUND],MsgTypes.stop_timer)
+	send_message_to_backend(msg)
 	stop_timer();
 }
 
@@ -241,42 +242,45 @@ function stop_timer() {
 async function responde_to_msg(msg:message, sendResponse:any) {
 	console.log(msg)
 	let response = new message(msg.message_type,msg.payload,msg.msg_recs)
+
 	if (response.is_for(me)){
-		if (response.message_type == message_types.progressbar_color) {
-			$("#progress_bar").css("background-color", <string>response.payload['color']);
-			btnGo.css("background-color", <string>response.payload['color']);
-		}
-		if (response.message_type == message_types.start_timer) {
-			clearInterval(interval);
-			start_update_intervall(<number>response.payload['countDownDate_ms'], <number>response.payload['duration_s'])
-		}
-		if (response.message_type == message_types.stop_timer) {
-			stop_timer();
-		}
-		if (response.message_type == message_types.play_stop_sound) {
-			playAudio("../media/ring.mp3");
-		}
-
-		if (response.message_type == message_types.is_muted) {
-			apply_mute(<boolean>response.payload['is_muted']);
-		}
-		if (response.message_type == message_types.get_init_info) {
-			apply_mute(<boolean>response.payload['is_muted']); 
-
-			if ( <boolean>response.payload['is_running']){
-				let date:number = <number>response.payload['countDownDate_ms']
-				let dur:number = <number>response.payload['duration_s']
-				start_update_intervall(date, dur);
-			}
-		}
-		if (response.message_type == message_types.min_options){
-			console.log(response);
-			min_options = <[number]>response.payload['min_options']
-			console.log(min_options);
+		switch (response.message_type as MsgTypes) {
+			case MsgTypes.progressbar_color:
+				$("#progress_bar").css("background-color", <string>response.payload['color']);
+				btnGo.css("background-color", <string>response.payload['color']);
+				break;
+			case MsgTypes.start_timer: 
+				clearInterval(interval);
+				start_update_intervall(<number>response.payload['countDownDate_ms'], <number>response.payload['duration_s'])
+				break;
+			case MsgTypes.stop_timer:
+				stop_timer()
+				break
+			case MsgTypes.play_stop_sound:
+				playAudio("../media/ring.mp3");
+				break
+			case MsgTypes.get_init_info:
+				if ( <boolean>response.payload['is_running']){
+					let date:number = <number>response.payload['countDownDate_ms']
+					let dur:number = <number>response.payload['duration_s']
+					start_update_intervall(date, dur);
+				}
+				// apply mute
+				// break
+			case MsgTypes.is_muted:
+				apply_mute(<boolean>response.payload['is_muted']);
+				break;
+			case  MsgTypes.min_options:
+				console.log(response);
+				min_options = <[number]>response.payload['min_options']
+				console.log(min_options);
 			
-			dropdown_time = to_time_dict(min_options);
-			console.log("to_time_dict ",dropdown_time)
-			apply_time_dict();
+				dropdown_time = to_time_dict(min_options);
+				console.log("to_time_dict ",dropdown_time)
+				time_dict_2_html();
+				break;
+			default:
+				console.log('unknown type of message')
 		}
 	}
 };
@@ -291,7 +295,7 @@ function to_time_dict(min_options:number[]){
 	return min_dict
 }
 
-function apply_time_dict(){
+function time_dict_2_html(){
 	console.log(dropdownControl)
 	dropdownControl.empty();
 	for (const value in dropdown_time) {

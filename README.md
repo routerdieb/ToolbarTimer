@@ -10,6 +10,7 @@ For this extenison to work on as many pages as possible, it pastes the toolbar a
 Some websites send a header, to not allow being displayed in an iframe.
 This extension just allows set the xframe police to same origin, basically just circumventing the deny header without creating surface for Cross site scripting.
 
+### WebNavigate to detect all navigation inside the iframes
 
 ### My site is not working properly
 Sometimes reloading solves the issue.

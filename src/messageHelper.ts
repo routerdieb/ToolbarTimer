@@ -1,5 +1,5 @@
 // enum with message recievers
-export const enum message_recievers{
+export const enum MsgRecievers{
     IFRAME = 1,
     INJECT,
     BACKGROUND,
@@ -8,7 +8,7 @@ export const enum message_recievers{
 }
 
 // enum with message_types
-export enum message_types{
+export enum MsgTypes{
     start_timer,
     stop_timer,
     is_muted,
@@ -17,23 +17,23 @@ export enum message_types{
     close_modal,
     play_stop_sound,
     get_init_info,
-    Iframe_navigation,
+    iframe_navigation,
     progressbar_color,
     min_options
 }
 
 export class message {
-    public message_type:message_types
-    msg_recs: message_recievers[]
+    public message_type:MsgTypes
+    msg_recs: MsgRecievers[]
     public payload: {[key: string]: string | number | boolean | number[]}
 
-    constructor(message_type:message_types ,payload: {[key: string]: string | number | boolean | number[]},message_reciever: message_recievers[]){
+    constructor(message_type:MsgTypes ,payload: {[key: string]: string | number | boolean | number[]},message_reciever: MsgRecievers[]){
         this.msg_recs = message_reciever
         this.message_type = message_type
         this.payload = payload
     }
 
-    is_for(roles:message_recievers[]):boolean {
+    is_for(roles:MsgRecievers[]):boolean {
         for(let i = 0; i < roles.length;i++){
             let rolle = roles[i]
             if(this.msg_recs.indexOf(rolle) !== -1){
@@ -48,7 +48,7 @@ export class message {
 
 // Todo: Remove all the things below and write message.send function
 
-export function create_message(recievers: message_recievers[],type:message_types, payload?: {[key: string]: string | number | boolean | number[]}):message {
+export function create_message(recievers: MsgRecievers[],type:MsgTypes, payload?: {[key: string]: string | number | boolean | number[]}):message {
     let msg:message    
     if (payload != undefined){
         msg = new message( type, payload,recievers)
@@ -87,7 +87,7 @@ export function send_msg_to_active(msg:message) {
 	});
 }
 
-export function send_to_tab(msg:message, tabID:number){
+export function send_to_specific_tab(msg:message, tabID:number){
     console.log(tabID,typeof(tabID))
     console.log(msg,typeof(msg))
     try {
