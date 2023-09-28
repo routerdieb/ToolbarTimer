@@ -12,6 +12,9 @@ This extension just allows set the xframe police to same origin, basically just 
 
 ### WebNavigate to detect all navigation inside the iframes
 
+
+### tabs to navigate the whole site if you are redirected in subframe
+
 ### My site is not working properly
 Sometimes reloading solves the issue.
 If it still doesn't work, please create a github issue with the Website url
@@ -24,3 +27,4 @@ npm install chrome types and Jquery.
 npm i -D @types/jquery
 type 'tsc' in console
 after that there may be some bundling necessary
+

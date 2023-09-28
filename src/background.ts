@@ -6,6 +6,7 @@ let current_countDownDate_ms: number = -1
 let is_running : boolean = false
 let timer: NodeJS.Timeout | undefined
 
+
 const me:MsgRecievers[] = [MsgRecievers.BACKGROUND]
 
 // start listening
@@ -14,13 +15,11 @@ try {
 	chrome.runtime.onMessage.addListener(background_msg_listener);
 } catch (err : unknown) { console.log(err) }
 
-console.log('last thing ???')
 
 // listening to messages
 async function background_msg_listener(msg:message, sender:any) {
 	
 	let request = new message(msg.message_type,msg.payload,msg.msg_recs)
-	console.log(request);
 	
 	if (request.is_for(me)) {
 		switch(request.message_type as MsgTypes){
@@ -58,7 +57,6 @@ async function background_msg_listener(msg:message, sender:any) {
 	return true
 }
 
-console.log('parsing forward')
 function forward(request:message){
 	/*
 		Could be for multible at once.
@@ -92,19 +90,46 @@ function active_tab_play_stop_music() {
 }
 
 
-console.log('add navigation listener')
-function logOnBefore(details:any) {
-	console.log(typeof(details.frameType))
-	if (details.frameType == "sub_frame"){
-		console.log(`onBeforeNavigate to: ${details.url}`);
-		console.log('frameId',details.frameId)
-		console.log('tabId',details.tabId)
-		console.log(details.frameType)
-		console.log(details.parentFrameId)
-		console.log('url', details.url)
+
+function detect_redirect(url_parent:string,url_child:string): boolean{
+	if ( url_parent === url_child){
+		return false
+	}
+	if(url_child == "about:blank"){
+		return false
+	}
+	return true
+}
+
+// not temporary helpers
+async function logOnBefore(details:any) {
+
+	if (details.frameType == "sub_frame" && details.parentFrameId == 0){
+			console.log("any subframe move",details.url)
+			let frameDetails = await chrome.webNavigation.getAllFrames({tabId: details.tabId})
+			if (frameDetails != null){
+				let parent_url:string = frameDetails.filter((element,index,array)=> element.frameType == 'outermost_frame')[0].url
+				if (detect_redirect(parent_url,details.url)){
+					console.log('--------')
+					console.log('detected inner redirect',parent_url,details.url)
+					console.log('--------')
+					chrome.tabs.update(details.tabId, {url: details.url});
+					/*
+					console.log(`onBeforeNavigate to: ${details.url}`);
+					console.log('frameId',details.frameId)
+					console.log('tabId',details.tabId)
+					console.log(details.frameType)
+					console.log(details.parentFrameId)
+					console.log('url', details.url)
+					*/
+				}
+			}
+			
+			
 	}
 
 	
 }
-  
+
 chrome.webNavigation.onBeforeNavigate.addListener(logOnBefore); 
+chrome.webNavigation.onHistoryStateUpdated.addListener(logOnBefore);
