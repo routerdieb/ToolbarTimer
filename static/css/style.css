@@ -1,3 +1,9 @@
+/* Fix outer page */
+*, body{
+    padding:0px !important;
+}
+
+
 .toptimer-container{
 	background-color: #353535;
 	background:  #353535 !important;
