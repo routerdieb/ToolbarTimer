@@ -5,13 +5,13 @@ Such as a Meeting for a Code review on Github, or talking about a Notion page et
 
 ##FAQ
 
-### Why does this extension need web request
+### Why does this extension need declaritive net request (change headers)
 For this extenison to work on as many pages as possible, it pastes the toolbar and the website in seperate iframes.
 Some websites send a header, to not allow being displayed in an iframe.
-This extension just allows set the xframe police to same origin, basically just circumventing the deny header without creating surface for Cross site scripting.
+This extension just allows set the xframe police to none and will set it to same origin in the future, basically just circumventing the deny header without creating surface for Cross site scripting.
+
 
 ### WebNavigate to detect all navigation inside the iframes
-
 
 ### tabs to navigate the whole site if you are redirected in subframe
 

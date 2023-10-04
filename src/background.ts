@@ -102,7 +102,8 @@ function detect_redirect(url_parent:string,url_child:string): boolean{
 }
 
 // not temporary helpers
-async function logOnBefore(details:any) {
+async function process_netrequest(details:any) {
+	register_dynamic_rule();
 
 	if (details.frameType == "sub_frame" && details.parentFrameId == 0){
 			console.log("any subframe move",details.url)
@@ -114,6 +115,7 @@ async function logOnBefore(details:any) {
 					console.log('detected inner redirect',parent_url,details.url)
 					console.log('--------')
 					chrome.tabs.update(details.tabId, {url: details.url});
+					
 					/*
 					console.log(`onBeforeNavigate to: ${details.url}`);
 					console.log('frameId',details.frameId)
@@ -131,5 +133,26 @@ async function logOnBefore(details:any) {
 	
 }
 
-chrome.webNavigation.onBeforeNavigate.addListener(logOnBefore); 
-chrome.webNavigation.onHistoryStateUpdated.addListener(logOnBefore);
+chrome.webNavigation.onBeforeNavigate.addListener(process_netrequest); 
+chrome.webNavigation.onHistoryStateUpdated.addListener(process_netrequest);
+
+function register_dynamic_rule(){
+	const RULE:any = {
+        id: 1,
+        condition: { 
+          resourceTypes: ['sub_frame'],
+        },
+        action: {
+          type: 'modifyHeaders',
+          responseHeaders: [
+            {header: 'X-Frame-Options', operation: 'remove'},
+            {header: 'Frame-Options', operation: 'remove'},
+			{header: "content-security-policy", operation: "remove"}
+          ],
+        },
+      };
+      chrome.declarativeNetRequest.updateDynamicRules({
+        removeRuleIds: [RULE.id],
+        addRules: [RULE],
+      });
+}

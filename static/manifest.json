@@ -1,6 +1,6 @@
 {
   "name": "Toolbar Timer",
-  "version": "0.6.9",
+  "version": "0.6.13",
   "manifest_version": 3,
   "description": "Track time during screensharing in the webbrowser. Useful for use with evernote, Excel Online or a Github codereview.",
   "options_ui": {
@@ -28,7 +28,7 @@
 	"matches": ["<all_urls>"],
        "extension_ids": []
   }],
-  "permissions": ["webNavigation","storage","declarativeNetRequest","webRequest","tabs"],
+  "permissions": ["webNavigation","storage","declarativeNetRequest","tabs"],
    "host_permissions": [
     "<all_urls>"
   ],
